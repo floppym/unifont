@@ -1,0 +1,656 @@
+
+Subject: Unifont archive version 6.3.20131020
+
+
+OVERVIEW
+--------
+GNU Unifont is an official GNU package.  It is a dual-width
+(8x16/16x16) bitmap font, designed to provide coverage for
+all of Unicode Plane 0, the Basic Multilingual Plane (BMP).
+This version has a glyph for each visible code point in the
+Unicode 6.3 Basic Multilingual Plane (Plane 0).
+
+Unifont only provides a single glyph for each character, making it
+impossible to handle any language properly that needs context-dependent
+character shaping. It is supplied in the form of a hex file, with
+a converter to convert it to BDF. See http://czyborra.com/unifont/
+or http://unifoundry.com/unifont.html for more information.  The
+BDF font is converted to PCF, and the hex file is converted to a
+TrueType font.
+
+This is the unifoundry.com collection of utilities for GNU Unifont,
+assembled by Paul Hardy with the encouragement of the font's creator,
+Roman Czyborra.  This archive contains the following directories
+and files:
+
+     font       Everything you need to build the font from scratch
+     hangul     Standalone font sources to build hangul-syllables.hex
+     Makefile   The "make" file
+     man        Unix man pages
+     README     This file
+     src        Source programs, in Perl and C
+     TUTORIAL   Tutorial for using this package's utilities
+
+The "font/precompiled" directory contains prebuilt font-related files:
+
+     coverage.txt              Percentage coverage of each Plane 0 script
+     unifont-<version>.bmp     The entire Plane 0 font with combining circles
+     unifont-<version>.bdf.gz  BDF version of Unifont
+     unifont-<version>.hex     Hex string source of glyphs to build Unifont
+     unifontall-<version>.hex  Hex string source of all Plane 0 glyphs,
+                               including nonprinting and PUA glyphs
+     unifont-<version>.pcf.gz  PCF version of Unifont
+     unifont-<version>.ttf     TrueType version of Unifont
+
+The original version of this README file was written by David Starner
+and modified by Paul Hardy from 2008 to the present.
+
+This release incorporates all glyph errata issued by The Unicode Consortium
+from Unicode 1.0 errata to the latest.
+
+
+BUILDING
+--------
+To make the binaries from the top directory, type
+
+     make
+
+This will create the directories "./bin", "./lib", and "./font/compiled".
+
+The compiled programs will be in the "./bin" directory.  The ./lib
+directory will contain the file wcwidth.c, to provide an implementation
+of the POSIX wcwidth() and wcswidth() functions.  The font will build,
+placing files in the "font/compiled/" subdirectory.
+
+The default settings will build Unifont with four-digit hexadecimal
+glyphs appearing for unassigned code points, and with no glyphs for
+Private Use Area code points or non-printing code points.  As an
+example, to override these defaults in this top-level directory type
+
+     make UNASSIGNED="" PUA="hexsrc/pua.hex" \
+          NONPRINTING="hexsrc/nonprinting.hex"
+
+To make certain that no unassigned, PUA, or non-printing glyphs are
+included, type
+
+     make UNASSIGNED="" PUA="" NONPRINTING=""
+
+You can similarly build Unifont with your own custom PUA glyphs.
+Just specify where the custom PUA file is, relative to the "font/"
+directory.  Note, though, that unifontpic generates its glyph
+diagram from whatever .hex files are in the "font/hexsrc" directory.
+Therefore, to have custom PUA glyphs be part of this generated
+glyph map, replace "font/hexsrc/pua.hex" with a custom pua.hex file.
+
+Other useful make variables that can be overridden on the command line
+from the top-level Makefile include:
+
+     DESTDIR   - By default, not set; set to an alternate root location
+                 such as "~/tmproot" if desired, but this directory
+                 must already exist.
+     USRDIR    - Set as typically "usr" or "usr/local" for installation
+     PREFIX    - This is just $(DESTDIR)/$(USRDIR) but can be overridden.
+     PKGDEST   - Destination for package files, by default "usr/share"
+                 so that this README file, the TUTORIAL file, etc. will
+                 be installed in "/usr/share/unifont".
+     COMPRESS  - Set to non-zero to compress installed man pages
+
+All of the .hex file names can be replaced selectively on the top-level
+"make" command line.  The list of component hex file variables is:
+
+     UNIFONTBASE - The bulk of Unifont scripts
+     CJK         - Most of the CJK Ideographs
+     HANGUL      - Hangul Syllables block
+     NONPRINTING - Glyphs for non-printing characters
+     SPACES      - Space glyphs, single- and double-width
+     UNASSIGNED  - Glyphs for unassigned code points
+     PUA         - Glyphs for the Private Use Area
+
+To install the binaries, man pages, and Unifont, review the
+destination directories in the Makefiles to verify that the files
+will be installed where you want, and then type
+
+     make install
+
+This installs programs in "/usr/bin" or "/usr/local/bin" (depending
+on the USRDIR setting in the top-level Makefile), installs PCF and
+TrueType fonts in the appropriate places, and places the following
+files in "/usr/share/unifont" or "/usr/local/share/unifont" (again
+depending on the USRDIR setting in the top-level Makefile):
+
+     combining.txt - list of Unicode Plane 0 combining characters
+     LICENSE.gz    - license information for this package
+     README.gz     - this README file
+     TUTORIAL.gz   - tutorial on using the Unifont utilities
+     unifont.hex   - composite Unifont .hex source, used by GRUB1
+     wchardata.c   - implementation of IEEE 1003.1-2008 wcswidth(), wcwidth()
+     wchardata.o   - object file from wchardata.c
+
+Typing "make install" will install font files from "font/compiled/"
+if that directory exists; otherwise it will install font files from
+the "font/precompiled/" directory.
+
+To rebuild what is in the "font/precompiled" directory (which you
+ordinarily you should never do--there would have to be a very good
+reason), remove its files, modify the DATE and VERSION information in
+the top-level Makefile and in "font/Makefile", then type
+
+     make precompiled
+
+from the top-level directory or the "font/" subdirectory.
+
+To just make the fonts, charts, etc. within the "font" directory,
+install the "bdftopcf" program and FontForge as well as performing
+a "make install" to install the Unifont binaries.  Then from the
+top-level directory type
+
+     cd font
+     make
+
+The resulting fonts will be in the "./font/compiled" directory, along
+with bitmap renderings of each glyph.
+
+WARNING: Building the TrueType version of GNU Unifont will require
+anywhere from 256 MBytes to 1 GByte of virtual memory, can require
+almost 250 Megabytes of free disk space during the build, and is best
+run on a decent processor (say 1 GHz clock rate or better).
+
+During the TrueType build, FontForge will monopolize your CPU...plan
+accordingly.
+
+There is no reason to build the font from scratch unless you modify
+the .hex font source files (or must satisfy an insatiable curiosity),
+because the "./font/precompiled" directory already contains pre-built
+BDF, PCF, and TrueType fonts.
+
+To create a custom version of the font with combining circles (such as
+was done to create the large picture of Unifont), enter these commands:
+
+     cd font/ttfsrc
+     sort ../hexsrc/*.hex | \
+          unigencircles combining.txt ../hexsrc/nonprinting.hex > unifont.hex
+     make
+
+When "make" is finished, the ttfsrc directory will contain a "unifont.ttf"
+file which includes the dashed combining circles that the unigencircles
+utility added.  Copy this "unifont.ttf" file to a safe location in a different
+directory with a more descriptive name.  This font is named "unifontcircles"
+in the font distribution.  Then type
+
+     make clean
+
+If you've made a new version of the font, hand-copy the new font file(s)
+to your desired destination.  Otherwise, precompiled PCF and TrueType
+versions of the font will be copied from "./font/precompiled/" into
+$(DESTDIR)/usr/share/fonts.
+
+After font installation, you might need to restart the X Window System
+for the new fonts to be recognized, but first try the command
+
+     xset fp rehash
+
+in a shell (terminal) window.  If that doesn't work, restart the X
+Window System.
+
+To remove intermediate files, from the top-level directory type
+
+     make clean
+
+To remove all created files and leave the directory in its pre-build
+state, from the top-level directory type
+
+     make distclean
+
+That will remove the "./bin" directory, the "./lib" directory, the
+"./font/compiled" directory, and other intermediate files.  Note that
+this command leaves the files in "./font/precompiled" intact, even
+though a prior "make precompiled" command would have rebuilt those files.
+
+
+src/ AUTHORS
+------------
+Right now, all the Perl files in the src directory except "hex2sfd",
+"unifontchojung", and "unifontksx" were written by Roman Czyborra (or
+in the case of johab2ucs2, by Jungshik Shin, who then gave it to Roman).
+Roman originally named the "src/hexbraille" script as simply "braille";
+Paul Hardy thought there was too great a chance of a name conflict with
+other utilities, and so renamed it.
+
+Luis Alejandro Gonzalez Miranda wrote the original "hex2sfd" Perl
+script, as well as a "howto-build.sh" shell script that Paul Hardy
+converted into "./font/ttfsrc/Makefile".
+
+All the C programs were written by Paul Hardy.
+
+
+Unifont AUTHORS
+---------------
+Roman Czyborra created the original GNU Unifont, including the
+.hex format.  For greater detail, see the HISTORY section below.
+
+David Starner aggregated many glyphs contributed by others and
+built these into pre-2004 Unifont releases.
+
+Qianqian Fang began his Wen Quan Yi font in 2004, by which
+time work on Unifont had stopped.  Most of the almost 30,000
+CJK ideographs in the latest Unifont versions 5.1 and later
+were taken from Wen Quan Yi with permission of Qianqian Fang.
+The glyphs in "./font/hexsrc/wqy-cjk.hex" are for the most part
+Qianqian Fang's Unibit and Wen Quan Yi glyphs.
+
+Paul Hardy drew most of the newly-drawn glyphs added to the BMP
+from the Unifont 5.1 release to the present release.  This includes
+the 11,172 glyphs in the Hangul Syllables block, plus approximately
+10,000 additional glyphs scattered throughout the BMP.
+
+Andrew Miller drew the glyphs added to Unicode 6.3.0.
+
+
+LICENSE
+-------
+The source code for everything except the compiled fonts in this current
+release is licensed as follows:
+
+     License for this current distribution of program source
+     files (i.e., everything except the fonts) is released under
+     the terms of the GNU General Public License version 2,
+     or (at your option) a later version.
+
+The license for the compiled fonts is covered by the above GPL terms
+with the GNU font embedding exception, as follows:
+
+     As a special exception, if you create a document which uses this font,
+     and embed this font or unaltered portions of this font into the document,
+     this font does not by itself cause the resulting document to be covered
+     by the GNU General Public License. This exception does not however
+     invalidate any other reasons why the document might be covered by the
+     GNU General Public License. If you modify this font, you may extend
+     this exception to your version of the font, but you are not obligated
+     to do so. If you do not wish to do so, delete this exception statement
+     from your version. 
+
+See "http://www.gnu.org/licenses/gpl-faq.html#FontException" for more details.
+
+
+CHANGES IN VERSION 6.3
+----------------------
+Version 6.3 reflects all glyph changes and errata published in Unicode
+6.3.0.  In preparation for releasing this version, Paul Hardy obtained
+a hard copy of the errata published in Unicode Version 1.1, not yet
+available on Unicode's website.  All previously published errata have
+been incorporated.  This is a complete replacement for all previous
+releases.
+
+The following code points in previously published errata were examined
+and found to be correct:
+
+     Unicode 1.1: U+717F, U+773E, U+809C, U+8480, U+908E
+
+Three new utility programs have also been added:
+
+   - unifontpic - creates a bitmapped graphics (.bmp) file of the entire
+     Basic Multilingual Plane (Plane 0), by default in a 256-by-256
+     glyph grid for ease of printing, and optionally in a 16-by-4096 glyph
+     grid for easier scrolling on a screen, for software that can handle
+     a .bmp file with over 64k pixel rows (not all software can).  The
+     256-by-256 glyph grid can be scaled to print on a piece of paper
+     approximately 3 feet by 3 feet (or one meter by one meter).
+
+   - unigencircles - adds dashed combining circles to unifont.hex glyphs
+     for code points that are in "font/ttfsrc/combining.txt" but not in
+     "font/hexsrc/nonprinting.hex".
+
+   - unigenwidth - creates an implementation of the POSIX functions
+     wcwidth() and wcswidth() as specified in IEEE 1003.1-2008, Vol. 2:
+     System Interfaces, Issue 7, pages 2251 and 2241, respectively.
+     Plane 0 widths are determined by reading the current Unifont glyphs.
+     All higher planes, 0x01 through 0x10, are calculated without regard
+     to Unifont glyphs.  This can be modified in the future if Unifont
+     glyphs extend beyond Plane 0.
+
+Andrew Miller drew the 5 new additions to the Unicode 6.3.0 Basic
+Multilingual Plane in the initial Unifont 6.3 release.
+
+Paul Hardy made the following improvements for the latest Unifont 6.3
+release:
+
+   - Dashes -- changed to distguish better between different dash types
+     (a two horizontal pixel difference is the minimum to easily distinguish
+     a difference between two glyphs):
+     * Hyphen (U+002D) and Soft Hyphen (U+00AD) are now 4 pixels wide
+     * En Dash (U+2012) is now 6 pixels wide
+     * Em Dash (U+2013) is now 8 pixels wide
+
+   - Control Pictures:
+     * Centered text for C1 Controls U+0089 ("HTJ"), U+0095 ("MW"),
+       and U+009E ("PM")
+     * Copied glyphs from U+0000..U+001F to U+2400..u+241F and erased
+       surrounding borders; earlier, some glyphs in U+0000..U+001F had
+       their text re-centered so this carries that change forward
+
+   - Arrows -- General Re-alignment
+     * Aligned most single vertical arrow strokes with the 5th column,
+       counting from the left, to align with the center of the "w" glyph
+       (U+0077)
+     * Aligned most single horizontal arrow strokes with the 7th row,
+       counting from the bottom, to align with the horizontal stroke in
+       the "e" glyph (U+0065); this follows the convention of Donald Knuth's
+       fonts in TeX, as illustrated in The TeXbook
+     * Modified the following ranges per the above two re-alignments:
+       o U+2190..U+21FF Arrows
+       o U+27F0..U+27FF Supplemental Arrows -- A
+       o U+2900..U+297F Supplemental Arrows -- B
+       o U+2B00..U+2BFF Miscellaneous Symbols and Arrows
+
+   - Modified the following additional Miscellaneous Technical glyphs
+     * Scan lines for old 9-line character terminals:
+       o U+23BA Line 1, horizontal line across row  1 (counting from the top)
+       o U+23BB Line 3, horizontal line across row  5 (counting from the top)
+       o U+23BC Line 7, horizontal line across row 12 (counting from the top)
+       o U+23BD Line 9, horizontal line across row 16 (counting from the top)
+     * U+23CE Return Symbol: shortened to match Latin capital height
+     * U+23AF Horizontal Line Extension: aligned on 7th row, counting
+       from the bottom
+     * U+23D0 Vertical Line Extension: aligned on 5th column, counting
+       from the left
+     * U+23DA Ground Symbol: aligned with Vertical Line Extension (U+23D0)
+     * U+23DB Fuse Symbol: algined with Horizontal Line Extension (U+23AF)
+     * U+23EC Black Down-pointing Double Triangle: moved down one row to
+       match Latin capital height
+
+   - Swapped U+FE17 and U+FE18, which had been reversed
+
+   - hangul/ directory -- updated "hangul-generation.html" to match the
+     latest version at http://unifoundry.com/hangul/hangul-generation.html
+
+
+CHANGES IN VERSION 6.2
+----------------------
+After release of version 5.1 of Unifont, it was learned that the
+replacement glyphs used in Hangul Syllables, although free to use,
+could never be licensed under any version of GPL.  For that reason,
+Paul Hardy created a set of Hangul Syllables from scratch with the
+oversight of some native Koreans.  This was done using the files that
+appear in the "hangul/" directory.  For a detailed discussion of the
+process, see
+
+     http://unifoundry.com/hangul/hangul-generation.html
+
+The new font was released as Unifont 6.2, with representation of
+all glyphs in the Unicode 6.2 BMP.  As a result of replacing the
+Hangul Syllables block, this was the first release that provided
+GPLv2+ coverage (with a font embedding exception) for the entire
+package.
+
+The Unicode Consortium released Unicode Version 6.2.0 on 22 April 2013.
+
+This version of Unifont includes all additions to the BMP since Unicode
+Version 5.1, and adds 1,328 more glyphs to the Basic Multilingual Plane.
+
+It also incorporates all errata that the Unicode Consortium published
+that apply to the BMP from Unicode 3.0 errata through Unicode 6.1 errata
+(listed with the Unicode 6.2.0 release).  Only one erratum was left
+unmodified: the Ogham Space glyph, U+1680, which was left as a line stroke
+because of the rendering limitations of the bitmapped Unifont.  The errata
+for the following glyphs were examined and if necessary corrected:
+
+     Unicode 3.1: U+066B, U+224C, U+1780..U+17E9
+     Unicode 3.2: [none]
+     Unicode 4.0: U+06DD, U+0B66
+     Unicode 4.1: U+01B3, U+031A
+     Unicode 5.0: U+0485, U+0486, U+06E1
+     Unicode 5.1: U+047C, U+047D, U+075E, U+075F,
+                  U+1031, U+1E9A, U+1460, U+147E,
+                  U+2626 
+     Unicode 5.2: U+04A8, U+04A9, U+04BE, U+04BF,
+                  U+135F, U+19D1, U+19D2, U+19D4 
+                  [U+1680 left as is]
+     Unicode 6.0: [none]
+     Unicode 6.1: U+2D7F
+
+Note that some glyphs were assigned in earlier versions of Unicode and
+later withdrawn, but their glyphs still appear in the code charts.
+Therefore, they have been left in place.  The Unicode Consortium now
+holds the position that once a glyph is assigned, it is not replaced.
+
+Andrew Miller noted that one glyph (U+2047) was incorrect and the glyph
+CYRILLIC CAPITAL LETTER A (U+0410) did not match LATIN CAPITAL LETTER A
+(U+0041).  He submitted corrections and they have been incorporated.
+
+The biggest change was a totally redrawn set of Hangul Syllables,
+U+AC00..U+D7A3, comprising 11,172 glyphs in all.  This allowed the
+entire font to be licensed under the GNU GPL.
+
+Unicode 6.2 (and hence Unifont) now only has 2,330 unassigned code points
+in the BMP for possible future assignments, and the rate at which new
+code points are being assigned in the BMP is decreasing greatly.
+
+The unihex2bmp program has reversed the meaning of its "-f" (flip,
+or transpose) flag compared to Unifont Version 5.1 unihex2bmp.
+Now the default behavior is to produce 16x16 glyph charts with
+the same arrangement as The Unicode Standard.
+
+The unibmp2hex program now hard-codes several scripts and code points
+to be double-width.  This was necessary after removing the combining
+circles from many glyphs that only occupied the left-hand side of the
+16x16 grid, but combine with double-width glyphs from the rest of a
+given script.
+
+The "blanks.hex" file has been renamed to "unassigned.hex" as a more
+accurate description of its contents.  The "substitutes.hex" file has
+been renamed to "spaces.hex", as all it contained were single- and
+double-width space glyphs (strings of 0s).
+
+
+Roman Czyborra and Paul Hardy wanted to license this entire collection
+under GPL to simplify its adoption by the GNU Project.  In the end, there
+was just one catch: the Hangul Syllables block that appeared in Unifont 5.1,
+although licensed for free use, could not be licensed under the GPL.
+
+There was no suitable alternative that was covered under the GPL, so Paul
+Hardy created a new block of Hangul Syllables.  This took a few years of
+spare time to complete.  Native Koreans reviewed and critiqued the glyphs.
+If anyone who is Korean would like to improve this block (U+AC00..U+D7A3),
+please feel free to do so and submit the changes so they can be incorporated.
+
+The font has also gone through a couple of simplifications since the
+release of version 5.1:
+
+   - There is only one source file for CJK ideographs now, "wqy.hex",
+     acknowledging that most of these glyphs were taken from the Wen
+     Quan Yi distribution.
+
+   - There are no more combining circles; these were all removed.
+
+The result is now there is just one variation of output font rather than
+four.  That one is used to generate the TrueType "unifont.ttf" font.
+
+The directory "font/hexsrc" contains the .hex input files for building
+Unifont, and contains these files:
+
+     hangul-syllables.hex   Unicode Hangul Syllables, U+AC00..U+D7A3
+     nonprinting.hex        Format and other assigned but invisible glyphs
+     pua.hex                Private Use Area glyphs
+     README                 The README file
+     spaces.hex             Code points that are space glyphs
+     unassigned.hex         Unassigned code points in the BMP
+     unifont-base.hex       Source file with almost all BMP scripts
+     wqy.hex                Source file with Wen Quan Yi CJK ideographs
+
+The file previously named "blanks.hex" is now named "unassigned.hex".
+These "blank" glyphs are no longer included in the compiled font.
+Although the Unicode Standard specifically allows a visual rendering
+of unassigned code points, doing so would prevent a display engine
+finding a glyph in another font.  In fact, the original "blanks.hex"
+pattern was modeled after the proposed representation of unassigned
+code points depicted in The Unicode Standard, Version 5.0, Section 5.3,
+Unknown and Missing Characters (p. 155).
+
+Incorporating "blanks.hex" (now "unassigned.hex") was invaluable in
+spotting assigned code points with glyphs that had not yet been drawn.
+However, now there is complete coverage of the entire BMP, with only
+about 2,300 BMP code points remaining out of 65,536 that could potentially
+be given assignments in the future, so the great bulk of work on the
+BMP is done.
+
+The "pua.hex" file contains a four-digit hexadecimal representation of
+each code point, rendered as white on black.  The new program "hexgen.c"
+generated these glyphs.  A four-digit hexadecimal code point is suggested
+as one possible rendering of PUA glyphs in The Unicode Standard, Version
+5.0, Section 5.3.  Another possible rendering suggested in that same
+section is a pencil glyph.  A pencil glyph was used originally in Unifont
+Version 5.1.
+
+The glyphs in "pua.hex" are not compiled into the final font.  To do
+so, modify font/Makefile by adding "pua.hex" to the list of hex source
+files.  Alternatively, someone could use their own pua.hex file for
+various Private Use Area assignments.
+
+
+UNIFONT VERSION 5.1
+-------------------
+Paul Hardy's first release of Unifont and associated graphics utilities
+was Version 5.1.  This corresponded to Unicode Version 5.1 (the current
+version at the time), with a glyph for every visible character in the
+Unicode 5.1 Basic Multilingual Plane.
+
+For the Unifont 5.1 release, Paul Hardy replaced the 11,172
+thick-stroke Hangul Syllables glyphs with thin-stroke glyphs
+(a desire expressed by Roman Czyborra for years), merged Qianqian
+Fang's unibit and Wen Quan Yi glyphs into GNU Unifont (with lots
+of help and enthusiasm from Qianqian Fang), drew about 8,500 more
+glyphs to provide complete coerage of the BMP, and replaced the
+existing Tibetan glyphs with new ones contributed by Rich Felker.
+
+There was a bug in the johab2ucs2 Perl Script that formed one range
+of Hangul Syllables incorrectly in previous releases.  Paul Hardy
+noticed and fixed the bug for the Unifont 5.1 release.  All previous
+releases of Unifont have an incorrectly formed Hangul Syllables block.
+
+Earlier releases also had an incorrectly formed Braille glyph block.
+There was a bug in the Perl script that drew the Braille glyphs in
+earlier releases.  Roman Czyborra made a fix to that Perl script,
+named "braille" at his website (http://czyborra.com).  The revised
+script ("hexbraille") was included in the Unifont 5.1 release, and
+used to generate the Unifont 5.1 Braille glyphs.
+
+
+HISTORY
+-------
+Roman Czyborra <roman@czybora.com> began GNU Unifont in 1998 as a low
+quality font to provide a glyph for every Unicode character in the
+Basic Multilingual Plane.  He realized that no one font at the time
+had complete coverage of the Unicode BMP.  http://czyborra.com still
+has several cool tools for Unifont not included here.
+
+Since Roman Czyborra was unable to maintain the Unifont for a while,
+and many patches existed on gnu-unifont@groups.yahoo.com
+(http://groups.yahoo.com/group/gnu-unifont), David Starner
+<dstarner98@aasaa.ofe.org> decided to make a new release extending
+Unifont with many characters in 1999.  That was the foundation of earlier
+GNU Unifont compilations from 1999 to 2004.
+
+By 2004, work on Unifont had stopped.  Qianqian Fang wanted to create
+a high-quality Chinese Unicode font in 2004.  He began by copying the
+GNU Unifont glyphs.  He replaced its Latin glyphs with those of another
+X11 font.  He replaced the existing main CJK ideographs with a higher
+quality font that the People's Republic of China had placed in the public
+domain.  Qianqian named this new font "unibit", and released it under
+the terms of the GNU General Public License (GPL) version 2, with the
+exception that embedding his font in a document did not by itself bind
+that document to the terms of the GNU GPL.
+
+See http://wqy.sourceforge.net/cgi-bin/enindex.cgi (English) or
+http://wenq.org (Chinese) for more information on Wen Quan Yi.
+
+In late 2007, Paul Hardy became interested in adding to GNU Unifont.
+He wrote a couple of programs to convert GNU Unifont .hex files to and
+from bitmap images for easy editing with any graphics software.  He began
+by combining the latest glyphs available for GNU Unifont.  This starting
+point was posted at http://czyborra.com as the 2007-12-31 version of
+unifont.hex.  Shortly after that, Roman Czyborra's website went down.
+Paul Hardy then started posting complete copies of GNU Unifont on his
+website, at "http://unifoundry.com/unifont.html".
+
+Roman Czyborra encouraged Paul Hardy to continue this work on GNU Unifont.
+
+In early 2008, Paul Hardy learned of Qianqian Fang's work.  Qianqian
+encouraged a combining of effort, and Paul Hardy at that point created
+two versions of GNU Unifont: one with the original Chinese ideographs
+(which Roman Czyborra copied from a Japanese font in the public domain),
+and one with Qianqian Fang's Wen Quan Yi (Spring of Letters) ideographs.
+The Wen Quan Yi font provides far more coverage of CJK ideographs than
+the original Japanese font did, and is of higher quality.
+
+Paul Hardy created a version of both the font with the original CJK
+ideographs from Japan and with CJK ideographs from Wen Quan Yi that
+contained combining circles.  He then wrote a post-processing program
+to remove the combining circles from the final font.
+
+In 2005, Luis Alejandro Gonzalez Miranda (http://www.lgm.cl) created
+a set of Fontforge scripts and Perl programs to build a TrueType font
+from unifont.hex.  Paul Hardy modified Luis' software in 2008 to cover
+the full Unicode 5.1 Basic Multilingual Plane range.  Luis gave Paul
+Hardy permission to release this modified version under the terms of
+"the GNU General Public License, version 2 or (at your option) a later
+version."
+
+On 4 July 2008, Paul Hardy was looking through all of Roman Czyborra's
+Perl scripts.  One of these, "braille", contained a comment from 2003
+that the original GNU Unifont did not generate its Braille patterns
+(U+2800..U+28FF) correctly.  The modified script fixed that bug.  Paul
+Hardy incorporated the corrected Braille glyphs into the 6 July 2008
+release of GNU Unifont.
+
+All previous versions probably contain this Braille bug and should be
+replaced.
+
+Other notable additions include:
+
+     - Incorporation of CJK glyphs from Qianqian Fang's fonts
+
+     - Incorporation of Rich Felker's Tibetan glyphs
+
+     - Replacement of the Hangul Syllables block with a thin stroke font
+       (Roman had mentioned wanting to do this someday on his website),
+       the current version being created from scratch by Paul Hardy
+
+     - Addition of circled pencil glyphs for the Private Use Area
+       (suggested as an acceptable rendering in the Unicode 5.0 Standard),
+       now replaced with optional four-digit hexadecimal code point glyphs;
+       thought not built into the final font by default, they are available
+       in "font/hexsrc/pua.hex"
+
+     - Replacement of the Unifont 5.1 gray box glyphs for unassigned
+       code points with four-digit hexadecimal glyphs; these are built
+       into the final font by default
+
+     - Proper handling of combining characters in the TrueType version
+
+     - Proper handling of space glyphs in the TrueType version
+
+The hex2bdf script in this release is Roman's original script, not the
+modified version that produced two BDF files (one for 8 pixel wide glyphs
+and another for 16 pixel wide glyphs).  The TrueType font should be used
+in preference to the BDF font, so this is probably a moot point.
+
+For the Unifont 6.2 release, Qianqian Fang gave Paul Hardy permission
+to release the subset of Wen Quan Yi glyphs included in Unifont under
+GPLv2+, with a font embedding exception.  With the newly-drawn Hangul
+Syllables block, this allowed the entire font to be released under
+GPLv2+ with a font embedding exception.
+
+
+OPEN ISSUES
+-----------
+* Some CJK ideographs use an entire 16x16 pixel grid.  This leaves
+insufficient space between lines.  However, changing to a non-square
+grid would distort the block drawing glyphs.  The best solution is
+probably to use GNU Unifont for mostly non-CJK glyph rendering, and
+to use Qianqian Fang's Wen Quan Yi fonts (http://wenq.org) for
+predominately CJK glyph rendering.  The Wen Quan Yi fonts use extra
+leading (blank space) between lines.
+
+* There are still some Control and Format glyphs in "unifont-base.hex";
+these might be more appropriate for "nonprinting.hex".
+

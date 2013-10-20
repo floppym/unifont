@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+#
+# Copyright (C) 1998, 2013 Roman Czyborra, Paul Hardy
+#
+# LICENSE:
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 2 of the License, or
+#    (at your option) any later version.
+#  
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+#    GNU General Public License for more details.
+#  
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+while (<>) { $glyph{$1} = $2 if /(....):(.+)\n/; }
+@chars = sort keys %glyph;
+$nchars = $#chars + 1;
+# dbmopen (%charname, "/usr/share/unicode/unidata/charname.db", 0);
+
+print "STARTFONT 2.1
+FONT -gnu-unifont-medium-r-normal--16-160-75-75-c-80-iso10646-1
+SIZE 16 75 75
+FONTBOUNDINGBOX 16 16 0 -2
+STARTPROPERTIES 3
+FONT_ASCENT 14
+FONT_DESCENT 2
+DEFAULT_CHAR 65533
+ENDPROPERTIES
+CHARS $nchars\n";
+
+foreach $character (@chars)
+{
+	$encoding = hex($character); $glyph = $glyph{$character};
+	$width = length ($glyph) > 32 ? 2 : 1;
+	$dwidth = $width * 8; $swidth= $width * 500;
+	$glyph =~ s/((..){$width})/\n$1/g;
+	$character = "$character $charname"
+	    if $charname = $charname{pack("n",hex($character))};
+
+	print "STARTCHAR U+$character
+ENCODING $encoding
+SWIDTH $swidth 0
+DWIDTH $dwidth 0
+BBX $dwidth 16 0 -2
+BITMAP $glyph
+ENDCHAR\n";
+}
+
+print "ENDFONT\n";
