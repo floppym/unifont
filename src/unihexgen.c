@@ -69,7 +69,9 @@
    (binary 1111, or 0xF) to form white digits on a black background.
 
 
-   The hexdigit[][] array is shared by hexprint4() and hexprint6().
+   Functions hexprint4 and hexprint6 share the hexdigit array;
+   they print four-digit and six-digit hexadecimal code points
+   in a single glyph, respectively.
 */
 char hexdigit[16][5] = {
    {0x6,0x9,0x9,0x9,0x6},  /* 0x0 */
@@ -91,25 +93,27 @@ char hexdigit[16][5] = {
 };
 
 
-int main(int argc, char *argv[]) {
+int
+main (int argc, char *argv[])
+{
 
    int startcp, endcp, thiscp;
    void hexprint4(int); /* function to print one 4-digit unifont.hex code point */
    void hexprint6(int); /* function to print one 6-digit unifont.hex code point */
 
    if (argc != 3) {
-      fprintf(stderr,"\n%s - generate unifont.hex code points as\n", argv[0]);
-      fprintf(stderr,"four-digit hexadecimal numbers in a 2 by 2 grid,\n");
-      fprintf(stderr,"or six-digit hexadecimal numbers in a 3 by 2 grid.\n");
-      fprintf(stderr,"Syntax:\n\n");
-      fprintf(stderr,"     %s first_code_point last_code_point > glyphs.hex\n\n", argv[0]);
-      fprintf(stderr,"Example (to generate glyphs for the Private Use Area):\n\n");
-      fprintf(stderr,"     %s e000 f8ff > pua.hex\n\n", argv[0]);
-      exit(EXIT_FAILURE);
+      fprintf (stderr,"\n%s - generate unifont.hex code points as\n", argv[0]);
+      fprintf (stderr,"four-digit hexadecimal numbers in a 2 by 2 grid,\n");
+      fprintf (stderr,"or six-digit hexadecimal numbers in a 3 by 2 grid.\n");
+      fprintf (stderr,"Syntax:\n\n");
+      fprintf (stderr,"     %s first_code_point last_code_point > glyphs.hex\n\n", argv[0]);
+      fprintf (stderr,"Example (to generate glyphs for the Private Use Area):\n\n");
+      fprintf (stderr,"     %s e000 f8ff > pua.hex\n\n", argv[0]);
+      exit (EXIT_FAILURE);
    }
 
-   sscanf(argv[1], "%x", &startcp);
-   sscanf(argv[2], "%x", &endcp);
+   sscanf (argv[1], "%x", &startcp);
+   sscanf (argv[2], "%x", &endcp);
 
    startcp &= 0xFFFFFF; /* limit to 6 hex digits */
    endcp   &= 0xFFFFFF; /* limit to 6 hex digits */
@@ -119,13 +123,13 @@ int main(int argc, char *argv[]) {
    */
    for (thiscp = startcp; thiscp <= endcp; thiscp++) {
       if (thiscp <= 0xFFFF) {
-         hexprint4(thiscp); /* print digits 2/line, 2 lines */
+         hexprint4 (thiscp); /* print digits 2/line, 2 lines */
       }
       else {
-         hexprint6(thiscp); /* print digits 3/line, 2 lines */
+         hexprint6 (thiscp); /* print digits 3/line, 2 lines */
       }
    }
-   exit(EXIT_SUCCESS);
+   exit (EXIT_SUCCESS);
 }
 
 
@@ -133,7 +137,9 @@ int main(int argc, char *argv[]) {
    Takes a 4-digit Unicode code point as an argument
    and prints a unifont.hex string for it to stdout.
 */
-void hexprint4(int thiscp) {
+void
+hexprint4 (int thiscp)
+{
 
    int grid[16]; /* the glyph grid we'll build */
 
@@ -154,7 +160,7 @@ void hexprint4(int thiscp) {
    /* 14 inner rows are 14-pixel wide black lines, centered */
    for (row = 1; row < 15; row++) grid[row] = 0x7FFE;
 
-   printf("%04X:", thiscp);
+   printf ("%04X:", thiscp);
 
    /*
       Render the first row of 2 hexadecimal digits
@@ -178,9 +184,9 @@ void hexprint4(int thiscp) {
       digitrow++;
    }
 
-   for (row = 0; row < 16; row++) printf("%04X", grid[row] & 0xFFFF);
+   for (row = 0; row < 16; row++) printf ("%04X", grid[row] & 0xFFFF);
 
-   putchar('\n');
+   putchar ('\n');
 
    return;
 }
@@ -190,7 +196,9 @@ void hexprint4(int thiscp) {
    Takes a 6-digit Unicode code point as an argument
    and prints a unifont.hex string for it to stdout.
 */
-void hexprint6(int thiscp) {
+void
+hexprint6 (int thiscp)
+{
 
    int grid[16]; /* the glyph grid we'll build */
 
@@ -214,7 +222,7 @@ void hexprint6(int thiscp) {
    for (row = 1; row < 15; row++) grid[row] = 0xFFFF;
 
 
-   printf("%06X:", thiscp);
+   printf ("%06X:", thiscp);
 
    /*
       Render the first row of 3 hexadecimal digits
@@ -240,9 +248,9 @@ void hexprint6(int thiscp) {
       digitrow++;
    }
 
-   for (row = 0; row < 16; row++) printf("%04X", grid[row] & 0xFFFF);
+   for (row = 0; row < 16; row++) printf ("%04X", grid[row] & 0xFFFF);
 
-   putchar('\n');
+   putchar ('\n');
 
    return;
 }

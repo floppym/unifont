@@ -1,5 +1,5 @@
 
-Subject: Unifont archive version 6.3.20131020
+Subject: Unifont package version 6.3.20131215
 
 
 OVERVIEW
@@ -23,27 +23,36 @@ assembled by Paul Hardy with the encouragement of the font's creator,
 Roman Czyborra.  This archive contains the following directories
 and files:
 
+     ChangeLog  Log of changes made to each GNU release
+     COPYING    Full text of GPL version 2
+     doc        Documentation in Texinfo format
      font       Everything you need to build the font from scratch
      hangul     Standalone font sources to build hangul-syllables.hex
+     INSTALL    Instructions for font and software installation
      Makefile   The "make" file
      man        Unix man pages
+     NEWS       Summary of what's new with each GNU release
      README     This file
      src        Source programs, in Perl and C
-     TUTORIAL   Tutorial for using this package's utilities
 
 The "font/precompiled" directory contains prebuilt font-related files:
 
-     coverage.txt              Percentage coverage of each Plane 0 script
-     unifont-<version>.bmp     The entire Plane 0 font with combining circles
-     unifont-<version>.bdf.gz  BDF version of Unifont
-     unifont-<version>.hex     Hex string source of glyphs to build Unifont
-     unifontall-<version>.hex  Hex string source of all Plane 0 glyphs,
-                               including nonprinting and PUA glyphs
-     unifont-<version>.pcf.gz  PCF version of Unifont
-     unifont-<version>.ttf     TrueType version of Unifont
+     coverage.txt                     Percentage coverage of each Plane 0 script
 
-The original version of this README file was written by David Starner
-and modified by Paul Hardy from 2008 to the present.
+     unifont-<version>.hex            Hex string source of glyphs to build Unifont
+     unifont-<version>.bdf.gz         BDF version of Unifont
+     unifont-<version>.pcf.gz         PCF version of Unifont
+     unifont-<version>.ttf            TrueType version of Unifont
+
+     unifont_sample-<version>.hex     Hex string source of all Plane 0 glyphs,
+                                      including nonprinting and PUA glyphs, with
+                                      combining circles
+     unifont_sample-<version>.bdf.gz  BDF font version of the above .hex file
+     unifont_sample-<version>.ttf     SBIT font version of the above .hex file
+
+     unifont-<version>.bmp            The entire Plane 0 font with combining circles,
+                                      actually built from unifont_sample-*.hex to
+                                      show combining circles
 
 This release incorporates all glyph errata issued by The Unicode Consortium
 from Unicode 1.0 errata to the latest.
@@ -51,168 +60,17 @@ from Unicode 1.0 errata to the latest.
 
 BUILDING
 --------
-To make the binaries from the top directory, type
-
-     make
-
-This will create the directories "./bin", "./lib", and "./font/compiled".
-
-The compiled programs will be in the "./bin" directory.  The ./lib
-directory will contain the file wcwidth.c, to provide an implementation
-of the POSIX wcwidth() and wcswidth() functions.  The font will build,
-placing files in the "font/compiled/" subdirectory.
-
-The default settings will build Unifont with four-digit hexadecimal
-glyphs appearing for unassigned code points, and with no glyphs for
-Private Use Area code points or non-printing code points.  As an
-example, to override these defaults in this top-level directory type
-
-     make UNASSIGNED="" PUA="hexsrc/pua.hex" \
-          NONPRINTING="hexsrc/nonprinting.hex"
-
-To make certain that no unassigned, PUA, or non-printing glyphs are
-included, type
-
-     make UNASSIGNED="" PUA="" NONPRINTING=""
-
-You can similarly build Unifont with your own custom PUA glyphs.
-Just specify where the custom PUA file is, relative to the "font/"
-directory.  Note, though, that unifontpic generates its glyph
-diagram from whatever .hex files are in the "font/hexsrc" directory.
-Therefore, to have custom PUA glyphs be part of this generated
-glyph map, replace "font/hexsrc/pua.hex" with a custom pua.hex file.
-
-Other useful make variables that can be overridden on the command line
-from the top-level Makefile include:
-
-     DESTDIR   - By default, not set; set to an alternate root location
-                 such as "~/tmproot" if desired, but this directory
-                 must already exist.
-     USRDIR    - Set as typically "usr" or "usr/local" for installation
-     PREFIX    - This is just $(DESTDIR)/$(USRDIR) but can be overridden.
-     PKGDEST   - Destination for package files, by default "usr/share"
-                 so that this README file, the TUTORIAL file, etc. will
-                 be installed in "/usr/share/unifont".
-     COMPRESS  - Set to non-zero to compress installed man pages
-
-All of the .hex file names can be replaced selectively on the top-level
-"make" command line.  The list of component hex file variables is:
-
-     UNIFONTBASE - The bulk of Unifont scripts
-     CJK         - Most of the CJK Ideographs
-     HANGUL      - Hangul Syllables block
-     NONPRINTING - Glyphs for non-printing characters
-     SPACES      - Space glyphs, single- and double-width
-     UNASSIGNED  - Glyphs for unassigned code points
-     PUA         - Glyphs for the Private Use Area
-
-To install the binaries, man pages, and Unifont, review the
-destination directories in the Makefiles to verify that the files
-will be installed where you want, and then type
-
-     make install
-
-This installs programs in "/usr/bin" or "/usr/local/bin" (depending
-on the USRDIR setting in the top-level Makefile), installs PCF and
-TrueType fonts in the appropriate places, and places the following
-files in "/usr/share/unifont" or "/usr/local/share/unifont" (again
-depending on the USRDIR setting in the top-level Makefile):
-
-     combining.txt - list of Unicode Plane 0 combining characters
-     LICENSE.gz    - license information for this package
-     README.gz     - this README file
-     TUTORIAL.gz   - tutorial on using the Unifont utilities
-     unifont.hex   - composite Unifont .hex source, used by GRUB1
-     wchardata.c   - implementation of IEEE 1003.1-2008 wcswidth(), wcwidth()
-     wchardata.o   - object file from wchardata.c
-
-Typing "make install" will install font files from "font/compiled/"
-if that directory exists; otherwise it will install font files from
-the "font/precompiled/" directory.
-
-To rebuild what is in the "font/precompiled" directory (which you
-ordinarily you should never do--there would have to be a very good
-reason), remove its files, modify the DATE and VERSION information in
-the top-level Makefile and in "font/Makefile", then type
-
-     make precompiled
-
-from the top-level directory or the "font/" subdirectory.
-
-To just make the fonts, charts, etc. within the "font" directory,
-install the "bdftopcf" program and FontForge as well as performing
-a "make install" to install the Unifont binaries.  Then from the
-top-level directory type
-
-     cd font
-     make
-
-The resulting fonts will be in the "./font/compiled" directory, along
-with bitmap renderings of each glyph.
-
-WARNING: Building the TrueType version of GNU Unifont will require
-anywhere from 256 MBytes to 1 GByte of virtual memory, can require
-almost 250 Megabytes of free disk space during the build, and is best
-run on a decent processor (say 1 GHz clock rate or better).
-
-During the TrueType build, FontForge will monopolize your CPU...plan
-accordingly.
-
-There is no reason to build the font from scratch unless you modify
-the .hex font source files (or must satisfy an insatiable curiosity),
-because the "./font/precompiled" directory already contains pre-built
-BDF, PCF, and TrueType fonts.
-
-To create a custom version of the font with combining circles (such as
-was done to create the large picture of Unifont), enter these commands:
-
-     cd font/ttfsrc
-     sort ../hexsrc/*.hex | \
-          unigencircles combining.txt ../hexsrc/nonprinting.hex > unifont.hex
-     make
-
-When "make" is finished, the ttfsrc directory will contain a "unifont.ttf"
-file which includes the dashed combining circles that the unigencircles
-utility added.  Copy this "unifont.ttf" file to a safe location in a different
-directory with a more descriptive name.  This font is named "unifontcircles"
-in the font distribution.  Then type
-
-     make clean
-
-If you've made a new version of the font, hand-copy the new font file(s)
-to your desired destination.  Otherwise, precompiled PCF and TrueType
-versions of the font will be copied from "./font/precompiled/" into
-$(DESTDIR)/usr/share/fonts.
-
-After font installation, you might need to restart the X Window System
-for the new fonts to be recognized, but first try the command
-
-     xset fp rehash
-
-in a shell (terminal) window.  If that doesn't work, restart the X
-Window System.
-
-To remove intermediate files, from the top-level directory type
-
-     make clean
-
-To remove all created files and leave the directory in its pre-build
-state, from the top-level directory type
-
-     make distclean
-
-That will remove the "./bin" directory, the "./lib" directory, the
-"./font/compiled" directory, and other intermediate files.  Note that
-this command leaves the files in "./font/precompiled" intact, even
-though a prior "make precompiled" command would have rebuilt those files.
+See the "INSTALL" file in this directory for building instructions.
 
 
 src/ AUTHORS
 ------------
-Right now, all the Perl files in the src directory except "hex2sfd",
-"unifontchojung", and "unifontksx" were written by Roman Czyborra (or
-in the case of johab2ucs2, by Jungshik Shin, who then gave it to Roman).
-Roman originally named the "src/hexbraille" script as simply "braille";
+Roman Czyborra wrote all the Perl files in the src directory except
+"hex2sfd", "unifontchojung", "unifontksx", "unihex2png", and "unipng2hex".
+In the case of "johab2ucs2", Jungshik Shin wrote the orignial version;
+he then gave it to Roman.  Paul Hardy made further changes to "johab2ucs2".
+
+Roman originally named the "src/hexbraille" script as simply "braille".
 Paul Hardy thought there was too great a chance of a name conflict with
 other utilities, and so renamed it.
 
@@ -220,7 +78,13 @@ Luis Alejandro Gonzalez Miranda wrote the original "hex2sfd" Perl
 script, as well as a "howto-build.sh" shell script that Paul Hardy
 converted into "./font/ttfsrc/Makefile".
 
-All the C programs were written by Paul Hardy.
+Paul Hardy wrote "unifontchojung" and "unifontksx" for extracting subsets
+of Hangul glyphs, as an aid in creating a new Hangul Syllables block.
+
+Andrew Miller wrote "unihex2png" and "unipng2hex" based upon Paul
+Hardy's "unihex2bmp" and "unibmp2hex" programs.
+
+Paul Hardy wrote all the C programs.
 
 
 Unifont AUTHORS
@@ -233,10 +97,10 @@ built these into pre-2004 Unifont releases.
 
 Qianqian Fang began his Wen Quan Yi font in 2004, by which
 time work on Unifont had stopped.  Most of the almost 30,000
-CJK ideographs in the latest Unifont versions 5.1 and later
-were taken from Wen Quan Yi with permission of Qianqian Fang.
-The glyphs in "./font/hexsrc/wqy-cjk.hex" are for the most part
-Qianqian Fang's Unibit and Wen Quan Yi glyphs.
+CJK ideographs in Unifont versions 5.1 and later were taken
+from Wen Quan Yi with permission of Qianqian Fang.  The glyphs
+in "./font/hexsrc/wqy-cjk.hex" are for the most part Qianqian
+Fang's Unibit and Wen Quan Yi glyphs.
 
 Paul Hardy drew most of the newly-drawn glyphs added to the BMP
 from the Unifont 5.1 release to the present release.  This includes
@@ -255,6 +119,11 @@ release is licensed as follows:
      files (i.e., everything except the fonts) is released under
      the terms of the GNU General Public License version 2,
      or (at your option) a later version.
+
+GPL version 2 is contained in the "COPYING" file in the main source
+directory for this package.  If your received this source without
+a copy of GPL version 2, you can download a copy from GNU's website
+at http://www.gnu.org/licenses/gpl-2.0.html.
 
 The license for the compiled fonts is covered by the above GPL terms
 with the GNU font embedding exception, as follows:
@@ -286,33 +155,20 @@ and found to be correct:
 
      Unicode 1.1: U+717F, U+773E, U+809C, U+8480, U+908E
 
-Three new utility programs have also been added:
-
-   - unifontpic - creates a bitmapped graphics (.bmp) file of the entire
-     Basic Multilingual Plane (Plane 0), by default in a 256-by-256
-     glyph grid for ease of printing, and optionally in a 16-by-4096 glyph
-     grid for easier scrolling on a screen, for software that can handle
-     a .bmp file with over 64k pixel rows (not all software can).  The
-     256-by-256 glyph grid can be scaled to print on a piece of paper
-     approximately 3 feet by 3 feet (or one meter by one meter).
-
-   - unigencircles - adds dashed combining circles to unifont.hex glyphs
-     for code points that are in "font/ttfsrc/combining.txt" but not in
-     "font/hexsrc/nonprinting.hex".
-
-   - unigenwidth - creates an implementation of the POSIX functions
-     wcwidth() and wcswidth() as specified in IEEE 1003.1-2008, Vol. 2:
-     System Interfaces, Issue 7, pages 2251 and 2241, respectively.
-     Plane 0 widths are determined by reading the current Unifont glyphs.
-     All higher planes, 0x01 through 0x10, are calculated without regard
-     to Unifont glyphs.  This can be modified in the future if Unifont
-     glyphs extend beyond Plane 0.
-
 Andrew Miller drew the 5 new additions to the Unicode 6.3.0 Basic
 Multilingual Plane in the initial Unifont 6.3 release.
 
-Paul Hardy made the following improvements for the latest Unifont 6.3
-release:
+The latest Unifont 6.3 release includes these glyph changes by Paul Hardy:
+
+   - Armenian -- several glyphs were redrawn based upon feedback from
+     native speakers (U+0530..U+058F).
+
+   - CJK Radicals Supplement -- several glyphs were redrawn to better match
+     their representations in The Unicode Standard code charts:
+     U+2E9F, U+2EA9, U+2EAC, U+2EAE, U+2EC0, U+2EDE, U+2EE7, and U+2EED.
+
+   - Capricorn sign (U+2651) -- this was redrawn to an alternate form that
+     better fit in an 8 by 16 pixel grid.
 
    - Dashes -- changed to distguish better between different dash types
      (a two horizontal pixel difference is the minimum to easily distinguish
@@ -362,6 +218,46 @@ release:
 
    - hangul/ directory -- updated "hangul-generation.html" to match the
      latest version at http://unifoundry.com/hangul/hangul-generation.html
+
+Five new utility programs have also been added:
+
+   - unifontpic - creates a bitmapped graphics (.bmp) file of the entire
+     Basic Multilingual Plane (Plane 0), by default in a 256-by-256
+     glyph grid for ease of printing, and optionally in a 16-by-4096 glyph
+     grid for easier scrolling on a screen, for software that can handle
+     a .bmp file with over 64k pixel rows (not all software can).  The
+     256-by-256 glyph grid can be scaled to print on a piece of paper
+     approximately 3 feet by 3 feet (or one meter by one meter).  Written
+     by Paul Hardy.
+
+   - unigencircles - adds dashed combining circles to unifont.hex glyphs
+     for code points that are in "font/ttfsrc/combining.txt" but not in
+     "font/hexsrc/nonprinting.hex".  Written by Paul Hardy.
+
+   - unigenwidth - creates an implementation of the POSIX functions
+     wcwidth() and wcswidth() as specified in IEEE 1003.1-2008, Vol. 2:
+     System Interfaces, Issue 7, pages 2251 and 2241, respectively.
+     Plane 0 widths are determined by reading the current Unifont glyphs.
+     All higher planes, 0x01 through 0x10, are calculated without regard
+     to Unifont glyphs.  This can be modified in the future if Unifont
+     glyphs extend beyond Plane 0.  Written by Paul Hardy.
+
+   - unihex2png - converts a unifont.hex-format file into a Portable
+     Network Graphics (PNG) file for editing with a wider rane of graphics
+     editors than the original unihex2bmp allowed.  Written by Andrew
+     Miller, based upon the unihex2bmp source code.  Introduced in
+     Version 6.3.20131215.
+
+   - unipng2hex - converts a PNG graphics file created by unihex2png
+     back into a unifont.hex-format file.  Written by Andrew Miller,
+     based upon the unibmp2hex source code.  Introduced in Version
+     6.3.20131215.
+
+The last two program additions, unihex2png and unipng2hex, also support
+glyph heights of 24 and 32 pixels in addition to Unifont's original
+height of 16 pixels.  hex2bdf and hexdraw have also been modified to
+support these alternate glyph heights.  This capability has not been
+tested extensively, and for now is considered experimental.
 
 
 CHANGES IN VERSION 6.2

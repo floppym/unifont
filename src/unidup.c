@@ -31,17 +31,32 @@
 #define MAXBUF 256
 
 
-int main () {
+int
+main (int argc, char **argv)
+{
 
    int ix, iy;
    char inbuf[MAXBUF];
+   char *infile;   /* the input file name */
+   FILE *infilefp; /* file pointer to input file */
+
+   if (argc > 1) {
+      infile = argv[1];
+      if ((infilefp = fopen (infile, "r")) == NULL) {
+         fprintf (stderr, "\nERROR: Can't open file %s\n\n", infile);
+         exit (EXIT_FAILURE);
+      }
+   }
+   else {
+      infilefp = stdin;
+   }
 
    ix = -1;
 
-   while (fgets(inbuf, MAXBUF-1, stdin) != NULL) {
-      sscanf(inbuf, "%X", &iy);
-      if (ix == iy) fprintf(stderr, "Duplicate code point: %04X\n", ix);
+   while (fgets (inbuf, MAXBUF-1, infilefp) != NULL) {
+      sscanf (inbuf, "%X", &iy);
+      if (ix == iy) fprintf (stderr, "Duplicate code point: %04X\n", ix);
       else ix = iy;
    }
-   exit(0);
+   exit (0);
 }

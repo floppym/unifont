@@ -1,0 +1,60 @@
+2013-12-15: Release 6.3.20131215
+
+   This version introduces unihex2png and unipng2hex, two Perl scripts
+   that Andrew Miller wrote based upon Paul Hardy's unihex2bmp.c and
+   unibmp2hex.c programs.  These new scripts allow conversion between
+   the Unifont .hex format and Portable Network Graphics (PNG) files
+   for graphical editing.  With this addition, more graphics programs
+   can be used to edit Unifont glyphs.
+
+   unihex2png and unipng2hex also support glyphs that are 24 or 32
+   pixels tall, in addition to Unifont's default 16 pixels tall.
+   Roman Czyborra's hexdraw and hex2bdf Perl scripts were modified
+   to also support glyphs that are 16, 24, or 32 pixels tall.  These
+   changes have not been fully tested, and at this point are considered
+   experimental.
+
+   There are no plans to add this multi-height support to unihex2bmp.c
+   and  unibmp2hex.c.
+
+   The package now contains a "doc/" directory, with documentation
+   in Texinfo format.  Files in the "man/" directory were updated
+   for consistency, especially in noting that all programs are
+   covered under GPLv2+ now.
+
+   In addition to "unifont-*.*" font files, this package now also creates
+   "unifont_sample-*.*" files.  These "Unifont Sample" fonts contain
+   combining circles, and four-digit hexadecimal glyphs for unassigned
+   code points and Private Use Area glyphs.  Because of the inclusion
+   of combining cirlces, "Unifont Sample" font versions are only intended
+   for illustrating individual glyphs, not for general-purpose writing.
+   The two generated fonts are unifont_sample-*.bdf and unifont_sample-*.ttf.
+   The TTF file contains SBIT glyphs, not outlined TrueType glyphs like
+   "unifont-*.ttf".
+
+   The font versions (BDF, PCF, and TTF) now contain copyright and
+   version information.  This will help identify outdated versions
+   of a font in the future.  hex2bdf now accepts a version string and
+   a copyright string as command line arguments.
+
+   To simplify this package supporting two versions of Unifont
+   ("Unifont" and "Unifont Sample"), hex2bdf now accepts a font name
+   as a command line argument.  This will streamline adding additional
+   fonts in the future as part of this same package.  Note that the
+   old XLFD font name "unifont" has now been capitalized to "Unifont".
+
+   Many XLFD properties have been added to the BDF version of Unifont
+   in addition to font version and copyright XLFD properties.  At least
+   some of these are carried over to the PCF version during conversion
+   with bdftopcf.  This has solved an issue with grub-mkfont and FreeType
+   for converting the PCF font into a GRUB version.
+
+   Some glyphs were redrawn: the Capricorn sign, several CJK Radicals
+   Supplement ideographs, and several Armenian letters.  The Armenian
+   letters were modified with the new unihex2png and unipng2hex programs.
+
+   Further details are in the ChangeLog file.
+
+2013-10-20: Release 6.3.20131020
+
+   This is the first release as part of the GNU Project.

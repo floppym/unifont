@@ -1,0 +1,59 @@
+2013-12-15  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* src/unihex2png: new program to convert unifont.hex to PNG image.
+	* src/unipng2hex: new program to convert PNG image to unifont.hex.
+	* src/hex2bdf:
+	  - Added new XLFD properties for font generation for FreeType and
+	    grub-mkfont support; includes version & copyright info.
+	  - Fields now begin with upper-case, including "unifont"-->"Unifont".
+	  - Changed POINT_SIZE property from 160 to 120.
+	  - Added "Sans" style name to FONT string plus XLFD property.
+	  - Added command line options for font name, version, & glyph height.
+	  - Allow generation of fonts with other than 16 pixel rows/glyph, to
+	    support new capabilities of unihex2png, unipng2hex, and hexdraw.
+	* src/unidup.c: now takes an optional file name on the command line.
+	* src/*.c: reformatted to follow GNU Coding Standards.
+	* man/*: Updated man pages to reflect new options, new programs,
+	  and to reflect the GPLv2+ license now common to all programs.
+	* doc/: new directory with Texinfo files.
+	* ChangeLog: created new file.
+	* COPYING: created new file.
+	* INSTALL: file created using BUILDING section from old README file.
+	* LICENSE: removed; its contents are in README and COPYING now.
+	* NEWS: created new file.
+	* Makefiles: added "SHELL = /bin/sh" if not already declared.
+	* Makefiles (distclean): added removal of "*~" if not already declared.
+	* Makefile: compress text files with "gzip -f -9" during installation.
+	* font/Makefile: fontforge scripting updated; now adds font copyright,
+	  license, version and other info to PCF files.
+	* font/hexsrc/unifont-base.hex:
+	  - Redrew several Armenian letters (U+0530..U+058F).
+	  - Redrew Capricorn symbol (U+2651).
+	  - Redrew CJK Radical Supplement glyphs: U+2E9F, U+2EA9, U+2EAC,
+	    U+2EAE, U+2EC0, U+2EDE, U+2EE7, and U+2EED.
+	* font/ttfsrc/Makefile: fontforge scripting command changed from
+	  "Simplify(-1,1)" to "Simplify(64,1)" to "merge lines which are
+	  nearly parallel into one".  This decreases the TrueType file size
+	  by almost 2 Megabytes, by reducing the number of control points
+	  for a glyph.  Also add font copyright, license, version, and
+	  other info to TTF files.
+	* font/ttfsrc/Makefile: now builds SBIT font unifont_sample.ttf.
+	* unifontall-*: renamed to "unifont_sample-*".
+	* *.bdf: Added font version, copyright, etc. with hex2bdf.
+	* *.pcf: Added font version, copyright, etc. with fontforge.
+	* *.ttf: Added font version, copyright, etc. with fontforge.
+	* font/*/unifont-*.bmp: Create chart of entire Unifont using pre-built
+	  unifont_sample.hex rather than assembling *.hex just for this image.
+	* hangul/hangul-generation.html: updated to correct a typo, where
+          rieul was mentioned as an initial consonant instead of a final
+          consonant in an explanation of vertical spacing constraints.
+	* hangul/Makefile:
+	  - Updated hex2bdf parameters to name generated BDF font
+	    "Unifont Johab" rather than "unifont" and add copyright.
+	  - Used a sed script to change BDF encoding from ISO10646 to "Johab".
+	  - Call bdftopcf to create hangul-base.pcf, then compress with gzip.
+	  - Add "precompiled:" target to create basic Johab font files.
+
+2013-10-20  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* First GNU Project version.

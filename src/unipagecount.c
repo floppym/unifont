@@ -33,7 +33,9 @@
 
 #define MAXBUF 256 /* maximum input line size */
 
-int main(int argc, char *argv[]) {
+int
+main (int argc, char *argv[])
+{
 
    char inbuf[MAXBUF]; /* Max 256 characters in an input line */
    int i, j;  /* loop variables */
@@ -51,7 +53,7 @@ int main(int argc, char *argv[]) {
    if (argc > 1 && argv[1][0] == '-') {  /* Parse option */
       switch (argv[1][1]) {
          case 'p':  /* specified -p<hexpage> -- use given page number */
-            sscanf(&argv[1][2], "%x", &pageno);
+            sscanf (&argv[1][2], "%x", &pageno);
             if (pageno >= 0 && pageno <= 255) onepage = 1;
             break;
          case 'h':  /* print HTML table instead of text table */
@@ -81,8 +83,8 @@ int main(int argc, char *argv[]) {
       top to bottom.  The character is assumed to be 16 rows of variable
       width.
    */
-   while (fgets(inbuf, MAXBUF-1, stdin) != NULL) {
-      sscanf(inbuf, "%X", &unichar);
+   while (fgets (inbuf, MAXBUF-1, stdin) != NULL) {
+      sscanf (inbuf, "%X", &unichar);
       page = unichar >> 8;
       if (onepage) { /* only increment counter if this is page we want */
          if (page == pageno) { /* character is in the page we want */
@@ -96,29 +98,29 @@ int main(int argc, char *argv[]) {
       }
    }
    if (html) {
-      mkftable(pagecount, links);
+      mkftable (pagecount, links);
    }
    else {  /* Otherwise, print plain text table */
-      fprintf(stdout,
+      fprintf (stdout,
          "   0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F\n");
       for (i=0; i<0x10; i++) {
-         fprintf(stdout,"%X ", i); /* row header */
+         fprintf (stdout,"%X ", i); /* row header */
          for (j=0; j<0x10; j++) {
             if (onepage) {
                if (pagecount[i*16+j])
-                  fprintf(stdout," *  ");
+                  fprintf (stdout," *  ");
                else
-                  fprintf(stdout," .  ");
+                  fprintf (stdout," .  ");
             }
             else {
-               fprintf(stdout, "%3X ", pagecount[i*16+j]);
+               fprintf (stdout, "%3X ", pagecount[i*16+j]);
             }
          }
-         fprintf(stdout,"\n");
+         fprintf (stdout,"\n");
       }
    
    }
-   exit(0);
+   exit (0);
 }
 
 
@@ -127,18 +129,20 @@ int main(int argc, char *argv[]) {
               in a 16 by 16 grid.
 */
 
-void mkftable(int pagecount[256], int links) {
+void
+mkftable (int pagecount[256], int links)
+{
    int i, j;
    int count;
    unsigned bgcolor;
    
-   printf("<html>\n");
-   printf("<body>\n");
-   printf("<table border=\"3\" align=\"center\">\n");
-   printf("  <tr><th colspan=\"16\" bgcolor=\"#ffcc80\">");
-   printf("GNU Unifont Page Coverage<br>(Green=100%%, Red=0%%)</th></tr>\n");
+   printf ("<html>\n");
+   printf ("<body>\n");
+   printf ("<table border=\"3\" align=\"center\">\n");
+   printf ("  <tr><th colspan=\"16\" bgcolor=\"#ffcc80\">");
+   printf ("GNU Unifont Page Coverage<br>(Green=100%%, Red=0%%)</th></tr>\n");
    for (i = 0x0; i <= 0xF; i++) {
-      printf("  <tr>\n");
+      printf ("  <tr>\n");
       for (j = 0x0; j <= 0xF; j++) {
          count = pagecount[ (i << 4) | j ];
          
@@ -148,37 +152,37 @@ void mkftable(int pagecount[256], int links) {
             if (count == 0x100) bgcolor = 0xccffcc;
             /* otherwise background is a shade of yellow to orange to red */
             else bgcolor = 0xff0000 | (count << 8) | (count >> 1);
-            printf("    <td bgcolor=\"#%06X\">", bgcolor);
-            printf("<a href=\"bmp/uni%X%X.bmp\">%X%X</a>", i, j, i, j);
-            printf("</td>\n");
+            printf ("    <td bgcolor=\"#%06X\">", bgcolor);
+            printf ("<a href=\"bmp/uni%X%X.bmp\">%X%X</a>", i, j, i, j);
+            printf ("</td>\n");
          }
          else if (i == 0xd) {
             if (j == 0x8) {
-               printf("    <td align=\"center\" colspan=\"8\" bgcolor=\"#cccccc\">");
-               printf("<b>Surrogate Pairs</b>");
-               printf("</td>\n");
+               printf ("    <td align=\"center\" colspan=\"8\" bgcolor=\"#cccccc\">");
+               printf ("<b>Surrogate Pairs</b>");
+               printf ("</td>\n");
             }  /* otherwise don't print anything more columns in this row */
          }
          else if (i == 0xe) {
             if (j == 0x0) {
-               printf("    <td align=\"center\" colspan=\"16\" bgcolor=\"#cccccc\">");
-               printf("<b>Private Use</b>");
-               printf("</td>\n");
+               printf ("    <td align=\"center\" colspan=\"16\" bgcolor=\"#cccccc\">");
+               printf ("<b>Private Use</b>");
+               printf ("</td>\n");
             }  /* otherwise don't print any more columns in this row */
          }
          else if (i == 0xf) {
             if (j == 0x0) {
-               printf("    <td align=\"center\" colspan=\"9\" bgcolor=\"#cccccc\">");
-               printf("<b>Private Use</b>");
-               printf("</td>\n");
+               printf ("    <td align=\"center\" colspan=\"9\" bgcolor=\"#cccccc\">");
+               printf ("<b>Private Use</b>");
+               printf ("</td>\n");
             }
          }
       }
-      printf("  </tr>\n");
+      printf ("  </tr>\n");
    }
-   printf("</table>\n");
-   printf("</body>\n");
-   printf("</html>\n");
+   printf ("</table>\n");
+   printf ("</body>\n");
+   printf ("</html>\n");
 
    return;
 }

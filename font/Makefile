@@ -12,12 +12,19 @@
 # commands will be interpreted with the Bourne Shell
 #
 SHELL = /bin/sh
+INSTALL = install
+FONTFORGE = fontforge
 #
 # assembly date of this version
 #
 MAJORVERSION = 6.3
-DATE = 20131020
+DATE = 20131215
 VERSION = $(MAJORVERSION).$(DATE)
+
+COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
+Licensed under the GNU General Public License; either version 2, or \
+(at your option) a later version, with the GNU Font Embedding Exception."
+
 #
 # Path to local unifont-bin utilities.  If your system doesn't
 # use GNU's version of "make", use the first BINDIR definition.
@@ -63,8 +70,8 @@ UNASSIGNED = $(HEXDIR)/unassigned.hex
 # users do want to print representations of these glyphs, so they are
 # included as an optional assignment.
 #
-# NONPRINTING = $(HEXDIR)/nonprinting.hex
-NONPRINTING =
+NONPRINTING = $(HEXDIR)/nonprinting.hex
+# NONPRINTING =
 
 #
 # Private Use Area glyphs.  Uncomment to include four-digit hexadecimal glyphs
@@ -84,13 +91,25 @@ UNIFILES = $(UNIFONTBASE) $(CJK) $(HANGUL) $(SPACES) $(UNASSIGNED) \
 	   $(NONPRINTING) $(PUA)
 
 #
+# Location of the file containing a list of Unicode combining characters.
+#
+COMBINING = ttfsrc/combining.txt
+
+VPATH = hexsrc ttfsrc
+
+#
 # Location of  TTF source directory, where TTF font is built.
 #
 TTFSRC = ttfsrc
 
 
-all: pcf bmp ttf bigpic coverage
-	cp -a index.html $(COMPILED_DIR)/index.html
+all: compiled
+
+compiled: $(UNIFILES) $(COMBINING)
+	make compiled-files
+
+compiled-files: pcf bmp ttf bigpic coverage
+	install -p index.html $(COMPILED_DIR)/index.html
 
 #
 # Build the aggregate .hex font files
@@ -100,24 +119,50 @@ hex: distclean
 	   mkdir -p $(COMPILED_DIR) ; \
 	fi
 	sort $(UNIFILES) >$(COMPILED_DIR)/unifont-$(VERSION).hex
-	(cd $(HEXDIR) ; sort *.hex) >$(COMPILED_DIR)/unifontall-$(VERSION).hex
+	(cd $(HEXDIR) ; sort *.hex) | \
+	   $(BINDIR)/unigencircles ttfsrc/combining.txt hexsrc/nonprinting.hex \
+	   > $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
 
 #
 # Build a BDF font file from the final .hex file.
 #
 bdf: hex
-	$(BINDIR)/hex2bdf <$(COMPILED_DIR)/unifont-$(VERSION).hex \
-		   >$(COMPILED_DIR)/unifont-$(VERSION).bdf
+	# First make the default BDF font.  The font name will be "unifont".
+	$(BINDIR)/hex2bdf --version "$(VERSION)" --copyright $(COPYRIGHT) \
+	   $(COMPILED_DIR)/unifont-$(VERSION).hex \
+	   >$(COMPILED_DIR)/unifont-$(VERSION).bdf
 	gzip -f -9 <$(COMPILED_DIR)/unifont-$(VERSION).bdf \
 	           >$(COMPILED_DIR)/unifont-$(VERSION).bdf.gz
+	# Now make a version with combining circles.  The font name
+	# will be "unifont_sample" instead of "unifont" to distinguish
+	# it from the default font.
+	$(BINDIR)/hex2bdf --font "Unifont Sample" \
+	   --version "$(VERSION)" --copyright $(COPYRIGHT) \
+	     $(COMPILED_DIR)/unifont_sample-$(VERSION).hex \
+	   > $(COMPILED_DIR)/unifont_sample-$(VERSION).bdf
+	gzip -f -9 <$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
+	           >$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf.gz
 
 #
 # Build a PCF font file from the final .hex file.
 #
 pcf: bdf
 	bdftopcf <$(COMPILED_DIR)/unifont-$(VERSION).bdf \
-			>$(COMPILED_DIR)/unifont-$(VERSION).pcf
+	         >$(COMPILED_DIR)/unifont-$(VERSION).pcf
+	$(FONTFORGE) -lang=ff -c \
+	   'Open($$1); \
+	    SetFontNames("UnifontMedium", "GNU", "Unifont", "Medium", $(COPYRIGHT), "$(VERSION)"); \
+	    Save($$1)' \
+	   $(COMPILED_DIR)/unifont-$(VERSION).pcf
 	gzip -f -9 $(COMPILED_DIR)/unifont-$(VERSION).pcf
+	bdftopcf <$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
+	         >$(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
+	$(FONTFORGE) -lang=ff -c \
+	   'Open($$1); \
+	    SetFontNames("UnifontSampleMedium", "GNU", "Unifont Sample", "Medium", $(COPYRIGHT), "$(VERSION)"); \
+	    Save($$1)' \
+	   $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
+	gzip -f -9 $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
 
 #
 # Print coverage of scripts in Basic Multilingual Plane in .txt file.
@@ -153,7 +198,7 @@ bmp: hex $(BINDIR)/unihex2bmp
 	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	   for j in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	      $(BINDIR)/unihex2bmp -p$$i$$j \
-	         -i$(COMPILED_DIR)/unifontall-$(VERSION).hex \
+	         -i$(COMPILED_DIR)/unifont_sample-$(VERSION).hex \
 	         -o$(BMPDIR)/uni$$i$$j.bmp ; \
 	   done ; \
 	done ; \
@@ -162,10 +207,9 @@ bmp: hex $(BINDIR)/unihex2bmp
 #
 # Build one bitmap of the entire Unifont as a 4096 x 16 grid.
 #
-bigpic: $(COMPILED_DIR)/unifontall-$(VERSION).hex
-	$(BINDIR)/unigencircles ttfsrc/combining.txt hexsrc/nonprinting.hex \
-	   < $(COMPILED_DIR)/unifontall-$(VERSION).hex | \
-	$(BINDIR)/unifontpic -d120 > $(COMPILED_DIR)/unifont-$(VERSION).bmp
+bigpic: $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
+	cat $(COMPILED_DIR)/unifont_sample-$(VERSION).hex | \
+	   $(BINDIR)/unifontpic -d120 > $(COMPILED_DIR)/unifont-$(VERSION).bmp
 
 #
 # Note that $(TTFSRC) must exist, because it contains some source files
@@ -175,10 +219,20 @@ bigpic: $(COMPILED_DIR)/unifontall-$(VERSION).hex
 #
 
 ttf:
-	cp $(COMPILED_DIR)/unifont-$(VERSION).hex $(TTFSRC)/unifont.hex
+	# First copy the ordinary version, to make a TrueType font.
+	install -p \
+		$(COMPILED_DIR)/unifont-$(VERSION).hex \
+		$(TTFSRC)/unifont.hex
+	# Second copy unifont_sample.bdf, to make an SBIT font.
+	install -p \
+		$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
+		$(TTFSRC)/unifont_sample.bdf
 	cd $(TTFSRC) ; make && make clean
 	mv $(TTFSRC)/unifont.sfd $(COMPILED_DIR)/unifont.sfd 
-	mv $(TTFSRC)/unifont.ttf $(COMPILED_DIR)/unifont-$(VERSION).ttf 
+	mv $(TTFSRC)/unifont.ttf \
+		$(COMPILED_DIR)/unifont-$(VERSION).ttf 
+	mv $(TTFSRC)/unifont_sample.ttf \
+		$(COMPILED_DIR)/unifont_sample-$(VERSION).ttf 
 	gzip -f -9 $(COMPILED_DIR)/unifont.sfd 
 
 #
@@ -186,12 +240,17 @@ ttf:
 # directory.  This has to be called manually, because the precompiled/
 # directory usually remains untouched.
 #
-precompiled:
+precompiled: all
+	\rm -rf precompiled
+	install -m0755 -d precompiled
 	install -m0644 -p $(COMPILED_DIR)/unifont-$(VERSION).hex \
-	                  $(COMPILED_DIR)/unifontall-$(VERSION).hex \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).bdf.gz \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).pcf.gz \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).ttf \
+	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).hex \
+	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).bdf.gz \
+	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf.gz \
+	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).ttf \
 	                  $(COMPILED_DIR)/coverage.txt \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).bmp \
 	   precompiled
@@ -218,14 +277,18 @@ install:
 	   echo "Fatal Error: CURDIR not defined -- define in Makefile." ; \
 	   exit 1 ; \
 	fi
-	install -m0755 -d $(PCFDEST)
-	install -m0755 -d $(TTFDEST)
+	$(INSTALL) -m0755 -d $(PCFDEST)
+	$(INSTALL) -m0755 -d $(TTFDEST)
 	if [ ! -d $(COMPILED_DIR) ] ; then \
-	   install -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).pcf.gz $(PCFDEST)/unifont.pcf.gz ; \
-	   install -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).ttf    $(TTFDEST)/unifont.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).pcf.gz $(PCFDEST)/unifont.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_sample-$(VERSION).pcf.gz $(PCFDEST)/unifont_sample.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).ttf    $(TTFDEST)/unifont.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_sample-$(VERSION).ttf    $(TTFDEST)/unifont_sample.ttf ; \
 	else \
-	   install -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).pcf.gz $(PCFDEST)/unifont.pcf.gz ; \
-	   install -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).ttf    $(TTFDEST)/unifont.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).pcf.gz $(PCFDEST)/unifont.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_sample-$(VERSION).pcf.gz $(PCFDEST)/unifont_sample.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).ttf    $(TTFDEST)/unifont.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_sample-$(VERSION).ttf    $(TTFDEST)/unifont_sample.ttf ; \
 	fi
 
 clean:
@@ -233,6 +296,7 @@ clean:
 	\rm -f $(COMPILED_DIR)/unifont-$(VERSION).hex
 	\rm -f $(COMPILED_DIR)/unifont-$(VERSION).bdf
 	\rm -f $(COMPILED_DIR)/unifont-$(VERSION).bdf.gz
+	\rm -f *~
 
 #
 # Note that distclean leaves precompiled/ alone.  This is intentional.
@@ -241,6 +305,7 @@ clean:
 distclean:
 	\rm -rf $(COMPILED_DIR)
 	$(MAKE) -C ttfsrc distclean
+	\rm -f *~
 	\rm -rf .DS* ._.DS*
 
 .PHONY: all hex bdf pcf coverage pagecount bmp bigpic ttf precompiled install clean distclean 

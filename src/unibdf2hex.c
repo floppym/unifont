@@ -34,9 +34,10 @@
 #define MAXBUF 256
 
 
-int main() {
+int
+main()
+{
    int i;
-// int j;
    int digitsout;  /* how many hex digits we output in a bitmap */
    int thispoint;
    char inbuf[MAXBUF];
@@ -46,9 +47,9 @@ int main() {
    int startrow;  /* row to start glyph        */
    unsigned rowout;
 
-   while (fgets(inbuf, MAXBUF - 1, stdin) != NULL) {
-      if (strncmp(inbuf, "ENCODING ", 9) == 0) {
-         sscanf(&inbuf[9], "%d", &thispoint); /* get code point */
+   while (fgets (inbuf, MAXBUF - 1, stdin) != NULL) {
+      if (strncmp (inbuf, "ENCODING ", 9) == 0) {
+         sscanf (&inbuf[9], "%d", &thispoint); /* get code point */
          /*
             If we want this code point, get the BBX (bounding box) and
             BITMAP information.
@@ -64,41 +65,40 @@ int main() {
              (thispoint >= 0x4E00 && thispoint <= 0x9FCF) || // CJK Unified Ideographs
              (thispoint >= 0xF900 && thispoint <= 0xFAFF))   // CJK Compatibility Ideographs
             {
-            while (fgets(inbuf, MAXBUF - 1, stdin) != NULL &&
-                   strncmp(inbuf, "BBX ", 4) != 0); /* find bounding box */
+            while (fgets (inbuf, MAXBUF - 1, stdin) != NULL &&
+                   strncmp (inbuf, "BBX ", 4) != 0); /* find bounding box */
 
-            sscanf(&inbuf[4], "%d %d %d %d", &bbxx, &bbxy, &bbxxoff, &bbxyoff);
-            while (fgets(inbuf, MAXBUF - 1, stdin) != NULL &&
-                   strncmp(inbuf, "BITMAP", 6) != 0); /* find bitmap start */
-            fprintf(stdout, "%04X:", thispoint);
-//          j = 5; /* start after colon in .hex file line */
+            sscanf (&inbuf[4], "%d %d %d %d", &bbxx, &bbxy, &bbxxoff, &bbxyoff);
+            while (fgets (inbuf, MAXBUF - 1, stdin) != NULL &&
+                   strncmp (inbuf, "BITMAP", 6) != 0); /* find bitmap start */
+            fprintf (stdout, "%04X:", thispoint);
             digitsout = 0;
             /* Print initial blank rows */
             startrow = descent + bbxyoff + bbxy;
 
             /* Force everything to 16 pixels wide */
             for (i = 16; i > startrow; i--) {
-               fprintf(stdout,"0000");
+               fprintf (stdout,"0000");
                digitsout += 4;
             }
-            while (fgets(inbuf, MAXBUF - 1, stdin) != NULL &&
-                   strncmp(inbuf, "END", 3) != 0) { /* copy bitmap until END */
-               sscanf(inbuf, "%X", &rowout);
+            while (fgets (inbuf, MAXBUF - 1, stdin) != NULL &&
+                   strncmp (inbuf, "END", 3) != 0) { /* copy bitmap until END */
+               sscanf (inbuf, "%X", &rowout);
                /* Now force glyph to a 16x16 grid even if they'd fit in 8x16 */
                if (bbxx <= 8) rowout <<= 8;  /* shift left for 16x16 glyph */
                rowout >>= bbxxoff;
-               fprintf(stdout, "%04X", rowout);
+               fprintf (stdout, "%04X", rowout);
                digitsout += 4;
             }
 
             /* Pad for 16x16 glyph */
             while (digitsout < 64) {
-               fprintf(stdout,"0000");
+               fprintf (stdout,"0000");
                digitsout += 4;
             }
-            fprintf(stdout,"\n");
+            fprintf (stdout,"\n");
          }
       }
    }
-   exit(0);
+   exit (0);
 }

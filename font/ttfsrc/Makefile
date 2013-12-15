@@ -5,16 +5,11 @@ BINDIR = ../../bin
 
 FONTFORGE = fontforge
 
-#
-# Luis' original scripts were invoked with "-lang=ff" on the command
-# line.  This was not supported by the version of FontForge in
-# the current Debian stable release (Etch), so it was removed.
-# However, the latest (as of July 2008) version of Debian (Sid)
-# needed the language defined.  Setting FONTFORGE_LANGUAGE gets
-# around this conflict between the old and new FontForge command
-# line options -- thanks to Anthony Fok for this solution.
-#
-export FONTFORGE_LANGUAGE = ff
+COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
+Licensed under the GNU General Public License; either version 2, or \
+(at your option) a later version, with the GNU Font Embedding Exception."
+
+VERSION = 6.3.20131215
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex
@@ -39,7 +34,7 @@ export FONTFORGE_LANGUAGE = ff
 # a .sfd generated from the whole unifont.hex would be too big to
 # process all at once.
 
-all: hex2sfd merge sfd2ttf
+all: hex2sfd merge sfd2ttf sbit
 
 hex2sfd: unifont.hex $(BINDIR)/hex2sfd
 	echo "Separating unifont.hex into 16 parts"
@@ -50,12 +45,18 @@ hex2sfd: unifont.hex $(BINDIR)/hex2sfd
 	done
 	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F ; \
 	   do \
-	   $(FONTFORGE) -c 'Open($$1); SelectAll(); RemoveOverlap(); Simplify(-1,1); Save($$1);' $$i.sfd ; \
+	   $(FONTFORGE) -lang=ff -c \
+	      'Open($$1); \
+	       SelectAll(); \
+	       RemoveOverlap(); \
+	       Simplify(64,1); \
+	       Save($$1);' \
+	      $$i.sfd ; \
 	   \rm -f $$i.hex ; \
 	done
 
-# We join all the generated .sfd files on a single one,
-# and generate the final TrueType font
+# We join all the generated .sfd files into a single one,
+# and generate the final TrueType font.
 
 merge:
 	echo "Merging all .sfd files"
@@ -63,26 +64,38 @@ merge:
 
 sfd2ttf:
 	echo "Converting .sfd font into .ttf font"
-	$(FONTFORGE) -c 'Open($$1); Generate($$2)' unifont.sfd unifont.ttf
+	$(FONTFORGE) -lang=ff -c \
+	   'Open($$1); \
+            SetFontNames("UnifontMedium", "GNU", "Unifont", "Medium", $(COPYRIGHT), "$(VERSION)"); \
+	    Generate($$2)' unifont.sfd unifont.ttf
 	\rm -f unifont.hex
 
 #
 # This fontforge script reads a BDF font file and generates an SBIT font file.
 # Author: written by Qianqian Fang, given to Paul Hardy in 2008.
-# Right now nothing calls this; it is just here for experimentation.
 # The SBIT font is far smaller than the default outline TrueType font
 # and takes far less time to build than the outline font.  However, it
 # isn't scalable.  An SBIT font could be created and merged with the
 # larger TTF font using fontforge, but I (Paul Hardy) haven't noticed
 # any degradation in the screen rendering of just the outline TTF font
 # that this Makefile produces as its final product.  This is with
-# daily use of this Makefile's default TrueType font.  Note that there
-# is no file in this directory called "unifont.bdf" -- copy a BDF font
-# here from ../compiled and name it "unifont.bdf".
+# daily use of this Makefile's default TrueType font.
+#
+# This builds an SBIT font from the unifont_sample BDF font.  The
+# BDF font already contains font name, etc., so they don't need to
+# be set using SetFontNames; those parameters are left null so the
+# existing font's values will be preserved.  However, Fontforge
+# does not read the FONT_VERSION property so Paul Hardy added the
+# the SetFontNames call.
 #
 sbit:
-	$(FONTFORGE) -c 'New(); Import($$1); Generate($$2, "ttf"); Close()' \
-		unifont.bdf unifont-sbit.ttf
+	$(FONTFORGE) -lang=ff -c \
+	   'New(); \
+            SetFontNames("","","","","","$(VERSION)"); \
+	    Import($$1); \
+	    Generate($$2, "ttf"); \
+	    Close()' \
+	   unifont_sample.bdf unifont_sample.ttf
 
 clean:
 	\rm -f [0-9A-F].hex

@@ -28,7 +28,9 @@
 #define MAXSTRING	256
 
 
-int main(int argc, char **argv) {
+int
+main (int argc, char **argv)
+{
 
    char teststring[MAXSTRING];  /* current input line                       */
    int  loc;                    /* Unicode code point of current input line */
@@ -43,9 +45,9 @@ int main(int argc, char **argv) {
 
    /*
       if (argc != 3) {
-         fprintf(stderr,
+         fprintf (stderr,
                 "\n\nUsage: %s combining.txt nonprinting.hex < unifont.hex > unifontfull.hex\n\n");
-         exit(EXIT_FAILURE);
+         exit (EXIT_FAILURE);
       }
    */
 
@@ -53,53 +55,55 @@ int main(int argc, char **argv) {
       Read the combining characters list.
    */
    /* Start with no combining code points flagged */
-   memset(combining, 0, 0x10000 * sizeof(char));
+   memset (combining, 0, 0x10000 * sizeof (char));
 
-   if ((infilefp = fopen(argv[1],"r")) == NULL) {
-      fprintf(stderr,"ERROR - combining characters file %s not found.\n\n",
+   if ((infilefp = fopen (argv[1],"r")) == NULL) {
+      fprintf (stderr,"ERROR - combining characters file %s not found.\n\n",
               argv[1]);
-      exit(EXIT_FAILURE);
+      exit (EXIT_FAILURE);
    }
 
    /* Flag list of combining characters to add a dashed circle. */
-   while (fscanf(infilefp, "%X", &loc) != EOF) combining[loc] = 1;
+   while (fscanf (infilefp, "%X", &loc) != EOF) combining[loc] = 1;
 
-   fclose(infilefp); /* all done reading combining.txt */
+   fclose (infilefp); /* all done reading combining.txt */
 
    /* Now read the non-printing glyphs; they never have dashed circles */
-   if ((infilefp = fopen(argv[2],"r")) == NULL) {
-      fprintf(stderr,"ERROR - nonprinting characters file %s not found.\n\n",
+   if ((infilefp = fopen (argv[2],"r")) == NULL) {
+      fprintf (stderr,"ERROR - nonprinting characters file %s not found.\n\n",
               argv[1]);
-      exit(EXIT_FAILURE);
+      exit (EXIT_FAILURE);
    }
 
    /* Reset list of nonprinting characters to avoid adding a dashed circle. */
-   while (fscanf(infilefp, "%X:%*s", &loc) != EOF) combining[loc] = 0;
+   while (fscanf (infilefp, "%X:%*s", &loc) != EOF) combining[loc] = 0;
 
-   fclose(infilefp); /* all done reading nonprinting.hex */
+   fclose (infilefp); /* all done reading nonprinting.hex */
 
    /*
       Read the hex glyphs.
    */
-   teststring[MAXSTRING - 1] = '\0';  /* so there's no chance we leave array */
-   while (fgets(teststring, MAXSTRING-1, stdin) != NULL) {
-      sscanf(teststring, "%X", &loc);     /* loc == the Uniocde code point   */
-      gstart = index(teststring,':') + 1; /* start of glyph bitmap           */
-      if (combining[loc]) {               /* if a combining character        */
-         if (strlen(gstart) < 35) add_single_circle(gstart); /* single-width */
-         else add_double_circle(gstart);                     /* double-width */
+   teststring[MAXSTRING - 1] = '\0';   /* so there's no chance we leave array  */
+   while (fgets (teststring, MAXSTRING-1, stdin) != NULL) {
+      sscanf (teststring, "%X", &loc);     /* loc == the Uniocde code point    */
+      gstart = index (teststring,':') + 1; /* start of glyph bitmap            */
+      if (combining[loc]) {                /* if a combining character         */
+         if (strlen (gstart) < 35) add_single_circle (gstart); /* single-width */
+         else add_double_circle (gstart);                      /* double-width */
       }
-      printf("%s", teststring); /* output the new character .hex string */
+      printf ("%s", teststring); /* output the new character .hex string */
    }
 
-   exit(EXIT_SUCCESS);
+   exit (EXIT_SUCCESS);
 }
 
 
 /*
-   add_single_circle() - superimpose a single-width dashed combining circle.
+   add_single_circle - superimpose a single-width dashed combining circle.
 */
-void add_single_circle(char *glyphstring) {
+void
+add_single_circle (char *glyphstring)
+{
 
    char newstring[256];
    /* Circle hex string pattern is "00000008000024004200240000000000" */
@@ -126,7 +130,7 @@ void add_single_circle(char *glyphstring) {
 
    /* for each character position, OR the corresponding circle glyph value */
    for (i = 0; i < 32; i++) {
-      glyphstring[i] = toupper(glyphstring[i]);
+      glyphstring[i] = toupper (glyphstring[i]);
 
       /* Convert ASCII character to a hexadecimal integer */
       digit1 = (glyphstring[i] <= '9') ?
@@ -144,16 +148,18 @@ void add_single_circle(char *glyphstring) {
    newstring[i++] = '\n';
    newstring[i++] = '\0';
 
-   strncpy(glyphstring, newstring, i);
+   strncpy (glyphstring, newstring, i);
 
    return;
 }
 
 
 /*
-   add_double_circle() - superimpose a single-width dashed combining circle.
+   add_double_circle - superimpose a single-width dashed combining circle.
 */
-void add_double_circle(char *glyphstring) {
+void
+add_double_circle (char *glyphstring)
+{
 
    char newstring[256];
    /* Circle hex string pattern is "00000008000024004200240000000000" */
@@ -180,7 +186,7 @@ void add_double_circle(char *glyphstring) {
 
    /* for each character position, OR the corresponding circle glyph value */
    for (i = 0; i < 64; i++) {
-      glyphstring[i] = toupper(glyphstring[i]);
+      glyphstring[i] = toupper (glyphstring[i]);
 
       /* Convert ASCII character to a hexadecimal integer */
       digit1 = (glyphstring[i] <= '9') ?
@@ -198,7 +204,7 @@ void add_double_circle(char *glyphstring) {
    newstring[i++] = '\n';
    newstring[i++] = '\0';
 
-   strncpy(glyphstring, newstring, i);
+   strncpy (glyphstring, newstring, i);
 
    return;
 }

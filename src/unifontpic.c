@@ -29,8 +29,18 @@
 
 #define HEADER_STRING "GNU Unifont 6.3" /* to be printed as chart title */
 
+/*
+   Stylistic Note:
 
-int main(int argc, char **argv) {
+   Many variables in this program use multiple words scrunched
+   together, with each word starting with an upper-case letter.
+   This is only done to match the canonical field names in the
+   Windows Bitmap Graphics spec.
+*/
+
+int
+main (int argc, char **argv)
+{
 
    /* long and dpi are set from command-line options */
    int wide=1; /* =1 for a 256x256 grid, =0 for a 16x4096 grid */
@@ -45,59 +55,65 @@ int main(int argc, char **argv) {
    void genlongbmp();
    void genwidebmp();
 
-   memset((void *)bitarray, 0, 0x10000 * 16 * sizeof(int));
+   memset ((void *)bitarray, 0, 0x10000 * 16 * sizeof (int));
 
-   gethex(bitarray); /* read .hex input file and fill bitarray with glyph data */
+   gethex (bitarray); /* read .hex input file and fill bitarray with glyph data */
 
    if (argc > 1) {
       for (i = 1; i < argc; i++) {
-         if (strncmp(argv[i],"-l",2) == 0) { /* long display */
+         if (strncmp (argv[i],"-l",2) == 0) { /* long display */
            wide = 0;
          }
-         else if (strncmp(argv[i],"-d",2) == 0) {
-            dpi = atoi(&argv[i][2]); /* dots/inch specified on command line */
+         else if (strncmp (argv[i],"-d",2) == 0) {
+            dpi = atoi (&argv[i][2]); /* dots/inch specified on command line */
          }
-         else if (strncmp(argv[i],"-t",2) == 0) {
+         else if (strncmp (argv[i],"-t",2) == 0) {
             tinynum = 1;
          }
       }
    }
 
    if (wide) {
-      genwidebmp(bitarray, dpi, tinynum); /* write bitarray glyph data to BMP file */
+      genwidebmp (bitarray, dpi, tinynum); /* write bitarray glyph data to BMP file */
    }
    else {
-      genlongbmp(bitarray, dpi, tinynum);
+      genlongbmp (bitarray, dpi, tinynum);
    }
 
-   exit(EXIT_SUCCESS);
+   exit (EXIT_SUCCESS);
 }
 
 
-void output4(int thisword) {
+void
+output4 (int thisword)
+{
 
-   putchar( thisword        & 0xFF);
-   putchar((thisword >>  8) & 0xFF);
-   putchar((thisword >> 16) & 0xFF);
-   putchar((thisword >> 24) & 0xFF);
+   putchar ( thisword        & 0xFF);
+   putchar ((thisword >>  8) & 0xFF);
+   putchar ((thisword >> 16) & 0xFF);
+   putchar ((thisword >> 24) & 0xFF);
 
    return;
 }
 
 
-void output2(int thisword) {
+void
+output2 (int thisword)
+{
 
-   putchar( thisword       & 0xFF);
-   putchar((thisword >> 8) & 0xFF);
+   putchar ( thisword       & 0xFF);
+   putchar ((thisword >> 8) & 0xFF);
 
    return;
 }
 
 
 /*
-   gethex() reads a Unifont .hex-format input file from stdin.
+   gethex reads a Unifont .hex-format input file from stdin.
 */
-void gethex(int bitarray[0x10000][16]) {
+void
+gethex (int bitarray[0x10000][16])
+{
 
    char instring[MAXSTRING]; /* input buffer for a code point */
    char *bitstring;          /* pointer into instring for glyph bitmap */
@@ -108,15 +124,15 @@ void gethex(int bitarray[0x10000][16]) {
    /*
       Read each input line and place its glyph into the bit array.
    */
-   while (fgets(instring, MAXSTRING, stdin) != NULL) {
-      sscanf(instring, "%X", &codept);
+   while (fgets (instring, MAXSTRING, stdin) != NULL) {
+      sscanf (instring, "%X", &codept);
       for (i = 0; (instring[i] != ':') && (i < 9); i++); /* find the colon separator */
       i++; /* position past it */
       bitstring = &instring[i];
       /*
          If this glyph is only 8 pixels wide, expand so right half of glyph is 0s.
       */
-      if (strlen(bitstring) <= 33) { /* count terminating newline */
+      if (strlen (bitstring) <= 33) { /* count terminating newline */
          for (i = 60; i >= 0; i -= 4) {
             bitstring[i + 3] = '0';
             bitstring[i + 2] = '0';
@@ -127,7 +143,7 @@ void gethex(int bitarray[0x10000][16]) {
       bitstring[64] = '\0'; /* truncate string, overwriting newline */
 
       for (i = 0; i < 16; i++) {
-         sscanf(bitstring, "%4X", &bitarray[codept][i]);
+         sscanf (bitstring, "%4X", &bitarray[codept][i]);
          bitstring += 4;
       }
    }
@@ -137,10 +153,12 @@ void gethex(int bitarray[0x10000][16]) {
 
 
 /*
-   genlongbmp() generates the BMP output file from a bitmap parameter.
+   genlongbmp generates the BMP output file from a bitmap parameter.
    This is a long bitmap, 16 glyphs wide by 4,096 glyphs tall.
 */
-void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
+void
+genlongbmp (int bitarray[0x10000][16], int dpi, int tinynum)
+{
 
    char header_string[17];
    int header[16][16]; /* header row, for chart title */
@@ -148,11 +166,10 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    int startcol;       /* column to start printing header, for centering */
 
    unsigned leftcol[0x1000][16]; /* code point legend on left side of chart */
-   int d1, d2, d3, d4;          /* digits for filling leftcol[][] legend   */
-   int codept;                  /* current starting code point for legend  */
-   int thisrow;                 /* glyph row currently being rendered */
-
-   unsigned toprow[16][16];     /* code point legend on top of chart */
+   int d1, d2, d3, d4;           /* digits for filling leftcol[][] legend   */
+   int codept;                   /* current starting code point for legend  */
+   int thisrow;                  /* glyph row currently being rendered      */
+   unsigned toprow[16][16];      /* code point legend on top of chart       */
 
    /*
       hexdigit contains 4x5 pixel arrays of tiny digits for legend.
@@ -212,48 +229,48 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /*
       Generate the BMP Header
    */
-   putchar('B');
-   putchar('M');
+   putchar ('B');
+   putchar ('M');
 
    /*
       Calculate file size:
 
          BMP Header + InfoHeader + Color Table + Raster Data
    */
-   output4(FileSize);  /* FileSize */
-   output4(0x0000); /* reserved */
+   output4 (FileSize);  /* FileSize */
+   output4 (0x0000); /* reserved */
 
    /* Calculate DataOffset */
-   output4(DataOffset);
+   output4 (DataOffset);
 
    /*
       InfoHeader
    */
-   output4(40);         /* Size of InfoHeader                       */
-   output4(Width);      /* Width of bitmap in pixels                */
-   output4(Height);     /* Height of bitmap in pixels               */
-   output2(1);          /* Planes (1 plane)                         */
-   output2(1);          /* BitCount (1 = monochrome)                */
-   output4(0);          /* Compression (0 = none)                   */
-   output4(ImageSize);  /* ImageSize, in bytes                      */
-   output4(ppm);        /* XpixelsPerM (96 dpi = 3780 pixels/meter) */
-   output4(ppm);        /* YpixelsPerM (96 dpi = 3780 pixels/meter) */
-   output4(2);          /* ColorsUsed (= 2)                         */
-   output4(2);          /* ColorsImportant (= 2)                    */
-   output4(0x00000000); /* black (reserved, B, G, R)                */
-   output4(0x00FFFFFF); /* white (reserved, B, G, R)                */
+   output4 (40);         /* Size of InfoHeader                       */
+   output4 (Width);      /* Width of bitmap in pixels                */
+   output4 (Height);     /* Height of bitmap in pixels               */
+   output2 (1);          /* Planes (1 plane)                         */
+   output2 (1);          /* BitCount (1 = monochrome)                */
+   output4 (0);          /* Compression (0 = none)                   */
+   output4 (ImageSize);  /* ImageSize, in bytes                      */
+   output4 (ppm);        /* XpixelsPerM (96 dpi = 3780 pixels/meter) */
+   output4 (ppm);        /* YpixelsPerM (96 dpi = 3780 pixels/meter) */
+   output4 (2);          /* ColorsUsed (= 2)                         */
+   output4 (2);          /* ColorsImportant (= 2)                    */
+   output4 (0x00000000); /* black (reserved, B, G, R)                */
+   output4 (0x00FFFFFF); /* white (reserved, B, G, R)                */
 
    /*
       Create header row bits.
    */
-   memset((void *)header, 0, 16 * 16 * sizeof(int)); /* fill with white */
-   memset((void *)header_string, ' ', 16 * sizeof(char)); /* 16 spaces */
+   memset ((void *)header, 0, 16 * 16 * sizeof (int)); /* fill with white */
+   memset ((void *)header_string, ' ', 16 * sizeof (char)); /* 16 spaces */
    header_string[16] = '\0';  /* null-terminated */
 
-   hdrlen = strlen(HEADER_STRING);
+   hdrlen = strlen (HEADER_STRING);
    if (hdrlen > 16) hdrlen = 16;        /* only 16 columns to print header */
    startcol = 8 - ((hdrlen + 1) >> 1);                 /* to center header */
-   strncpy(&header_string[startcol], HEADER_STRING, hdrlen); /* center up to 16 chars */
+   strncpy (&header_string[startcol], HEADER_STRING, hdrlen); /* center up to 16 chars */
 
    /* Copy each letter's bitmap from the bitarray[][] we constructed. */
    for (j = 0; j < 16; j++) {
@@ -265,13 +282,12 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /*
       Create the left column legend.
    */
-   memset((void *)leftcol, 0, 4096 * 16 * sizeof(unsigned));
+   memset ((void *)leftcol, 0, 4096 * 16 * sizeof (unsigned));
 
    for (codept = 0x0000; codept < 0x10000; codept += 0x10) {
       d1 = (codept >> 12) & 0xF; /* most significant hex digit */
       d2 = (codept >>  8) & 0xF;
       d3 = (codept >>  4) & 0xF;
-//    d4 =  codept        & 0xF; /* least significant hex digit */
 
       thisrow = codept >> 4; /* rows of 16 glyphs */
 
@@ -306,7 +322,7 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /*
       Create the top row legend.
    */
-   memset((void *)toprow, 0, 16 * 16 * sizeof(unsigned));
+   memset ((void *)toprow, 0, 16 * 16 * sizeof (unsigned));
 
    for (codept = 0x0; codept <= 0xF; codept++) {
       d1 = (codept >> 12) & 0xF; /* most significant hex digit */
@@ -348,15 +364,15 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
       thisrow = i >> 4; /* 16 glyphs per row */
       for (j = 15; j >= 0; j--) {
          /* left-hand legend */
-         putchar((~leftcol[thisrow][j] >> 24) & 0xFF);
-         putchar((~leftcol[thisrow][j] >> 16) & 0xFF);
-         putchar((~leftcol[thisrow][j] >>  8) & 0xFF);
-         putchar( ~leftcol[thisrow][j]        & 0xFF);
+         putchar ((~leftcol[thisrow][j] >> 24) & 0xFF);
+         putchar ((~leftcol[thisrow][j] >> 16) & 0xFF);
+         putchar ((~leftcol[thisrow][j] >>  8) & 0xFF);
+         putchar ( ~leftcol[thisrow][j]        & 0xFF);
          /* Unifont glyph */
          for (k = 0; k < 16; k++) {
             bytesout = ~bitarray[i+k][j] & 0xFFFF;
-            putchar((bytesout >> 8) & 0xFF);
-            putchar( bytesout       & 0xFF);
+            putchar ((bytesout >> 8) & 0xFF);
+            putchar ( bytesout       & 0xFF);
          }
       }
    }
@@ -366,32 +382,32 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    */
    /* i == 15: bottom pixel row of header is output here */
    /* left-hand legend: solid black line except for right-most pixel */
-   putchar(0x00);
-   putchar(0x00);
-   putchar(0x00);
-   putchar(0x01);
+   putchar (0x00);
+   putchar (0x00);
+   putchar (0x00);
+   putchar (0x01);
    for (j = 0; j < 16; j++) {
-      putchar((~toprow[15][j] >> 8) & 0xFF);
-      putchar( ~toprow[15][j]       & 0xFF);
+      putchar ((~toprow[15][j] >> 8) & 0xFF);
+      putchar ( ~toprow[15][j]       & 0xFF);
    }
 
-   putchar(0xFF);
-   putchar(0xFF);
-   putchar(0xFF);
-   putchar(0xFC);
+   putchar (0xFF);
+   putchar (0xFF);
+   putchar (0xFF);
+   putchar (0xFC);
    for (j = 0; j < 16; j++) {
-      putchar((~toprow[14][j] >> 8) & 0xFF);
-      putchar( ~toprow[14][j]       & 0xFF);
+      putchar ((~toprow[14][j] >> 8) & 0xFF);
+      putchar ( ~toprow[14][j]       & 0xFF);
    }
 
    for (i = 13; i >= 0; i--) {
-      putchar(0xFF);
-      putchar(0xFF);
-      putchar(0xFF);
-      putchar(0xFD);
+      putchar (0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
+      putchar (0xFD);
       for (j = 0; j < 16; j++) {
-         putchar((~toprow[i][j] >> 8) & 0xFF);
-         putchar( ~toprow[i][j]       & 0xFF);
+         putchar ((~toprow[i][j] >> 8) & 0xFF);
+         putchar ( ~toprow[i][j]       & 0xFF);
       }
    }
 
@@ -402,30 +418,30 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /* 7 completely white rows */
    for (i = 7; i >= 0; i--) {
       for (j = 0; j < 18; j++) {
-         putchar(0xFF);
-         putchar(0xFF);
+         putchar (0xFF);
+         putchar (0xFF);
       }
    }
 
    for (i = 15; i >= 0; i--) {
       /* left-hand legend */
-      putchar(0xFF);
-      putchar(0xFF);
-      putchar(0xFF);
-      putchar(0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
       /* header glyph */
       for (j = 0; j < 16; j++) {
          bytesout = ~header[i][j] & 0xFFFF;
-         putchar((bytesout >> 8) & 0xFF);
-         putchar( bytesout       & 0xFF);
+         putchar ((bytesout >> 8) & 0xFF);
+         putchar ( bytesout       & 0xFF);
       }
    }
 
    /* 8 completely white rows at very top */
    for (i = 7; i >= 0; i--) {
       for (j = 0; j < 18; j++) {
-      putchar(0xFF);
-      putchar(0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
       }
    }
 
@@ -435,10 +451,12 @@ void genlongbmp(int bitarray[0x10000][16], int dpi, int tinynum) {
 
 
 /*
-   genwidebmp() generates the BMP output file from a bitmap parameter.
+   genwidebmp generates the BMP output file from a bitmap parameter.
    This is a wide bitmap, 256 glyphs wide by 256 glyphs tall.
 */
-void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
+void
+genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
+{
 
    char header_string[257];
    int header[16][256]; /* header row, for chart title */
@@ -448,9 +466,8 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    unsigned leftcol[0x100][16]; /* code point legend on left side of chart */
    int d1, d2, d3, d4;          /* digits for filling leftcol[][] legend   */
    int codept;                  /* current starting code point for legend  */
-   int thisrow;                 /* glyph row currently being rendered */
-
-   unsigned toprow[32][256];     /* code point legend on top of chart */
+   int thisrow;                 /* glyph row currently being rendered      */
+   unsigned toprow[32][256];    /* code point legend on top of chart       */
 
    /*
       hexdigit contains 4x5 pixel arrays of tiny digits for legend.
@@ -511,46 +528,46 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /*
       Generate the BMP Header
    */
-   putchar('B');
-   putchar('M');
+   putchar ('B');
+   putchar ('M');
    /*
       Calculate file size:
 
          BMP Header + InfoHeader + Color Table + Raster Data
    */
-   output4(FileSize);  /* FileSize */
-   output4(0x0000); /* reserved */
+   output4 (FileSize);  /* FileSize */
+   output4 (0x0000); /* reserved */
    /* Calculate DataOffset */
-   output4(DataOffset);
+   output4 (DataOffset);
 
    /*
       InfoHeader
    */
-   output4(40);         /* Size of InfoHeader                       */
-   output4(Width);      /* Width of bitmap in pixels                */
-   output4(Height);     /* Height of bitmap in pixels               */
-   output2(1);          /* Planes (1 plane)                         */
-   output2(1);          /* BitCount (1 = monochrome)                */
-   output4(0);          /* Compression (0 = none)                   */
-   output4(ImageSize);  /* ImageSize, in bytes                      */
-   output4(ppm);        /* XpixelsPerM (96 dpi = 3780 pixels/meter) */
-   output4(ppm);        /* YpixelsPerM (96 dpi = 3780 pixels/meter) */
-   output4(2);          /* ColorsUsed (= 2)                         */
-   output4(2);          /* ColorsImportant (= 2)                    */
-   output4(0x00000000); /* black (reserved, B, G, R)                */
-   output4(0x00FFFFFF); /* white (reserved, B, G, R)                */
+   output4 (40);         /* Size of InfoHeader                       */
+   output4 (Width);      /* Width of bitmap in pixels                */
+   output4 (Height);     /* Height of bitmap in pixels               */
+   output2 (1);          /* Planes (1 plane)                         */
+   output2 (1);          /* BitCount (1 = monochrome)                */
+   output4 (0);          /* Compression (0 = none)                   */
+   output4 (ImageSize);  /* ImageSize, in bytes                      */
+   output4 (ppm);        /* XpixelsPerM (96 dpi = 3780 pixels/meter) */
+   output4 (ppm);        /* YpixelsPerM (96 dpi = 3780 pixels/meter) */
+   output4 (2);          /* ColorsUsed (= 2)                         */
+   output4 (2);          /* ColorsImportant (= 2)                    */
+   output4 (0x00000000); /* black (reserved, B, G, R)                */
+   output4 (0x00FFFFFF); /* white (reserved, B, G, R)                */
 
    /*
       Create header row bits.
    */
-   memset((void *)header, 0, 256 * 16 * sizeof(int)); /* fill with white */
-   memset((void *)header_string, ' ', 256 * sizeof(char)); /* 256 spaces */
+   memset ((void *)header, 0, 256 * 16 * sizeof (int)); /* fill with white */
+   memset ((void *)header_string, ' ', 256 * sizeof (char)); /* 256 spaces */
    header_string[256] = '\0';  /* null-terminated */
 
-   hdrlen = strlen(HEADER_STRING);
+   hdrlen = strlen (HEADER_STRING);
    if (hdrlen > 256) hdrlen = 256;        /* only 256 columns to print header */
    startcol = 128 - ((hdrlen + 1) >> 1);                 /* to center header */
-   strncpy(&header_string[startcol], HEADER_STRING, hdrlen); /* center up to 16 chars */
+   strncpy (&header_string[startcol], HEADER_STRING, hdrlen); /* center up to 16 chars */
 
    /* Copy each letter's bitmap from the bitarray[][] we constructed. */
    for (j = 0; j < 256; j++) {
@@ -562,13 +579,11 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /*
       Create the left column legend.
    */
-   memset((void *)leftcol, 0, 256 * 16 * sizeof(unsigned));
+   memset ((void *)leftcol, 0, 256 * 16 * sizeof (unsigned));
 
    for (codept = 0x0000; codept < 0x10000; codept += 0x100) {
       d1 = (codept >> 12) & 0xF; /* most significant hex digit */
       d2 = (codept >>  8) & 0xF;
-  //  d3 = (codept >>  4) & 0xF;
-  //  d4 =  codept        & 0xF; /* least significant hex digit */
 
       thisrow = codept >> 8; /* rows of 256 glyphs */
 
@@ -611,11 +626,9 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /*
       Create the top row legend.
    */
-   memset((void *)toprow, 0, 32 * 256 * sizeof(unsigned));
+   memset ((void *)toprow, 0, 32 * 256 * sizeof (unsigned));
 
    for (codept = 0x00; codept <= 0xFF; codept++) {
-//    d1 = (codept >> 12) & 0xF; /* most significant hex digit */
-//    d2 = (codept >>  8) & 0xF;
       d3 = (codept >>  4) & 0xF;
       d4 =  codept        & 0xF; /* least significant hex digit */
 
@@ -673,15 +686,15 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
       thisrow = i >> 8; /* 256 glyphs per row */
       for (j = 15; j >= 0; j--) {
          /* left-hand legend */
-         putchar((~leftcol[thisrow][j] >> 24) & 0xFF);
-         putchar((~leftcol[thisrow][j] >> 16) & 0xFF);
-         putchar((~leftcol[thisrow][j] >>  8) & 0xFF);
-         putchar( ~leftcol[thisrow][j]        & 0xFF);
+         putchar ((~leftcol[thisrow][j] >> 24) & 0xFF);
+         putchar ((~leftcol[thisrow][j] >> 16) & 0xFF);
+         putchar ((~leftcol[thisrow][j] >>  8) & 0xFF);
+         putchar ( ~leftcol[thisrow][j]        & 0xFF);
          /* Unifont glyph */
          for (k = 0x00; k < 0x100; k++) {
             bytesout = ~bitarray[i+k][j] & 0xFFFF;
-            putchar((bytesout >> 8) & 0xFF);
-            putchar( bytesout       & 0xFF);
+            putchar ((bytesout >> 8) & 0xFF);
+            putchar ( bytesout       & 0xFF);
          }
       }
    }
@@ -691,40 +704,40 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    */
    /* i == 15: bottom pixel row of header is output here */
    /* left-hand legend: solid black line except for right-most pixel */
-   putchar(0x00);
-   putchar(0x00);
-   putchar(0x00);
-   putchar(0x01);
+   putchar (0x00);
+   putchar (0x00);
+   putchar (0x00);
+   putchar (0x01);
    for (j = 0; j < 256; j++) {
-      putchar((~toprow[16 + 15][j] >> 8) & 0xFF);
-      putchar( ~toprow[16 + 15][j]       & 0xFF);
+      putchar ((~toprow[16 + 15][j] >> 8) & 0xFF);
+      putchar ( ~toprow[16 + 15][j]       & 0xFF);
    }
 
-   putchar(0xFF);
-   putchar(0xFF);
-   putchar(0xFF);
-   putchar(0xFC);
+   putchar (0xFF);
+   putchar (0xFF);
+   putchar (0xFF);
+   putchar (0xFC);
    for (j = 0; j < 256; j++) {
-      putchar((~toprow[16 + 14][j] >> 8) & 0xFF);
-      putchar( ~toprow[16 + 14][j]       & 0xFF);
+      putchar ((~toprow[16 + 14][j] >> 8) & 0xFF);
+      putchar ( ~toprow[16 + 14][j]       & 0xFF);
    }
 
    for (i = 16 + 13; i >= 0; i--) {
       if (i >= 8) { /* make vertical stroke on right */
-         putchar(0xFF);
-         putchar(0xFF);
-         putchar(0xFF);
-         putchar(0xFD);
+         putchar (0xFF);
+         putchar (0xFF);
+         putchar (0xFF);
+         putchar (0xFD);
       }
       else { /* all white */
-         putchar(0xFF);
-         putchar(0xFF);
-         putchar(0xFF);
-         putchar(0xFF);
+         putchar (0xFF);
+         putchar (0xFF);
+         putchar (0xFF);
+         putchar (0xFF);
       }
       for (j = 0; j < 256; j++) {
-         putchar((~toprow[i][j] >> 8) & 0xFF);
-         putchar( ~toprow[i][j]       & 0xFF);
+         putchar ((~toprow[i][j] >> 8) & 0xFF);
+         putchar ( ~toprow[i][j]       & 0xFF);
       }
    }
 
@@ -735,34 +748,33 @@ void genwidebmp(int bitarray[0x10000][16], int dpi, int tinynum) {
    /* 8 completely white rows */
    for (i = 7; i >= 0; i--) {
       for (j = 0; j < 258; j++) {
-         putchar(0xFF);
-         putchar(0xFF);
+         putchar (0xFF);
+         putchar (0xFF);
       }
    }
 
    for (i = 15; i >= 0; i--) {
       /* left-hand legend */
-      putchar(0xFF);
-      putchar(0xFF);
-      putchar(0xFF);
-      putchar(0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
       /* header glyph */
       for (j = 0; j < 256; j++) {
          bytesout = ~header[i][j] & 0xFFFF;
-         putchar((bytesout >> 8) & 0xFF);
-         putchar( bytesout       & 0xFF);
+         putchar ((bytesout >> 8) & 0xFF);
+         putchar ( bytesout       & 0xFF);
       }
    }
 
    /* 8 completely white rows at very top */
    for (i = 7; i >= 0; i--) {
       for (j = 0; j < 258; j++) {
-      putchar(0xFF);
-      putchar(0xFF);
+      putchar (0xFF);
+      putchar (0xFF);
       }
    }
 
    return;
 }
-
 

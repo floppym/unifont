@@ -1,7 +1,11 @@
 
-CFLAGS = -g -O -Wall
+SHELL = /bin/sh
 
-INSTALLBINDIR = ../bin
+CFLAGS   = -g -O -Wall
+
+LOCALBINDIR = ../bin
+
+VPATH = . $(LOCALBINDIR)
 
 #
 # $(PREFIX) is defined in top-level directory, so don't do a
@@ -22,16 +26,24 @@ CPROGS = unibmp2hex unicoverage unidup unibdf2hex unifontpic \
 # only used for generation of Hangul syllables.
 #
 PPROGS = bdfimplode hex2bdf hex2sfd hexbraille hexdraw hexmerge \
-	 johab2ucs2 unifontchojung unifontksx
+	 johab2ucs2 unifontchojung unifontksx unihex2png unipng2hex
 
 PROGS = $(CPROGS) $(PPROGS)
 
 
-all: $(CPROGS)
-	install    -m0755 -d $(INSTALLBINDIR)
-	install -s -m0755 $(CPROGS) $(INSTALLBINDIR)
-	install    -m0755 $(PPROGS) $(INSTALLBINDIR)
+all: $(CPROGS) bin
+
+.c:
+
+bin: bin-stamp
+
+bin-stamp: $(CPROGS) $(PPROGS)
+	install    -m0755 -d $(LOCALBINDIR)
+	install    -m0755 $? $(LOCALBINDIR)
 	\rm -f $(CPROGS)
+	touch $@
+#	install -s -m0755 $(CPROGS) $(LOCALBINDIR)
+#	install    -m0755 $(PPROGS) $(LOCALBINDIR)
 
 install:
 	if [ x$(PREFIX) = x ] ; \
@@ -42,7 +54,7 @@ install:
 	fi
 	install -m0755 -d $(INSTALLDIR)
 	set -e ; \
-	   cd $(INSTALLBINDIR) ; \
+	   cd $(LOCALBINDIR) ; \
 	   install -s -m0755 $(CPROGS) $(INSTALLDIR)
 	set -e ; \
 	   cd ../bin ; \
@@ -53,10 +65,12 @@ install:
 # The *.dSYM is for Mac OS X.
 #
 clean:
-	\rm -f $(CPROGS)
+	\rm -f $(CPROGS) *.o
+	\rm -f *~
 	\rm -f *.exe
 	\rm -rf *.dSYM
 
 distclean: clean
+	\rm -f bin-stamp *~
 
-.PHONY: all install clean distclean
+.PHONY: all bin install clean distclean

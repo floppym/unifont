@@ -34,25 +34,26 @@
 #define MAXBUF 256
 
 
-int main(int argc, char *argv[]) {
+int
+main (int argc, char *argv[])
+{
 
-   unsigned i;                /* loop variable                     */
+   unsigned i;                /* loop variable                       */
    unsigned slen;             /* string length of coverage file line */
-   char inbuf[256];           /* input buffer                      */
-   unsigned thischar;         /* the current character             */
-// unsigned char thischarbyte; /* unsigned char lowest byte of Unicode char */
+   char inbuf[256];           /* input buffer                        */
+   unsigned thischar;         /* the current character               */
 
-   char *infile="", *outfile="";  /* names of input and output files   */
-   FILE *infp, *outfp;        /* file pointers of input and output files */
-   FILE *coveragefp;          /* file pointer to coverage.dat file */
+   char *infile="", *outfile="";  /* names of input and output files        */
+   FILE *infp, *outfp;        /* file pointers of input and output files    */
+   FILE *coveragefp;          /* file pointer to coverage.dat file          */
    int cstart, cend;          /* current coverage start and end code points */
    char coverstring[MAXBUF];  /* description of current coverage range      */
-   int nglyphs;               /* number of glyphs in this section */
+   int nglyphs;               /* number of glyphs in this section           */
    int nextrange();           /* to get next range & name of Unicode glyphs */
 
-   if ((coveragefp = fopen("coverage.dat", "r")) == NULL) {
-      fprintf(stderr, "\nError: data file \"coverage.dat\" not found.\n\n");
-      exit(0);
+   if ((coveragefp = fopen ("coverage.dat", "r")) == NULL) {
+      fprintf (stderr, "\nError: data file \"coverage.dat\" not found.\n\n");
+      exit (0);
    }
 
    if (argc > 1) {
@@ -66,11 +67,11 @@ int main(int argc, char *argv[]) {
                   outfile = &argv[i][2];
                   break;
                default:   /* if unrecognized option, print list and exit */
-                  fprintf(stderr, "\nSyntax:\n\n");
-                  fprintf(stderr, "   %s -p<Unicode_Page> ", argv[0]);
-                  fprintf(stderr, "-i<Input_File> -o<Output_File> -w\n\n");
-                  fprintf(stderr, "\nExample:\n\n");
-                  exit(1);
+                  fprintf (stderr, "\nSyntax:\n\n");
+                  fprintf (stderr, "   %s -p<Unicode_Page> ", argv[0]);
+                  fprintf (stderr, "-i<Input_File> -o<Output_File> -w\n\n");
+                  fprintf (stderr, "\nExample:\n\n");
+                  exit (1);
             }
          }
       }
@@ -79,42 +80,42 @@ int main(int argc, char *argv[]) {
       Make sure we can open any I/O files that were specified before
       doing anything else.
    */
-   if (strlen(infile) > 0) {
-      if ((infp = fopen(infile, "r")) == NULL) {
-         fprintf(stderr, "Error: can't open %s for input.\n", infile);
-         exit(1);
+   if (strlen (infile) > 0) {
+      if ((infp = fopen (infile, "r")) == NULL) {
+         fprintf (stderr, "Error: can't open %s for input.\n", infile);
+         exit (1);
       }
    }
    else {
       infp = stdin;
    }
-   if (strlen(outfile) > 0) {
-      if ((outfp = fopen(outfile, "w")) == NULL) {
-         fprintf(stderr, "Error: can't open %s for output.\n", outfile);
-         exit(1);
+   if (strlen (outfile) > 0) {
+      if ((outfp = fopen (outfile, "w")) == NULL) {
+         fprintf (stderr, "Error: can't open %s for output.\n", outfile);
+         exit (1);
       }
    }
    else {
       outfp = stdout;
    }
-   slen = nextrange(coveragefp, &cstart, &cend, coverstring);
+   slen = nextrange (coveragefp, &cstart, &cend, coverstring);
    nglyphs = 0;
    /*
       Print header row.
    */
-   fprintf(outfp, "Covered      Range       Script\n");
-   fprintf(outfp, "-------      -----       ------\n\n");
+   fprintf (outfp, "Covered      Range       Script\n");
+   fprintf (outfp, "-------      -----       ------\n\n");
    /*
       Read in the glyphs in the file
    */
-   while (slen != 0 && fgets(inbuf, MAXBUF-1, infp) != NULL) {
-      sscanf(inbuf, "%x", &thischar);
+   while (slen != 0 && fgets (inbuf, MAXBUF-1, infp) != NULL) {
+      sscanf (inbuf, "%x", &thischar);
       while (cend < thischar && slen != 0) {
          /* print old range total */
-         fprintf(outfp, " %5.1f%%  U+%04X..U+%04X  %s\n",
+         fprintf (outfp, " %5.1f%%  U+%04X..U+%04X  %s\n",
                  100.0*nglyphs/(1+cend-cstart), cstart, cend, coverstring);
          /* start new range total */
-         slen = nextrange(coveragefp, &cstart, &cend, coverstring);
+         slen = nextrange (coveragefp, &cstart, &cend, coverstring);
          /*
             Count Non-characters as existing for totals counts
          */
@@ -130,40 +131,41 @@ int main(int argc, char *argv[]) {
       */
       if (thischar < 0xFDD0 || (thischar > 0xFDEF && thischar < 0xFFFE))
          nglyphs++;
-//    thischarbyte = (unsigned char)(thischar & 0xff);
    }
    /* print last range total */
-   fprintf(outfp, " %5.1f%%  U+%04X..U+%04X  %s\n",
+   fprintf (outfp, " %5.1f%%  U+%04X..U+%04X  %s\n",
            100.0*nglyphs/(1+cend-cstart), cstart, cend, coverstring);
-   exit(0);
+   exit (0);
 }
 
 /*
-   nextrange() - get next Unicode range
+   nextrange - get next Unicode range
 */
-int nextrange(FILE *coveragefp,
+int
+nextrange (FILE *coveragefp,
               int *cstart, int *cend,
-              char *coverstring) {
+              char *coverstring)
+{
 
    int i;
    static char inbuf[MAXBUF];
    int retval;         /* the return value */
 
-   if (fgets(inbuf, MAXBUF-1, coveragefp) != NULL) {
-      retval = strlen(inbuf);
+   if (fgets (inbuf, MAXBUF-1, coveragefp) != NULL) {
+      retval = strlen (inbuf);
       if ((inbuf[0] >= '0' && inbuf[0] <= '9') ||
           (inbuf[0] >= 'A' && inbuf[0] <= 'F') ||
           (inbuf[0] >= 'a' && inbuf[0] <= 'f')) {
-         sscanf(inbuf, "%x-%x", cstart, cend);
+         sscanf (inbuf, "%x-%x", cstart, cend);
          i = 0;
          while (inbuf[i] != ' ') i++;  /* find first blank */
          while (inbuf[i] == ' ') i++;  /* find next non-blank */
-         strcpy(coverstring, &inbuf[i]);
+         strcpy (coverstring, &inbuf[i]);
       }
    }
    else {
       retval = 0;
    }
 
-   return(retval);
+   return (retval);
 }

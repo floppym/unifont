@@ -70,13 +70,14 @@ int flip=1;                /* transpose entire matrix as in Unicode book */
 
 
 
-int main(int argc, char *argv[]) {
+int
+main (int argc, char *argv[])
+{
 
    int i, j;                  /* loop variables                    */
    unsigned k0;               /* temp Unicode char variable        */
    unsigned swap;             /* temp variable for swapping values */
    char inbuf[256];           /* input buffer                      */
-// unsigned headersize=0x28;  /* size of header (fixed in Windows) */
    unsigned filesize;         /* size of file in bytes             */
    unsigned bitmapsize;       /* size of bitmap image in bytes     */
    unsigned thischar;         /* the current character             */
@@ -112,24 +113,24 @@ int main(int argc, char *argv[]) {
                   outfile = &argv[i][2];
                   break;
                case 'p':  /* specify a Unicode page other than default of 0 */
-                  sscanf(&argv[i][2], "%x", &unipage); /* Get Unicode page */
+                  sscanf (&argv[i][2], "%x", &unipage); /* Get Unicode page */
                   break;
                case 'w':  /* write a .wbmp file instead of a .bmp file */
                   wbmp = 1;
                   break;
                default:   /* if unrecognized option, print list and exit */
-                  fprintf(stderr, "\nSyntax:\n\n");
-                  fprintf(stderr, "   %s -p<Unicode_Page> ", argv[0]);
-                  fprintf(stderr, "-i<Input_File> -o<Output_File> -w\n\n");
-                  fprintf(stderr, "   -w specifies .wbmp output instead of ");
-                  fprintf(stderr, "default Windows .bmp output.\n\n");
-                  fprintf(stderr, "   -p is followed by 1 to 6 ");
-                  fprintf(stderr, "Unicode page hex digits ");
-                  fprintf(stderr, "(default is Page 0).\n\n");
-                  fprintf(stderr, "\nExample:\n\n");
-                  fprintf(stderr, "   %s -p83 -iunifont.hex -ou83.bmp\n\n\n",
+                  fprintf (stderr, "\nSyntax:\n\n");
+                  fprintf (stderr, "   %s -p<Unicode_Page> ", argv[0]);
+                  fprintf (stderr, "-i<Input_File> -o<Output_File> -w\n\n");
+                  fprintf (stderr, "   -w specifies .wbmp output instead of ");
+                  fprintf (stderr, "default Windows .bmp output.\n\n");
+                  fprintf (stderr, "   -p is followed by 1 to 6 ");
+                  fprintf (stderr, "Unicode page hex digits ");
+                  fprintf (stderr, "(default is Page 0).\n\n");
+                  fprintf (stderr, "\nExample:\n\n");
+                  fprintf (stderr, "   %s -p83 -iunifont.hex -ou83.bmp\n\n\n",
                          argv[0]);
-                  exit(1);
+                  exit (1);
             }
          }
       }
@@ -138,19 +139,19 @@ int main(int argc, char *argv[]) {
       Make sure we can open any I/O files that were specified before
       doing anything else.
    */
-   if (strlen(infile) > 0) {
-      if ((infp = fopen(infile, "r")) == NULL) {
-         fprintf(stderr, "Error: can't open %s for input.\n", infile);
-         exit(1);
+   if (strlen (infile) > 0) {
+      if ((infp = fopen (infile, "r")) == NULL) {
+         fprintf (stderr, "Error: can't open %s for input.\n", infile);
+         exit (1);
       }
    }
    else {
       infp = stdin;
    }
-   if (strlen(outfile) > 0) {
-      if ((outfp = fopen(outfile, "w")) == NULL) {
-         fprintf(stderr, "Error: can't open %s for output.\n", outfile);
-         exit(1);
+   if (strlen (outfile) > 0) {
+      if ((outfp = fopen (outfile, "w")) == NULL) {
+         fprintf (stderr, "Error: can't open %s for output.\n", outfile);
+         exit (1);
       }
    }
    else {
@@ -162,14 +163,14 @@ int main(int argc, char *argv[]) {
    /*
       Read in the characters in the page
    */
-   while (lastpage <= unipage && fgets(inbuf, MAXBUF-1, infp) != NULL) {
-      sscanf(inbuf, "%x", &thischar);
+   while (lastpage <= unipage && fgets (inbuf, MAXBUF-1, infp) != NULL) {
+      sscanf (inbuf, "%x", &thischar);
       lastpage = thischar >> 8; /* keep Unicode page to see if we can stop */
       if (lastpage == unipage) {
          thischarbyte = (unsigned char)(thischar & 0xff);
          for (k0=0; inbuf[k0] != ':'; k0++);
          k0++;
-         hex2bit(&inbuf[k0], charbits);  /* convert hex string to 32*4 bitmap */
+         hex2bit (&inbuf[k0], charbits);  /* convert hex string to 32*4 bitmap */
 
          /*
             Now write character bitmap upside-down in page array, to match
@@ -210,19 +211,19 @@ int main(int argc, char *argv[]) {
       /*
          Write WBMP header
       */
-      fprintf(outfp, "%c", 0x00); /* Type of image; always 0 (monochrome) */
-      fprintf(outfp, "%c", 0x00); /* Reserved; always 0                   */
-      fprintf(outfp, "%c%c", 0x84, 0x40); /* Width  = 576 pixels          */
-      fprintf(outfp, "%c%c", 0x84, 0x20); /* Height = 544 pixels          */
+      fprintf (outfp, "%c", 0x00); /* Type of image; always 0 (monochrome) */
+      fprintf (outfp, "%c", 0x00); /* Reserved; always 0                   */
+      fprintf (outfp, "%c%c", 0x84, 0x40); /* Width  = 576 pixels          */
+      fprintf (outfp, "%c%c", 0x84, 0x20); /* Height = 544 pixels          */
       /*
          Write bitmap image
       */
       for (toppixelrow=0; toppixelrow <= 17*32-1; toppixelrow++) {
          for (j=0; j<18; j++) {
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2)    ]);
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2) | 1]);
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2) | 2]);
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2) | 3]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2)    ]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2) | 1]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2) | 2]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2) | 3]);
          }
       }
    }
@@ -232,62 +233,62 @@ int main(int argc, char *argv[]) {
       */
 
       /* 'B', 'M' appears at start of every .bmp file */
-      fprintf(outfp, "%c%c", 0x42, 0x4d);
+      fprintf (outfp, "%c%c", 0x42, 0x4d);
 
       /* Write file size in bytes */
       filesize   = 0x3E + bitmapsize;
-      fprintf(outfp, "%c", (unsigned char)((filesize        ) & 0xff));
-      fprintf(outfp, "%c", (unsigned char)((filesize >> 0x08) & 0xff));
-      fprintf(outfp, "%c", (unsigned char)((filesize >> 0x10) & 0xff));
-      fprintf(outfp, "%c", (unsigned char)((filesize >> 0x18) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((filesize        ) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((filesize >> 0x08) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((filesize >> 0x10) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((filesize >> 0x18) & 0xff));
 
       /* Reserved - 0's */
-      fprintf(outfp, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
 
       /* Offset from start of file to bitmap data */
-      fprintf(outfp, "%c%c%c%c", 0x3E, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x3E, 0x00, 0x00, 0x00);
 
       /* Length of bitmap info header */
-      fprintf(outfp, "%c%c%c%c", 0x28, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x28, 0x00, 0x00, 0x00);
 
       /* Width of bitmap in pixels */
-      fprintf(outfp, "%c%c%c%c", 0x40, 0x02, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x40, 0x02, 0x00, 0x00);
 
       /* Height of bitmap in pixels */
-      fprintf(outfp, "%c%c%c%c", 0x20, 0x02, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x20, 0x02, 0x00, 0x00);
 
       /* Planes in bitmap (fixed at 1) */
-      fprintf(outfp, "%c%c", 0x01, 0x00);
+      fprintf (outfp, "%c%c", 0x01, 0x00);
 
       /* bits per pixel (1 = monochrome) */
-      fprintf(outfp, "%c%c", 0x01, 0x00);
+      fprintf (outfp, "%c%c", 0x01, 0x00);
 
       /* Compression (0 = none) */
-      fprintf(outfp, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
 
       /* Size of bitmap data in bytes */
-      fprintf(outfp, "%c", (unsigned char)((bitmapsize        ) & 0xff));
-      fprintf(outfp, "%c", (unsigned char)((bitmapsize >> 0x08) & 0xff));
-      fprintf(outfp, "%c", (unsigned char)((bitmapsize >> 0x10) & 0xff));
-      fprintf(outfp, "%c", (unsigned char)((bitmapsize >> 0x18) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((bitmapsize        ) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((bitmapsize >> 0x08) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((bitmapsize >> 0x10) & 0xff));
+      fprintf (outfp, "%c", (unsigned char)((bitmapsize >> 0x18) & 0xff));
 
       /* Horizontal resolution in pixels per meter */
-      fprintf(outfp, "%c%c%c%c", 0xC4, 0x0E, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0xC4, 0x0E, 0x00, 0x00);
 
       /* Vertical resolution in pixels per meter */
-      fprintf(outfp, "%c%c%c%c", 0xC4, 0x0E, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0xC4, 0x0E, 0x00, 0x00);
 
       /* Number of colors used */
-      fprintf(outfp, "%c%c%c%c", 0x02, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x02, 0x00, 0x00, 0x00);
 
       /* Number of important colors */
-      fprintf(outfp, "%c%c%c%c", 0x02, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x02, 0x00, 0x00, 0x00);
 
       /* The color black: B=0x00, G=0x00, R=0x00, Filler=0xFF */
-      fprintf(outfp, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
 
       /* The color white: B=0xFF, G=0xFF, R=0xFF, Filler=0xFF */
-      fprintf(outfp, "%c%c%c%c", 0xFF, 0xFF, 0xFF, 0x00);
+      fprintf (outfp, "%c%c%c%c", 0xFF, 0xFF, 0xFF, 0x00);
 
       /*
          Now write the raw data bits.  Data is written from the lower
@@ -296,15 +297,15 @@ int main(int argc, char *argv[]) {
       */
       for (toppixelrow=17*32-1; toppixelrow >= 0; toppixelrow--) {
          for (j=0; j<18; j++) {
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2)    ]);
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2) | 1]);
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2) | 2]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2)    ]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2) | 1]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2) | 2]);
 
-            fprintf(outfp, "%c", bitmap[toppixelrow][(j<<2) | 3]);
+            fprintf (outfp, "%c", bitmap[toppixelrow][(j<<2) | 3]);
          }
       }
    }
-   exit(0);
+   exit (0);
 }
 
 /*
@@ -314,7 +315,9 @@ int main(int argc, char *argv[]) {
    If string is >= 64 characters and < 128, it will fill 2 bytes per row.
    Otherwise, it will fill 1 byte per row.
 */
-int hex2bit(char *instring, unsigned char character[32][4]) {
+int
+hex2bit (char *instring, unsigned char character[32][4])
+{
 
    int i;  /* current row in bitmap character */
    int j;  /* current character in input string */
@@ -325,11 +328,9 @@ int hex2bit(char *instring, unsigned char character[32][4]) {
       character[i][0] = character[i][1] = character[i][2] = character[i][3] = 0; 
    j=0;  /* current location is at beginning of instring */
 
-   // width = (strlen(instring) - 1) >> 4; /* 16 hex digits per 8 bytes */
-
-   if (strlen(instring) <= 34)  /* 32 + possible '\r', '\n' */
+   if (strlen (instring) <= 34)  /* 32 + possible '\r', '\n' */
       width = 0;
-   else if (strlen(instring) <= 66)  /* 64 + possible '\r', '\n' */
+   else if (strlen (instring) <= 66)  /* 64 + possible '\r', '\n' */
       width = 1;
    else
       width = 4;
@@ -337,24 +338,26 @@ int hex2bit(char *instring, unsigned char character[32][4]) {
    k = (width > 1) ? 0 : 1;  /* if width < 3, start at index 1 else at 0 */
 
    for (i=8; i<24; i++) {  /* 16 rows per input character, rows 8..23 */
-      sscanf(&instring[j], "%2hhx", &character[i][k]);
+      sscanf (&instring[j], "%2hhx", &character[i][k]);
       j += 2;
       if (width > 0) { /* add next pair of hex digits to this row */
-         sscanf(&instring[j], "%2hhx", &character[i][k+1]);
+         sscanf (&instring[j], "%2hhx", &character[i][k+1]);
          j += 2;
       }
       if (width > 1) { /* add 2 next pairs of hex digits to this row */
-         sscanf(&instring[j], "%2hhx", &character[i][k+2]);
+         sscanf (&instring[j], "%2hhx", &character[i][k+2]);
          j += 2;
-         sscanf(&instring[j], "%2hhx", &character[i][k+3]);
+         sscanf (&instring[j], "%2hhx", &character[i][k+3]);
          j += 2;
       }
    }
 
-   return(0);
+   return (0);
 }
 
-int init(unsigned char bitmap[17*32][18*4]) {
+int
+init (unsigned char bitmap[17*32][18*4])
+{
    int i, j;
    unsigned char charbits[32][4];  /* bitmap for one character, 4 bytes/row */
    unsigned toppixelrow;
@@ -363,7 +366,7 @@ int init(unsigned char bitmap[17*32][18*4]) {
 
    for (i=0; i<18; i++) { /* bitmaps for '0'..'9', 'A'-'F', 'u', '+' */
 
-      hex2bit(&hex[i][5], charbits);  /* convert hex string to 32*4 bitmap */
+      hex2bit (&hex[i][5], charbits);  /* convert hex string to 32*4 bitmap */
 
       for (j=0; j<32; j++) hexbits[i][j] = ~charbits[j][1];
    }
@@ -467,5 +470,5 @@ int init(unsigned char bitmap[17*32][18*4]) {
    /* fill in top left corner pixel of grid */
    bitmap[31][7] = 0xfe;
 
-   return(0);
+   return (0);
 }

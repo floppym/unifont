@@ -45,7 +45,9 @@ unsigned unidigit[6][4];
 
 
 
-int main(int argc, char *argv[]) {
+int
+main (int argc, char *argv[])
+{
 
    int i, j, k;               /* loop variables                       */
    unsigned char inchar;       /* temporary input character */
@@ -75,25 +77,25 @@ int main(int argc, char *argv[]) {
                   outfile = &argv[i][2];
                   break;
                case 'p':  /* specify a Unicode plane */
-                  sscanf(&argv[i][2], "%x", &uniplane); /* Get Unicode plane */
+                  sscanf (&argv[i][2], "%x", &uniplane); /* Get Unicode plane */
                   planeset = 1; /* Use specified range, not what's in bitmap */
                   break;
                case 'w': /* force wide (16 pixels) for each glyph */
                   forcewide = 1;
                   break;
                default:   /* if unrecognized option, print list and exit */
-                  fprintf(stderr, "\nSyntax:\n\n");
-                  fprintf(stderr, "   %s -p<Unicode_Page> ", argv[0]);
-                  fprintf(stderr, "-i<Input_File> -o<Output_File> -w\n\n");
-                  fprintf(stderr, "   -w specifies .wbmp output instead of ");
-                  fprintf(stderr, "default Windows .bmp output.\n\n");
-                  fprintf(stderr, "   -p is followed by 1 to 6 ");
-                  fprintf(stderr, "Unicode plane hex digits ");
-                  fprintf(stderr, "(default is Page 0).\n\n");
-                  fprintf(stderr, "\nExample:\n\n");
-                  fprintf(stderr, "   %s -p83 -iunifont.hex -ou83.bmp\n\n\n",
+                  fprintf (stderr, "\nSyntax:\n\n");
+                  fprintf (stderr, "   %s -p<Unicode_Page> ", argv[0]);
+                  fprintf (stderr, "-i<Input_File> -o<Output_File> -w\n\n");
+                  fprintf (stderr, "   -w specifies .wbmp output instead of ");
+                  fprintf (stderr, "default Windows .bmp output.\n\n");
+                  fprintf (stderr, "   -p is followed by 1 to 6 ");
+                  fprintf (stderr, "Unicode plane hex digits ");
+                  fprintf (stderr, "(default is Page 0).\n\n");
+                  fprintf (stderr, "\nExample:\n\n");
+                  fprintf (stderr, "   %s -p83 -iunifont.hex -ou83.bmp\n\n\n",
                          argv[0]);
-                  exit(1);
+                  exit (1);
             }
          }
       }
@@ -102,19 +104,19 @@ int main(int argc, char *argv[]) {
       Make sure we can open any I/O files that were specified before
       doing anything else.
    */
-   if (strlen(infile) > 0) {
-      if ((infp = fopen(infile, "r")) == NULL) {
-         fprintf(stderr, "Error: can't open %s for input.\n", infile);
-         exit(1);
+   if (strlen (infile) > 0) {
+      if ((infp = fopen (infile, "r")) == NULL) {
+         fprintf (stderr, "Error: can't open %s for input.\n", infile);
+         exit (1);
       }
    }
    else {
       infp = stdin;
    }
-   if (strlen(outfile) > 0) {
-      if ((outfp = fopen(outfile, "w")) == NULL) {
-         fprintf(stderr, "Error: can't open %s for output.\n", outfile);
-         exit(1);
+   if (strlen (outfile) > 0) {
+      if ((outfp = fopen (outfile, "w")) == NULL) {
+         fprintf (stderr, "Error: can't open %s for output.\n", outfile);
+         exit (1);
       }
    }
    else {
@@ -163,8 +165,8 @@ int main(int argc, char *argv[]) {
       all bets are off.
    */
    fatal = 0;  /* assume everything is okay with reading input file */
-   if ((header[0] = fgetc(infp)) != EOF) {
-      if ((header[1] = fgetc(infp)) != EOF) {
+   if ((header[0] = fgetc (infp)) != EOF) {
+      if ((header[1] = fgetc (infp)) != EOF) {
          if (header[0] == 'B' && header[1] == 'M') {
             wbmp = 0; /* Not a Wireless Bitmap -- it's a Windows Bitmap */
          }
@@ -179,8 +181,8 @@ int main(int argc, char *argv[]) {
       fatal = 1;
 
    if (fatal) {
-      fprintf(stderr, "Fatal error; end of input file.\n\n");
-      exit(1);
+      fprintf (stderr, "Fatal error; end of input file.\n\n");
+      exit (1);
    }
    /*
       If this is a Wireless Bitmap (.wbmp) format file,
@@ -188,13 +190,13 @@ int main(int argc, char *argv[]) {
    */
    if (wbmp) {
       for (i=2; i<6; i++)
-         header[i] = fgetc(infp);
+         header[i] = fgetc (infp);
       /*
          Now read the bitmap.
       */
       for (i=0; i < 32*17; i++) {
          for (j=0; j < 32*18/8; j++) {
-            inchar = fgetc(infp);
+            inchar = fgetc (infp);
             bitmap[i][j] = ~inchar;  /* invert bits for proper color */
          }
       }
@@ -206,13 +208,13 @@ int main(int argc, char *argv[]) {
    */
    else {
       for (i=2; i<0x3e; i++)
-         header[i] = fgetc(infp);
+         header[i] = fgetc (infp);
       /*
          Now read the bitmap.
       */
       for (i = 32*17-1; i >= 0; i--) {
          for (j=0; j < 32*18/8; j++) {
-            inchar = fgetc(infp);
+            inchar = fgetc (infp);
             bitmap[i][j] = ~inchar; /* invert bits for proper color */
          }
       }
@@ -220,7 +222,7 @@ int main(int argc, char *argv[]) {
    /*
       We've read the entire file.  Now close the input file pointer.
    */
-   fclose(infp);
+   fclose (infp);
   /*
       We now have the header portion in the header[] array,
       and have the bitmap portion from top-to-bottom in the bitmap[] array.
@@ -352,9 +354,9 @@ int main(int argc, char *argv[]) {
                the normal Unicode range, but this has not been fully tested.
             */
             if (uniplane > 0xff)
-               fprintf(outfp, "%04X%X%X:", uniplane, i, j); // 6 digit code pt.
+               fprintf (outfp, "%04X%X%X:", uniplane, i, j); // 6 digit code pt.
             else
-               fprintf(outfp, "%02X%X%X:", uniplane, i, j); // 4 digit code pt.
+               fprintf (outfp, "%02X%X%X:", uniplane, i, j); // 4 digit code pt.
             for (thisrow=0; thisrow<16; thisrow++) {
                /*
                   If second half is empty and we're not forcing this
@@ -362,17 +364,17 @@ int main(int argc, char *argv[]) {
                */
                if (!forcewide &&
                    empty2 && !wide[(uniplane << 8) | (i << 4) | j])
-                  fprintf(outfp,
+                  fprintf (outfp,
                           "%02X",
                           thischar1[thisrow]);
                else
-                  fprintf(outfp,
+                  fprintf (outfp,
                           "%02X%02X",
                           thischar1[thisrow], thischar2[thisrow]);
             }
-            fprintf(outfp, "\n");
+            fprintf (outfp, "\n");
          }
       }
    }
-   exit(0);
+   exit (0);
 }
