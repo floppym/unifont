@@ -16,7 +16,7 @@ OUTPUT_FILES = unifont.info unifont.txt unifont.pdf
 	$(MAKEINFO) --plaintext $< -o $@
 
 .texi.pdf:
-	$(TEXI2PDF) $< > $@
+	$(TEXI2PDF) $<
 
 #
 # Comment out the "all:" line to make the documents.  The default is

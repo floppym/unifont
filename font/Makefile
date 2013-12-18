@@ -18,7 +18,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 MAJORVERSION = 6.3
-DATE = 20131215
+DATE = 20131217
 VERSION = $(MAJORVERSION).$(DATE)
 
 COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
@@ -149,19 +149,9 @@ bdf: hex
 pcf: bdf
 	bdftopcf <$(COMPILED_DIR)/unifont-$(VERSION).bdf \
 	         >$(COMPILED_DIR)/unifont-$(VERSION).pcf
-	$(FONTFORGE) -lang=ff -c \
-	   'Open($$1); \
-	    SetFontNames("UnifontMedium", "GNU", "Unifont", "Medium", $(COPYRIGHT), "$(VERSION)"); \
-	    Save($$1)' \
-	   $(COMPILED_DIR)/unifont-$(VERSION).pcf
 	gzip -f -9 $(COMPILED_DIR)/unifont-$(VERSION).pcf
 	bdftopcf <$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
 	         >$(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
-	$(FONTFORGE) -lang=ff -c \
-	   'Open($$1); \
-	    SetFontNames("UnifontSampleMedium", "GNU", "Unifont Sample", "Medium", $(COPYRIGHT), "$(VERSION)"); \
-	    Save($$1)' \
-	   $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
 	gzip -f -9 $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
 
 #
@@ -228,12 +218,12 @@ ttf:
 		$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
 		$(TTFSRC)/unifont_sample.bdf
 	cd $(TTFSRC) ; make && make clean
-	mv $(TTFSRC)/unifont.sfd $(COMPILED_DIR)/unifont.sfd 
+	mv $(TTFSRC)/unifont.sfd $(COMPILED_DIR)/unifont-$(VERSION).sfd 
 	mv $(TTFSRC)/unifont.ttf \
 		$(COMPILED_DIR)/unifont-$(VERSION).ttf 
 	mv $(TTFSRC)/unifont_sample.ttf \
 		$(COMPILED_DIR)/unifont_sample-$(VERSION).ttf 
-	gzip -f -9 $(COMPILED_DIR)/unifont.sfd 
+	gzip -f -9 $(COMPILED_DIR)/unifont-$(VERSION).sfd 
 
 #
 # Copy the newly created files from $(COMPILED_DIR) to the precompiled/

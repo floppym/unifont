@@ -1,3 +1,15 @@
+2013-12-17: Release 6.3.20131217
+
+   This fixes three bugs:
+
+        * doc/Makefile: removed redirection of texi2pdf output.
+        * font/Makefile: don't modify PCF fonts with FontForge,
+          which alters them so grub-mkfont can't read them.
+        * font/ttfsrc/Makefile: remove *.bdf so unifont_sample.bdf
+          gets deleted.
+
+   Also includes a few formatting changes; see ChangeLog.
+
 2013-12-15: Release 6.3.20131215
 
    This version introduces unihex2png and unipng2hex, two Perl scripts

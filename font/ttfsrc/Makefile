@@ -9,7 +9,7 @@ COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
-VERSION = 6.3.20131215
+VERSION = 6.3.20131217
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex
@@ -100,6 +100,7 @@ sbit:
 clean:
 	\rm -f [0-9A-F].hex
 	\rm -f [0-9A-F].sfd
+	\rm -f *.bdf
 
 distclean: clean
 	\rm -f unifont.bdf

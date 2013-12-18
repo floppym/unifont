@@ -1,3 +1,15 @@
+2013-12-27  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* doc/Makefile: removed redirection of texi2pdf output.
+	* doc/unifont.pdf: rebuilt file.
+	* font/Makefile:
+	  - Don't modify PCF fonts with FontForge, which alters them
+	    so grub-mkfont can't read them.
+	  - In font/compiled, insert $(VERSION) into unifont.sfd name.
+	* font/ttfsrc/Makefile (clean): remove *.bdf, so unifont_sample.bdf
+	  is removed.
+	* README: removed date stamp at top of file.
+
 2013-12-15  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* src/unihex2png: new program to convert unifont.hex to PNG image.
