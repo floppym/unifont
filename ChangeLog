@@ -1,4 +1,23 @@
-2013-12-27  Paul Hardy  <unifoundry@unifoundry.com>
+2013-12-21  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* ChangeLog: corrected date on last entry from 12-27 to 12-17.
+	* Makefiles: updated date for new release.
+	* font/hexsrc/unifont-base.hex: Modified glyphs to appear better
+	  in APL: U+22F8, U+233B, U+233E, U+235B, and U+2364.
+	* font/ttfsrc/Makefile: commented out SetFontNames function calls
+	  in fontforge.  Not all applications were interpreting that data
+	  correctly.  For example, in LibreOffice, it listed the font as
+	  the foundry name ("GNU") rather than the foundry name plus the
+	  font name ("GNU Unifont") or just the font name.  That is a bug
+	  in LibreOffice, so if such things are fixed in the future then
+	  these calls can be re-introduced.
+	* src/hex2bdf:
+	  - Rearranged some properties (cosmetic change).
+	  - Changed default font name from "unifont" to "Unifont".
+	* src/unigencircles.c: changed subscript from MAXSTRING to
+	  MAXSTRING-1 at line 61.
+
+2013-12-17  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* doc/Makefile: removed redirection of texi2pdf output.
 	* doc/unifont.pdf: rebuilt file.

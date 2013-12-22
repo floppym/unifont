@@ -9,7 +9,7 @@ COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
-VERSION = 6.3.20131217
+VERSION = 6.3.20131221
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex
@@ -62,11 +62,15 @@ merge:
 	echo "Merging all .sfd files"
 	$(FONTFORGE) -script all.pe
 
+#
+# Commented out because not all applications correctly interpreted
+# the settings:
+#
+#	    SetFontNames("UnifontMedium", "GNU", "Unifont", "Medium", $(COPYRIGHT), "$(VERSION)"); \
 sfd2ttf:
 	echo "Converting .sfd font into .ttf font"
 	$(FONTFORGE) -lang=ff -c \
 	   'Open($$1); \
-            SetFontNames("UnifontMedium", "GNU", "Unifont", "Medium", $(COPYRIGHT), "$(VERSION)"); \
 	    Generate($$2)' unifont.sfd unifont.ttf
 	\rm -f unifont.hex
 
@@ -88,10 +92,13 @@ sfd2ttf:
 # does not read the FONT_VERSION property so Paul Hardy added the
 # the SetFontNames call.
 #
+# Commented out because not all applications correctly interpreted
+# the settings:
+#
+#	    SetFontNames("","","","","","$(VERSION)"); \
 sbit:
 	$(FONTFORGE) -lang=ff -c \
 	   'New(); \
-            SetFontNames("","","","","","$(VERSION)"); \
 	    Import($$1); \
 	    Generate($$2, "ttf"); \
 	    Close()' \

@@ -18,7 +18,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 MAJORVERSION = 6.3
-DATE = 20131217
+DATE = 20131221
 VERSION = $(MAJORVERSION).$(DATE)
 
 COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \

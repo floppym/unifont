@@ -58,7 +58,7 @@ main (int argc, char **argv)
 
    memset (plane0width, 0, 0x10000 * sizeof (char));
 
-   teststring[MAXSTRING] = '\0';
+   teststring[MAXSTRING-1] = '\0';
    while (fgets (teststring, MAXSTRING-1, infilefp) != NULL) {
       sscanf (teststring, "%X", &loc);
       gstart = index (teststring,':') + 1;

@@ -1,3 +1,17 @@
+2013-12-21: Release 6.3.2013121
+
+   The default font name that hex2bdf creates has changed from
+   lower-case "unifont" to "Unifont".
+
+   FontForge's SetFontNames function calls were removed because
+   not all applications correctly interpreted their settings.
+   For example, LibreOffice only listed Unifont by the foundry
+   name ("GNU") rather than foundry + font name ("GNU Unifont")
+   or just the font name.  Those calls are only commented out
+   so they could easily be re-introduced.
+
+   Some glyphs were changed for better appearance with APL.
+
 2013-12-17: Release 6.3.20131217
 
    This fixes three bugs:
