@@ -7,7 +7,7 @@ and the final output file hangul-syllables.hex, are in the precompiled/
 subdirectory.
 
 The hangul-syllables.hex file is the same file that appears in the
-font/hexsrc directory.
+"font/plane00" directory.
 
 To build hangul-syllables.hex from the input files, simply type
 

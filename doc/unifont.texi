@@ -8,9 +8,9 @@
 
 @copying
 This tutorial describes Unifont, a bitmap-based font covering the
-Unicode Basic Multilingual Plane, and its utility programs.
+Unicode Basic Multilingual Plane and beyond, and its utility programs.
 
-Copyright @copyright{} 2008--2013 Paul Hardy
+Copyright @copyright{} 2008--2014 Paul Hardy
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -59,7 +59,7 @@ to create a font.  The steps described in the "Using Graphical Tools"
 section in the "Tutorial" chapter are more or less the steps that
 I (Paul Hardy) followed to add thousands of glyphs to GNU Unifont,
 except that I didn't have the luxury of just typing @code{make}
-to make a new font while adding those glyphs.
+to make a new font while adding those glyphs in the beginning.
 
 I streamlined the font build process after I was done drawing the
 Unicode 5.1 glyphs.
@@ -137,11 +137,12 @@ that covered much of the Unicode standard.
 @section Unifont Structure
 
 
-GNU Unifont is a dual-width pixel font.  Roman Czyborra
-began this font in 1998 with a goal of having one glyph
-rendered for each visible character in the Unicode Basic
-Multilingual Plane (Plane 0, the first 65,536 characters).
-His original writing on this is at @code{http://czyborra.com/unifont/}.
+GNU Unifont is a bitmapped pixel font, which is also converted
+to an outline TrueType font.  Roman Czyborra began this font
+in 1998 with a goal of having one glyph rendered for each visible
+character in the Unicode Basic Multilingual Plane (Plane 0, the
+first 65,536 characters).  His original writing on this is at
+@code{http://czyborra.com/unifont/}.
 
 (Note that the term "character" is used very loosely here for
 simplicity; the Unicode Standard has a stricter definition
@@ -169,20 +170,18 @@ and F.  The Unicode Standard uses a hexadecimal number to assign
 each character a location.  These locations are called "code points"
 and their range is 0 through 10FFFF, inclusive.
 
-The range 0 through FFFF, inclusive, is called the Basic Multilingual
+The range 0000 through FFFF, inclusive, is called the Basic Multilingual
 Plane (BMP), or Plane 0.  This plane contains glyphs for most of
 the world's modern writing scripts.
 
-Because the original goal of GNU Unifont was to cover the entire
-Unicode Basic Multilingual Plane, a four digit hexadecimal number
-suffices.  In the future, I plan to allow the utilities to go beyond
-the BMP now that coverage of the Unicode BMP is finally complete.
+Unifont utilities support glyphs across the entire Unicode range.
+The current distribution includes glyphs for Unicode's Plane 0,
+Plane 1 (the Supplemental Multilingual Plane, or SMP), and others.
+Coverage of the SMP is only partial.
 
-The programs will probably handle glyphs beyond the BMP properly, but
-that capability is considered experimental, as the focus was to cover
-the BMP.  The C programs allow up to an eight digit hexadecimal code
-point, but not all the utilities have been thoroughly tested beyond
-the BMP.
+The first field in a @code{.hex} file should be either four digits long
+for the Basic Multilingual Plane, or six digits long for higher Unicode
+planes, following the convention of the Unicode Standard.
 
 The second field is a string of hexadecimal digits.  There are 32
 digits for a character that is 8 pixels wide, and 64 digits for a
@@ -209,6 +208,19 @@ Andrew Miller later converted @code{unihex2bmp} and @code{unibmp2hex}
 to Perl, then transformed them into
 @code{unihex2png} and @code{unipng2hex}, respectively.  These programs
 convert Unifont .hex files to and from Portable Network Graphics files.
+
+These programs will probably handle glyphs beyond the BMP properly, but
+that capability is considered experimental, as the focus was to cover
+the BMP.  The @code{unihex2png} and @code{unipng2hex} programs handle
+the full Unicode code point range of 0x000000 through 0x10FFFF.  The
+@code{unihex2bmp} and @code{unibmp2hex} programs support the full
+32-bit unsigned integer range of 0x00000000 through 0xFFFFFFFF, but
+have not been tested extensively beyond the Unicode BMP.  The range of
+the C programs might be truncated in the future to only cover to
+0x10FFFF, the limit of the Unicode code point space.
+
+The latest release of the @code{hexdraw} program works correctly with .hex
+files having code points in the full Unicode range of U+0000 through U+10FFFF.
 
 
 @node Using Graphical Tools, Using Hexdraw, Hex File Format, Tutorial
@@ -258,6 +270,14 @@ If there are duplicates, remove them and go back to Step 5.
 Create the new TrueType version or other versions of the font.
 
 @end enumerate
+
+If the script has combining characters (such as accent glyphs),
+also add their code points to the proper @code{*combining.txt} file
+in the directory for the corresponding Unicode plane.  That way,
+when the font is converted to TrueType those glyphs will have zero
+space.  For a script with combining characters, all glyphs that can
+appear with combining characters must have the same width so that
+the combining characters will be properly positioned.
 
 @strong{Step 1:} Convert the .hex range into a bitmap grid.
 Assuming our font file is named @code{unifont.hex}, type
@@ -404,15 +424,15 @@ To use @code{unihex2png} instead of @code{unihex2bmp}, continuing
 the example of the Coptic script in the U+2Cxx range, type:
 
 @example
-unihex2png -p2C -i unifont.hex -o uni2C.png
+unihex2png -p 2C -i unifont.hex -o uni2C.png
 @end example
 
 Note that with @code{unihex2bmp} specifying input and output files
-is optional, while with @code{unihex2png} they must be specified
-explicitly.  More specifically, @code{unihex2png} will read a .hex
-file format input from STDIN if no "-i" argument is specified,
-but the name of the binary PNG file must always be specified with
-the "-o" option.
+is optional, while with @code{unihex2png} at least the PNG filename
+must be specified explicitly.  More specifically, @code{unihex2png}
+will read a .hex file format input from STDIN if no "-i" argument
+is specified, but the name of the binary PNG file must always be
+specified with the "-o" option.
 
 Then edit the resulting PNG file to your heart's content.  When done,
 convert the file back into a @code{unifont.hex} format file.  In
@@ -600,11 +620,11 @@ Multilingual Plane, in order, with a percentage (0.0% through
 coverage of assigned code points, you'll have to merge @code{unassigned.hex}
 with the rest of @code{unifont.hex} if not done by default in your setup.
 
-Using the .hex files in @code{font/hexsrc/}, you can create a font with
+Using the .hex files in @code{font/plane00/}, you can create a font with
 all available glyphs with
 
 @example
-sort font/hexsrc/*.hex >unifont-whole.hex
+sort font/plane00/*.hex >unifont-whole.hex
 @end example
 
 @noindent
@@ -636,7 +656,7 @@ already exists in the @code{font/precompiled/} directory.  Font files
 are architecture-independent, so the only reason to build the font is
 if you modify its composition.
 
-By default, source glyphs are read from the @code{font/hexsrc/} directory.
+By default, source glyphs are read from the @code{font/plane00/} directory.
 Glyphs for unassigned code points are built into the font by default,
 but glyphs for Private Use Area code points are not built into the font.
 
@@ -672,16 +692,16 @@ code point glyphs (as white digits on a black background) for the
 Private Use Area, type
 
 @example
-make PUA="hexsrc/pua.hex"
+make PUA="plane00/pua.hex"
 @end example
 
 @noindent
-because those glyphs reside in the @code{font/hexsrc/pua.hex} file.
+because those glyphs reside in the @code{font/plane00/pua.hex} file.
 
 To build a font that includes your own special PUA glyphs, type
 
 @example
-make PUA="mycoolPUA.hex"
+make PUA="my-cool-PUA.hex"
 @end example
 
 @noindent
@@ -691,7 +711,7 @@ To create a build that includes the supplied PUA glyphs but not the
 unassigned code point glyphs, type
 
 @example
-make PUA="hexsrc/pua.hex" UNASSIGNED=""
+make PUA="plane00/pua.hex" UNASSIGNED=""
 @end example
 
 If you create a custom font build of your own in one gigantic file,
@@ -704,13 +724,13 @@ CJK="" HANGUL="" UNASSIGNED="" PUA=""
 @end example
 
 Note that this command did not include an override for the glyphs for spaces
-contained in the @code{font/hexsrc/spaces.hex} file; that is, the variable
+contained in the @code{font/plane00/spaces.hex} file; that is, the variable
 SPACES was not redefined on the command line.  You could also pass the
 argument SPACES="", but just be aware that those spaces glyphs are in
 a separate file for a reason.  When graphical (".bmp") glyph files are
 converted back into hex string (".hex") format, the @code{unibmp2hex} utility
 doesn't know if a blank glyph area is a space glyph or not, so it doesn't
-encode anything.  The @code{font/hexsrc/spaces.hex} file contains glyphs that
+encode anything.  The @code{font/plane00/spaces.hex} file contains glyphs that
 are strings of 0s, with length depending on whether the space is nominally
 a single- or double-width space.  (Unifont does not distinguish between
 finer spacing used in traditional typesetting, such as a thin space, en space,
@@ -766,14 +786,14 @@ The earliest versions of Unifont (before the 5.1 release) used glyphs
 that showed dashed circles for combining characters.  This is how the
 glyphs appear in The Unicode Standard code charts.  In version 5.1,
 Paul Hardy was able to get combining characters to appear superimposed
-correctly in the TrueType version of the font.  There are no plans
+correctly in the TrueType version of the font.  (There are no plans
 to try to get combining characters to work in a BDF or PCF version
-owing to the limitations of those bitmapped font formats.
+owing to the limitations of those bitmapped font formats.)
 
-With combining characters working, Paul Hardy created variations of
-Unifont with and without combining circles, the idea being that the
-version without combining circles would be used to create the TrueType
-font.  The variation with combining circles was kept for reference.
+With combining characters working in the TrueType font, Paul Hardy created
+variations of Unifont with and without combining circles, the idea being
+that the version without combining circles would be used to create the
+TrueType font.  The variation with combining circles was kept for reference.
 
 Unifont Version 6.2 simplified the build to produce only one font variation,
 without combining circles.
@@ -802,12 +822,12 @@ wish to render.  You could create such a file from the @code{font/}
 directory with the command
 
 @example
-sort hexsrc/*.hex >unifont.hex
+sort plane00/*.hex >unifont.hex
 @end example
 
 Because the output is another .hex file, you can use all Unifont
 utilities with this resulting file just as you would with the .hex files
-in @code{font/hexsrc/}.
+in @code{font/plane00/}.
 
 If you want to build a font from this generated @code{unifont.hex} file,
 you could type
@@ -819,7 +839,7 @@ UNASSIGNED="" PUA=""
 
 @noindent
 as discussed above.  In this case, if you included
-@code{font/hexsrc/spaces.hex} in the @code{unifont.hex} input file,
+@code{font/plane00/spaces.hex} in the @code{unifont.hex} input file,
 you should also set SPACES="" on the command line so that you only
 read in your final custom @code{unifont-circles.hex} file.
 
@@ -868,17 +888,11 @@ be to restart the X Window System or even reboot.
 The original tools will only produce glyphs that are 16 pixels tall, and
 either 8 or 16 pixels wide.  The utilities @code{unihex2png},
 @code{unipng2hex}, @code{hexdraw}, and @code{hex2bdf} now also support
-glyph heights of 24 and 32 pixels, and glyph widths of up to 32 pixels,
-but this is not fully tested.  These new dimensions are currently
+glyph heights of 24 and 32 pixels, and glyph widths of 8, 16, 24, and 32
+pixels, but this is not fully tested.  These new dimensions are currently
 available for experimental use.  See the respective sections for each
 of these programs in the Reference chapter of this document, or their
 respective man pages.
-
-This current release is furthermore only fully
-tested over the Unicode Basic Multilingual Plane (code points from
-U+0000 through U+FFFF, with none above that range --- this will change
-in the future).  The tools can be used to create and manipulate
-any bitmapped font within those constraints.
 
 To create a brand new font (or even to add a new script to Unifont
 in the future), plan out the basic dimensions of the characters:
@@ -908,10 +922,11 @@ will produce a better looking font.  Look over the entire script and
 plan out a template grid that is consistent for the entire script.
 Then use that template for each glyph you draw for the script.
 
-Unifont characters for the most part leave the right-most column
-of pixels blank if possible for left-to-right scripts.  Centering is
-done around the fourth pixel (if a glyph is eight pixels wide) or
-around the eighth pixel (if a glyph is 16 pixels wide).
+Unifont characters for the most part leave the left-most or right-most
+column of pixels blank if possible (consistent within each script) for
+left-to-right scripts.  Centering is done around the fourth pixel (if
+a glyph is eight pixels wide) or around the eighth pixel (if a glyph is
+16 pixels wide).
 
 Experimenting and (above all) having fun with these utilities is
 the best way to learn.
@@ -927,7 +942,7 @@ in the future, the font can be updated as follows:
 @enumerate
 
 @item
-Delete the code point's entry from @code{font/hexsrc/unassigned.hex},
+Delete the code point's entry from @code{font/plane00/unassigned.hex},
 as that code point will no longer be unassigned.
 
 @item
@@ -990,6 +1005,7 @@ Enjoy!
 * hex2sfd::
 * hexbraille::
 * hexdraw::
+* hexkinya::
 * hexmerge::
 * johab2ucs2::
 * unibdf2hex::
@@ -1013,6 +1029,7 @@ Enjoy!
 @include hex2sfd.texi
 @include hexbraille.texi
 @include hexdraw.texi
+@include hexkinya.texi
 @include hexmerge.texi
 @include johab2ucs2.texi
 @include unibdf2hex.texi

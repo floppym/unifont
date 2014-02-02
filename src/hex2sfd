@@ -37,7 +37,12 @@
 for ($i = 0; $i < 65536; $i++) {
    push(@combining, 0);
 }
-open(A, "<combining.txt");
+if ($#ARGV < 0) {
+   open(A, "<", "combining.txt");
+}
+else {
+   open(A, "<", $ARGV[0]);
+}
 while (<A>) {
    chomp;
    $combining[ hex($_) ] = 1;

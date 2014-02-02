@@ -18,10 +18,10 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 MAJORVERSION = 6.3
-DATE = 20131221
+DATE = 20140202
 VERSION = $(MAJORVERSION).$(DATE)
 
-COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
+COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
@@ -36,9 +36,10 @@ BINDIR = $(CURDIR)/../bin
 # The top-level directory for installing fonts on the system,
 # and the installation directories for PCF and TrueType fonts.
 #
-FONTDEST = $(DESTDIR)/usr/share/fonts
-PCFDEST = $(FONTDEST)/X11/misc
-TTFDEST = $(FONTDEST)/truetype/unifont
+CONSOLEDEST = $(DESTDIR)/usr/share/consolefonts
+FONTDEST    = $(DESTDIR)/usr/share/fonts
+PCFDEST     = $(FONTDEST)/X11/misc
+TTFDEST     = $(FONTDEST)/truetype/unifont
 #
 # destination directory for compiled fonts
 #
@@ -50,7 +51,7 @@ BMPDIR = $(COMPILED_DIR)/bmp
 #
 # Directory with original unifont-$(VERSION).hex files
 #
-HEXDIR = hexsrc
+HEXDIR = plane00
 #
 # These are the files for building GNU Unifont with the Qianqian Fang's
 # Wen Quan Yi CJK ideographs.  This version provides complete coverage
@@ -91,11 +92,19 @@ UNIFILES = $(UNIFONTBASE) $(CJK) $(HANGUL) $(SPACES) $(UNASSIGNED) \
 	   $(NONPRINTING) $(PUA)
 
 #
+# Planes 1 through 14 (0x0E) are ordinary;
+# Planes 15 (0x0F) and 16 (0x10) are Private Use Area
+#
+UPPER_FILES = plane0[1-E]/*.hex
+
+#
 # Location of the file containing a list of Unicode combining characters.
 #
-COMBINING = ttfsrc/combining.txt
+COMBINING = plane00/bmp-combining.txt
 
-VPATH = hexsrc ttfsrc
+UPPER_COMBINING = plane0[0-E]/*combining*.txt
+
+VPATH = plane00 ttfsrc
 
 #
 # Location of  TTF source directory, where TTF font is built.
@@ -105,10 +114,10 @@ TTFSRC = ttfsrc
 
 all: compiled
 
-compiled: $(UNIFILES) $(COMBINING)
+compiled: $(UNIFILES) $(COMBINING) $(UPPER_FILES) $(UPPER_COMBINING)
 	make compiled-files
 
-compiled-files: pcf bmp ttf bigpic coverage
+compiled-files: pcf psf bmp ttf csurttf upperttf uppercsurttf bigpic coverage
 	install -p index.html $(COMPILED_DIR)/index.html
 
 #
@@ -118,10 +127,17 @@ hex: distclean
 	if [ ! -d $(COMPILED_DIR) ] ; then \
 	   mkdir -p $(COMPILED_DIR) ; \
 	fi
-	sort $(UNIFILES) >$(COMPILED_DIR)/unifont-$(VERSION).hex
+	sort $(UNIFILES) > $(COMPILED_DIR)/unifont-$(VERSION).hex
 	(cd $(HEXDIR) ; sort *.hex) | \
-	   $(BINDIR)/unigencircles ttfsrc/combining.txt hexsrc/nonprinting.hex \
+	  egrep -v "^FFF[EF]" | \
+	   $(BINDIR)/unigencircles $(COMBINING) plane00/nonprinting.hex \
 	   > $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
+	sort plane00csur/*.hex $(UNIFILES) \
+	   > $(COMPILED_DIR)/unifont_csur-$(VERSION).hex
+	sort $(UPPER_FILES) \
+	   > $(COMPILED_DIR)/unifont_upper-$(VERSION).hex
+	sort plane0[1-F]/*.hex \
+	   > $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).hex
 
 #
 # Build a BDF font file from the final .hex file.
@@ -142,6 +158,24 @@ bdf: hex
 	   > $(COMPILED_DIR)/unifont_sample-$(VERSION).bdf
 	gzip -f -9 <$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
 	           >$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf.gz
+	$(BINDIR)/hex2bdf --font "Unifont CSUR" \
+	   --version "$(VERSION)" --copyright $(COPYRIGHT) \
+	     $(COMPILED_DIR)/unifont_csur-$(VERSION).hex \
+	   > $(COMPILED_DIR)/unifont_csur-$(VERSION).bdf
+	gzip -f -9 <$(COMPILED_DIR)/unifont_csur-$(VERSION).bdf \
+	           >$(COMPILED_DIR)/unifont_csur-$(VERSION).bdf.gz
+	$(BINDIR)/hex2bdf --font "Unifont Upper" \
+	   --version "$(VERSION)" --copyright $(COPYRIGHT) \
+	     $(COMPILED_DIR)/unifont_upper-$(VERSION).hex \
+	   > $(COMPILED_DIR)/unifont_upper-$(VERSION).bdf
+	gzip -f -9 <$(COMPILED_DIR)/unifont_upper-$(VERSION).bdf \
+	           >$(COMPILED_DIR)/unifont_upper-$(VERSION).bdf.gz
+	$(BINDIR)/hex2bdf --font "Unifont Upper CSUR" \
+	   --version "$(VERSION)" --copyright $(COPYRIGHT) \
+	     $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).hex \
+	   > $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf
+	gzip -f -9 <$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf \
+	           >$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf.gz
 
 #
 # Build a PCF font file from the final .hex file.
@@ -153,6 +187,27 @@ pcf: bdf
 	bdftopcf <$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
 	         >$(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
 	gzip -f -9 $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf
+	bdftopcf <$(COMPILED_DIR)/unifont_csur-$(VERSION).bdf \
+	         >$(COMPILED_DIR)/unifont_csur-$(VERSION).pcf
+	gzip -f -9 $(COMPILED_DIR)/unifont_csur-$(VERSION).pcf
+	bdftopcf <$(COMPILED_DIR)/unifont_upper-$(VERSION).bdf \
+	         >$(COMPILED_DIR)/unifont_upper-$(VERSION).pcf
+	gzip -f -9 $(COMPILED_DIR)/unifont_upper-$(VERSION).pcf
+	bdftopcf <$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf \
+	         >$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf
+	gzip -f -9 $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf
+
+#
+# Make the PSF (console) font for APL (A Programming Language).
+#
+psf: bdf
+	bdf2psf --fb \
+	   $(COMPILED_DIR)/unifont-$(VERSION).bdf \
+	   psf/apl-equivalents.txt \
+	   psf/unifont-apl.txt \
+	   512 \
+	   $(COMPILED_DIR)/Unifont-APL8x16-$(VERSION).psf
+	gzip -f -9 $(COMPILED_DIR)/Unifont-APL8x16-$(VERSION).psf
 
 #
 # Print coverage of scripts in Basic Multilingual Plane in .txt file.
@@ -196,9 +251,13 @@ bmp: hex $(BINDIR)/unihex2bmp
 
 #
 # Build one bitmap of the entire Unifont as a 4096 x 16 grid.
+# Use all the .hex files in $(HEXDIR) so we add the contents of
+# omit.hex (FFFE & FFFF).  Those two glyphs aren't included in the
+# unifont_sample font because they cause problems with MS Windows,
+# but we can put them in the picture.
 #
 bigpic: $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
-	cat $(COMPILED_DIR)/unifont_sample-$(VERSION).hex | \
+	sort -u $(HEXDIR)/*.hex | \
 	   $(BINDIR)/unifontpic -d120 > $(COMPILED_DIR)/unifont-$(VERSION).bmp
 
 #
@@ -213,18 +272,81 @@ ttf:
 	install -p \
 		$(COMPILED_DIR)/unifont-$(VERSION).hex \
 		$(TTFSRC)/unifont.hex
+	install -p \
+		$(HEXDIR)/bmp-combining.txt \
+		$(TTFSRC)/combining.txt
+	cd $(TTFSRC) ; \
+	   make FONTFILE="unifont" COMBINING="combining" \
+		FONTNAME="Unifont" PSNAME="Unifont"
+	mv $(TTFSRC)/unifont.sfd $(COMPILED_DIR)/unifont-$(VERSION).sfd 
+	mv $(TTFSRC)/unifont.ttf \
+		$(COMPILED_DIR)/unifont-$(VERSION).ttf 
 	# Second copy unifont_sample.bdf, to make an SBIT font.
 	install -p \
 		$(COMPILED_DIR)/unifont_sample-$(VERSION).bdf \
 		$(TTFSRC)/unifont_sample.bdf
-	cd $(TTFSRC) ; make && make clean
-	mv $(TTFSRC)/unifont.sfd $(COMPILED_DIR)/unifont-$(VERSION).sfd 
-	mv $(TTFSRC)/unifont.ttf \
-		$(COMPILED_DIR)/unifont-$(VERSION).ttf 
+	cd $(TTFSRC) ; \
+	   make sbit FONTFILE="unifont_sample" COMBINING="" \
+		FONTNAME="Unifont Sample" PSNAME="UnifontSample"
 	mv $(TTFSRC)/unifont_sample.ttf \
 		$(COMPILED_DIR)/unifont_sample-$(VERSION).ttf 
 	gzip -f -9 $(COMPILED_DIR)/unifont-$(VERSION).sfd 
 
+#
+# Now build the ConScript Unicode Registry PUA font.
+#
+csurttf:
+	install -p \
+		$(COMPILED_DIR)/unifont_csur-$(VERSION).hex \
+		$(TTFSRC)/unifont_csur.hex
+	sort -u plane00csur/csur-combining.txt $(HEXDIR)/bmp-combining.txt \
+		> $(TTFSRC)/combining_csur.txt
+	cd $(TTFSRC) ; \
+	   make outline FONTFILE="unifont_csur" COMBINING="combining_csur" \
+		FONTNAME="Unifont CSUR" PSNAME="UnifontCSUR"
+	mv $(TTFSRC)/unifont_csur.sfd \
+		$(COMPILED_DIR)/unifont_csur-$(VERSION).sfd 
+	mv $(TTFSRC)/unifont_csur.ttf \
+		$(COMPILED_DIR)/unifont_csur-$(VERSION).ttf 
+	gzip -f -9 $(COMPILED_DIR)/unifont_csur-$(VERSION).sfd 
+
+#
+# Now build the ConScript Unicode Registry PUA font.
+#
+upperttf:
+	install -p \
+		$(COMPILED_DIR)/unifont_upper-$(VERSION).hex \
+		$(TTFSRC)/unifont_upper.hex
+	sort -u $(UPPER_COMBINING) > $(TTFSRC)/combining_upper.txt
+	cd $(TTFSRC) ; \
+	   make outline FONTFILE="unifont_upper" COMBINING="combining_upper" \
+		FONTNAME="Unifont Upper" PSNAME="UnifontUpper"
+	mv $(TTFSRC)/unifont_upper.sfd \
+		$(COMPILED_DIR)/unifont_upper-$(VERSION).sfd 
+	mv $(TTFSRC)/unifont_upper.ttf \
+		$(COMPILED_DIR)/unifont_upper-$(VERSION).ttf 
+	gzip -f -9 $(COMPILED_DIR)/unifont_upper-$(VERSION).sfd 
+
+
+#
+# ConScript Unicode Registry PUA font beyond Plane 0.
+#
+uppercsurttf:
+	install -p \
+		$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).hex \
+		$(TTFSRC)/unifont_upper_csur.hex
+	sort -u plane0[1-F]csur/*combining*.txt \
+		> $(TTFSRC)/combining_upper_csur.txt
+	cd $(TTFSRC) ; \
+	   make outline FONTFILE="unifont_upper_csur" COMBINING="combining_upper_csur" \
+		FONTNAME="Unifont Upper CSUR" PSNAME="UnifontUpperCSUR"
+	mv $(TTFSRC)/unifont_upper_csur.sfd \
+		$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).sfd 
+	mv $(TTFSRC)/unifont_upper_csur.ttf \
+		$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).ttf 
+	gzip -f -9 $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).sfd 
+
+#
 #
 # Copy the newly created files from $(COMPILED_DIR) to the precompiled/
 # directory.  This has to be called manually, because the precompiled/
@@ -236,13 +358,24 @@ precompiled: all
 	install -m0644 -p $(COMPILED_DIR)/unifont-$(VERSION).hex \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).bdf.gz \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).pcf.gz \
+	                  $(COMPILED_DIR)/Unifont-APL8x16-$(VERSION).psf.gz \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).ttf \
+	                  $(COMPILED_DIR)/unifont_csur-$(VERSION).pcf.gz \
+	                  $(COMPILED_DIR)/unifont_csur-$(VERSION).ttf \
 	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).hex \
 	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).bdf.gz \
 	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).pcf.gz \
 	                  $(COMPILED_DIR)/unifont_sample-$(VERSION).ttf \
 	                  $(COMPILED_DIR)/coverage.txt \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).bmp \
+	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).hex \
+	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).bdf.gz \
+	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).pcf.gz \
+	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).ttf \
+	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).hex \
+	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf.gz \
+	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf.gz \
+	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).ttf \
 	   precompiled
 
 #
@@ -267,18 +400,29 @@ install:
 	   echo "Fatal Error: CURDIR not defined -- define in Makefile." ; \
 	   exit 1 ; \
 	fi
+	$(INSTALL) -m0755 -d $(CONSOLEDEST)
 	$(INSTALL) -m0755 -d $(PCFDEST)
 	$(INSTALL) -m0755 -d $(TTFDEST)
 	if [ ! -d $(COMPILED_DIR) ] ; then \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/Unifont-APL8x16-$(VERSION).psf.gz $(CONSOLEDEST)/Unifont-APL8x16.psf.gz ; \
 	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).pcf.gz $(PCFDEST)/unifont.pcf.gz ; \
 	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_sample-$(VERSION).pcf.gz $(PCFDEST)/unifont_sample.pcf.gz ; \
-	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).ttf    $(TTFDEST)/unifont.ttf ; \
-	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_sample-$(VERSION).ttf    $(TTFDEST)/unifont_sample.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_csur-$(VERSION).pcf.gz     $(PCFDEST)/unifont_csur.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont-$(VERSION).ttf             $(TTFDEST)/unifont.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_sample-$(VERSION).ttf      $(TTFDEST)/unifont_sample.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_csur-$(VERSION).ttf        $(TTFDEST)/unifont_csur.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_upper-$(VERSION).ttf       $(TTFDEST)/unifont_upper.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/precompiled/unifont_upper_csur-$(VERSION).ttf  $(TTFDEST)/unifont_upper_csur.ttf ; \
 	else \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/Unifont-APL8x16-$(VERSION).psf.gz $(CONSOLEDEST)/Unifont-APL8x16.psf.gz ; \
 	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).pcf.gz $(PCFDEST)/unifont.pcf.gz ; \
-	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_sample-$(VERSION).pcf.gz $(PCFDEST)/unifont_sample.pcf.gz ; \
-	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).ttf    $(TTFDEST)/unifont.ttf ; \
-	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_sample-$(VERSION).ttf    $(TTFDEST)/unifont_sample.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_sample-$(VERSION).pcf.gz    $(PCFDEST)/unifont_sample.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_csur-$(VERSION).pcf.gz      $(PCFDEST)/unifont_csur.pcf.gz ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont-$(VERSION).ttf              $(TTFDEST)/unifont.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_sample-$(VERSION).ttf       $(TTFDEST)/unifont_sample.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_csur-$(VERSION).ttf         $(TTFDEST)/unifont_csur.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_upper-$(VERSION).ttf        $(TTFDEST)/unifont_upper.ttf ; \
+	   $(INSTALL) -m0644 -p $(CURDIR)/$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).ttf   $(TTFDEST)/unifont_upper_csur.ttf ; \
 	fi
 
 clean:
@@ -298,4 +442,5 @@ distclean:
 	\rm -f *~
 	\rm -rf .DS* ._.DS*
 
-.PHONY: all hex bdf pcf coverage pagecount bmp bigpic ttf precompiled install clean distclean 
+.PHONY: all hex bdf pcf coverage pagecount bmp bigpic csurttf upper ttf \
+	precompiled install clean distclean 

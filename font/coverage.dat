@@ -164,94 +164,84 @@ FFF0-FFFF Specials
 ;
 ;    (commented out because unifont.hex just covers Plane 0)
 ;
-; Linear B Syllabary
-; Linear B Ideograms
-; Aegean Numbers
-; Ancient Greek Numbers
-; Ancient Symbols
-; Phaistos Disc
-; Lycian
-; Carian
-; Old Italic
-; Gothic
-; Ugaritic
-; Old Persian
-; Deseret
-; Shavian
-; Osmanya
-; Cypriot Syllabary
-; Imperial Aramaic
-; Phoenecian
-; Lydian
-; Kharoshthi
-; Old South Arabian
-; Avestan
-; Inscriptional Parthian
-; Inscriptional Pahlavi
-; Old Turkic
-; Rumi Numeral Symbols
-; Kaithi
+; 010000-01007F Linear B Syllabary
+; 010080-0100FF Linear B Ideograms
+; 010100-01013F Aegean Numbers
+; 010140-01018F Ancient Greek Numbers
+; 010190-0101CF Ancient Symbols [Unicode 5.1]
+; 0101D0-0101FF Phaistos Disc [Unicode 5.1]
+; 010280-01029F Lycian [Unicode 5.1]
+; 0102A0-0102DF Carian [Unicode 5.1]
+; 010300-01032F Old Italic
+; 010330-01034F Gothic
+; 010380-01039F Ugaritic
+; 0103A0-0103DF Old Persian
+; 010400-01044F Deseret
+; 010450-01047F Shavian
+; 010480-0104AF Osmanya
+; 010800-01083F Cypriot Syllabary
+; 010840-01085F Imperial Aramaic [Unicode 5.2]
+; 010900-01091F Phoenecian
+; 010920-01093F Lydian [Unicode 5.1]
+; 010980-01099F Meroitic Hieroglyphs [Unicode 6.1]
+; 0109A0-0109FF Meroitic Cursive [Unicode 6.1]
+; 010A00-010A5F Kharoshthi
+; 010A60-010A7F Old South Arabian [Unicode 5.2]
+; 010B00-010B3F Avestan [Unicode 5.2]
+; 010B40-010B5F Inscriptional Parthian [Unicode 5.2]
+; 010B60-010B7F Inscriptional Pahlavi [Unicode 5.2]
+; 010C00-010C4F Old Turkic [Unicode 5.2]
+; 010E60-010E7F Rumi Numeral Symbols [Unicode 5.2]
+; 011000-01107F Brahmi [Unicode 6.0]
+; 011080-0110CF Kaithi [Unicode 5.2]
+; 0110D0-0110FF Sora Sompeng [Unicode 6.1]
+; 011100-01114F Chakma [Unicode 6.1]
+; 011180-0111DF Sharada [Unicode 6.1]
+; 011680-0116CF Takri [Unicode 6.1]
+; 012000-0123FF Cuneiform
+; 012400-01247F Cuneiform Numbers and Punctuation
+; 013000-01342F Egyptian Hieroglyphs [Unicode 5.2]
+; 016800-016A3F Bamum Supplement [Unicode 6.0]
+; 016F00-016F9F Miao [Unicode 6.1]
+; 01B000-01B0FF Kana Supplement [Unicode 6.0]
+; 01D000-01D0FF Byzantine Musical Symbols
+; 01D100-01D1FF Musical Symbols
+; 01D200-01D24F Ancient Greek Musical Notation
+; 01D300-01D35F Tai Xuan Jing Symbols
+; 01D360-01D37F Counting Rod Numerals
+; 01D400-01D7FF Mathematical Alphanumeric Symbols
+; 01EE00-01EEFF Arabic Mathematical Alphabetic Symbols [Unicode 6.1]
+; 01F000-01F02F Mahjong Tiles [Unicode 5.1]
+; 01F030-01F09F Domino Tiles [Unicode 5.1]
+; 01F0A0-01F0FF Playing Cards [Unicode 6.0]
+; 01F100-01F1FF Enclosed Alphanumeric Supplement [Unicode 5.2]
+; 01F200-01F2FF Enclosed Ideographic Supplement [Unicode 5.2]
+; 01F300-01F5FF Miscellaneous Symbols and Pictographs [Unicode 6.0]
+; 01F600-01F64F Emoticons [Unicode 6.0]
+; 01F680-01F6FF Transport and Map Symbols [Unicode 6.0]
+; 01F700-01F77F Alchemical Symbols [Unicode 6.0]
+;
+; ===== PLANE 02 =====
+;
+;    (commented out because unifont.hex just covers Plane 0)
+;
+; 02F800-02F8BF CJK Compatibility Ideographs Supplement
+;
+; ===== PLANE 0E =====
+;
+;    (commented out because unifont.hex just covers Plane 0)
+;
+; 0E0000-0E007F Tags
+; 0E0100-0E01EF Variation Selectors Supplement
+;
 ;    (check rendering of all of these)
 ; 10A01-10A03
 ; 10A05-10A06
 ; 10A0C-10A0F
 ; 10A38-10A3A
 ; 10A3F
-; Cuneiform
-; Cuneiform Numbers and Punctuation
-; Egyptian Heiroglyphs
-; Byzantine Musical Symbols
-; Musical Symbols
 ;   (check rendering of all these)
 ; 1D165-1D169
 ; 1D16D-1D172
 ; 1D17B-1D18B
 ; 1D1AA-1D1AD
-; Ancient Greek Musical Notation
-; Tai Xuan Ji Symbols
-; Counting Rod Numerals
-; Mathematical Alphanumeric Symbols
-; Mahjong Tiles
-; Domino Tiles
-; Enclosed Alphanumeric Supplement
-; Enclosed Ideographic Supplement
-; CJK Compatibility Ideographs Supplement
-; Tags
-; Variation Selectors Supplement
-;
-; Added in Unicode 5.2:
-;
-; 10840-1085F Imperial Aramaic
-; 10900-1091F Phoenecian
-; 10A60-10A7F Old South Arabian
-; 10B00-10B3F Avestan
-; 10B40-10B5F Inscriptional Parthian
-; 10B60-10B7F Inscriptional Pahlavi
-; 10C00-10C4F Old Turkic
-; 10E60-10E7F Rumi Numeral Symbols
-; 11080-110CF Kaithi
-; 13000-1342F Egyptian Hieroglyphs
-; 1F100-1F1FF Enclosed Alphanumeric Supplement
-; 1F200-1F2FF Enclosed Ideographic Supplement
-;
-; Added in Unicode 6.0
-;
-; 11000-1107F Brahmi
-; 16800-16A3F Bamum Supplement
-; 1B000-1B0FF Kana Supplement
-; 1F0A0-1F0FF Playing Cards
-; 1F300-1F5FF Miscellaneous Symbols and Pictographs
-; 1F600-1F64F Emoticons
-; 1F680-1F6FF Transport and Map Symbols
-; 1F700-1F77F Alchemical Symbols
-;
-; Added in Unicode 6.1
-;
-; 10980-1099F Meroitic Hieroglyphs
-; 109A0-109FF Meroitic Cursive
-; 110D0-110FF Sora Sompeng
-; 11100-1114F Chakma
-; 11180-111DF Sharada
-; 11680-116CF Takri
-; 16F00-16F9F Miao
-; 1EE00-1EEFF Arabic Mathematical Alphabetic Symbols

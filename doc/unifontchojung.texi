@@ -79,6 +79,8 @@ This lets a font designer focus on this subset during font creation.
 @b{hexbraille(1),}
 @comment TROFF INPUT: .BR hexdraw(1),
 @b{hexdraw(1),}
+@comment TROFF INPUT: .BR hexkinya(1),
+@b{hexkinya(1),}
 @comment TROFF INPUT: .BR hexmerge(1),
 @b{hexmerge(1),}
 @comment TROFF INPUT: .BR johab2ucs2(1),

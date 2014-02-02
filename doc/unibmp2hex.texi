@@ -137,6 +137,8 @@ unibmp2hex -imy@t{_}input@t{_}file.bmp -omy@t{_}output@t{_}file.hex
 @b{hexbraille(1),}
 @comment TROFF INPUT: .BR hexdraw(1),
 @b{hexdraw(1),}
+@comment TROFF INPUT: .BR hexkinya(1),
+@b{hexkinya(1),}
 @comment TROFF INPUT: .BR hexmerge(1),
 @b{hexmerge(1),}
 @comment TROFF INPUT: .BR johab2ucs2(1),

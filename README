@@ -4,8 +4,12 @@ OVERVIEW
 GNU Unifont is an official GNU package.  It is a dual-width
 (8x16/16x16) bitmap font, designed to provide coverage for
 all of Unicode Plane 0, the Basic Multilingual Plane (BMP).
+
 This version has a glyph for each visible code point in the
-Unicode 6.3 Basic Multilingual Plane (Plane 0).
+Unicode 6.3 Basic Multilingual Plane (Plane 0) and some glyphs
+in the Supplemental Multilingual Plane (Plane 1).  This version
+also includes many glyphs in Michael Everson's ConScript
+Unicode Registry (CSUR).
 
 Unifont only provides a single glyph for each character, making it
 impossible to handle any language properly that needs context-dependent
@@ -23,7 +27,7 @@ and files:
      ChangeLog  Log of changes made to each GNU release
      COPYING    Full text of GPL version 2
      doc        Documentation in Texinfo format
-     font       Everything you need to build the font from scratch
+     font       The font source file with scripts for building
      hangul     Standalone font sources to build hangul-syllables.hex
      INSTALL    Instructions for font and software installation
      Makefile   The "make" file
@@ -34,22 +38,44 @@ and files:
 
 The "font/precompiled" directory contains prebuilt font-related files:
 
-     coverage.txt                     Percentage coverage of each Plane 0 script
+     coverage.txt                     Percentage coverage of Plane 0 scripts
 
-     unifont-<version>.hex            Hex string source of glyphs to build Unifont
+     unifont-<version>.hex            Hex string source of glyphs to build
+                                      Unifont
      unifont-<version>.bdf.gz         BDF version of Unifont
      unifont-<version>.pcf.gz         PCF version of Unifont
      unifont-<version>.ttf            TrueType version of Unifont
 
-     unifont_sample-<version>.hex     Hex string source of all Plane 0 glyphs,
-                                      including nonprinting and PUA glyphs, with
-                                      combining circles
+     unifont_sample-<version>.hex     Hex string source of all Plane 0 glyphs
+                                      (except those for U+FFFE and U+FFFF),
+                                      including nonprinting and PUA glyphs,
+                                      with combining circles
      unifont_sample-<version>.bdf.gz  BDF font version of the above .hex file
      unifont_sample-<version>.ttf     SBIT font version of the above .hex file
 
-     unifont-<version>.bmp            The entire Plane 0 font with combining circles,
-                                      actually built from unifont_sample-*.hex to
-                                      show combining circles
+     unifont_csur-<version>.*         Fonts containing Plane 0 Unifont glyphs
+                                      plus glyphs for Michael Everson's
+                                      ConScript Unicode Registry (CSUR) for
+                                      the Plane 0 Private Use Area
+
+     unifont_upper-<version>.*        Fonts containing glyphs from Unicode
+                                      Plane 1 through Plane 14, inclusive
+
+     unifont_upper_csur-<version>.*   Fonts containing glyphs from Unifont
+                                      Upper plus glyphs from Michael Everson's
+                                      ConScript Unicode Registry (CSUR) that
+                                      are in the Private Use Area in Plane 15
+
+     unifont-<version>.bmp            The entire Plane 0 Unifont font with
+                                      combining circles, built from the files
+                                      font/plane00/*.hex, showing combining
+                                      circles
+
+The directory that was originally named "font/hexsrc" has been renamed
+to "font/plane00" now that Unifont supports glyphs beyond Plane 0.  Higher
+plane glyphs appear in "font/plane01" through "font/plane0F".  Currently
+there is no "font/plane10" directory (the highest Unicode plane is Plane 17,
+or 0x10).
 
 This release incorporates all glyph errata issued by The Unicode Consortium
 from Unicode 1.0 errata to the latest.
@@ -63,7 +89,9 @@ See the "INSTALL" file in this directory for building instructions.
 src/ AUTHORS
 ------------
 Roman Czyborra wrote all the Perl files in the src directory except
-"hex2sfd", "unifontchojung", "unifontksx", "unihex2png", and "unipng2hex".
+"hex2sfd", "hexkinya", "unifontchojung", "unifontksx", "unihex2png",
+and "unipng2hex".
+
 In the case of "johab2ucs2", Jungshik Shin wrote the orignial version;
 he then gave it to Roman.  Paul Hardy made further changes to "johab2ucs2".
 
@@ -78,8 +106,8 @@ converted into "./font/ttfsrc/Makefile".
 Paul Hardy wrote "unifontchojung" and "unifontksx" for extracting subsets
 of Hangul glyphs, as an aid in creating a new Hangul Syllables block.
 
-Andrew Miller wrote "unihex2png" and "unipng2hex" based upon Paul
-Hardy's "unihex2bmp" and "unibmp2hex" programs.
+Andrew Miller wrote "hexkinya".  He also wrote "unihex2png" and "unipng2hex"
+based upon Paul Hardy's "unihex2bmp" and "unibmp2hex" programs.
 
 Paul Hardy wrote all the C programs.
 
@@ -90,7 +118,7 @@ Roman Czyborra created the original GNU Unifont, including the
 .hex format.  For greater detail, see the HISTORY section below.
 
 David Starner aggregated many glyphs contributed by others and
-built these into pre-2004 Unifont releases.
+incorporated these into pre-2004 Unifont releases.
 
 Qianqian Fang began his Wen Quan Yi font in 2004, by which
 time work on Unifont had stopped.  Most of the almost 30,000
@@ -105,6 +133,9 @@ the 11,172 glyphs in the Hangul Syllables block, plus approximately
 10,000 additional glyphs scattered throughout the BMP.
 
 Andrew Miller drew the glyphs added to Unicode 6.3.0.
+
+For higher planes and the Private Use Area glyphs, see the ChangeLog
+file.
 
 
 LICENSE

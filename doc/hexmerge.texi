@@ -72,6 +72,8 @@ the combined font to stdout.
 @b{hex2sfd(1),}
 @comment TROFF INPUT: .BR hexbraille(1),
 @b{hexbraille(1),}
+@comment TROFF INPUT: .BR hexkinya(1),
+@b{hexkinya(1),}
 @comment TROFF INPUT: .BR hexdraw(1),
 @b{hexdraw(1),}
 @comment TROFF INPUT: .BR johab2ucs2(1),

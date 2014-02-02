@@ -5,11 +5,29 @@ BINDIR = ../../bin
 
 FONTFORGE = fontforge
 
-COPYRIGHT = "Copyright (C) 2013 Roman Czyborra, Paul Hardy, et al.  \
+#
+# Default values, if not set on the command line when make is invoked:
+#
+# FONTFILE:  Prefix of the file name for input and output files.
+# FONTNAME:  Name of the font inside a TTF file.
+# PSNAME:    PostScript name of the font inside a TTF file; can't have spaces.
+# COMBINING: Prefix of the file containing a list of combining characters.
+#
+FONTFILE="unifont"
+FONTNAME="Unifont"
+PSNAME="Unifont"
+COMBINING="combining"
+
+#
+# The PostScript name of a font can't contain spaces--remove them.
+# Could also use bash string replacement if you know you're using bash.
+#
+
+COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
-VERSION = 6.3.20131221
+VERSION = 6.3.20140202
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex
@@ -34,45 +52,35 @@ VERSION = 6.3.20131221
 # a .sfd generated from the whole unifont.hex would be too big to
 # process all at once.
 
-all: hex2sfd merge sfd2ttf sbit
-
-hex2sfd: unifont.hex $(BINDIR)/hex2sfd
-	echo "Separating unifont.hex into 16 parts"
-	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F ; \
-	   do \
-	   grep ^$$i unifont.hex > $$i.hex ; \
-	   $(BINDIR)/hex2sfd < $$i.hex > $$i.sfd ; \
-	done
-	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F ; \
-	   do \
-	   $(FONTFORGE) -lang=ff -c \
-	      'Open($$1); \
-	       SelectAll(); \
-	       RemoveOverlap(); \
-	       Simplify(64,1); \
-	       Save($$1);' \
-	      $$i.sfd ; \
-	   \rm -f $$i.hex ; \
-	done
-
-# We join all the generated .sfd files into a single one,
-# and generate the final TrueType font.
-
-merge:
-	echo "Merging all .sfd files"
-	$(FONTFORGE) -script all.pe
+all: outline
 
 #
-# Commented out because not all applications correctly interpreted
-# the settings:
+# Commented out this operation on SFD file because not all applications
+# correctly interpreted the settings:
 #
 #	    SetFontNames("UnifontMedium", "GNU", "Unifont", "Medium", $(COPYRIGHT), "$(VERSION)"); \
-sfd2ttf:
+#
+# Convert unifont.hex to unifont.sfd as a single file, then generate
+# an outline TrueType font.
+#
+outline: $(FONTFILE).hex $(BINDIR)/hex2sfd
+	echo "Converting font as a single file."
+	$(BINDIR)/hex2sfd $(COMBINING).txt < $(FONTFILE).hex > $(FONTFILE).sfd
+	$(FONTFORGE) -lang=ff -c \
+	   'Open($$1); \
+	    SetFontNames("$(PSNAME)Medium", \
+		"$(FONTNAME)", "$(FONTNAME)", "Medium", \
+		$(COPYRIGHT), "$(VERSION)"); \
+	    SelectAll(); \
+	    RemoveOverlap(); \
+	    Simplify(64,1); \
+	    Save($$1);' \
+	   $(FONTFILE).sfd
 	echo "Converting .sfd font into .ttf font"
 	$(FONTFORGE) -lang=ff -c \
 	   'Open($$1); \
-	    Generate($$2)' unifont.sfd unifont.ttf
-	\rm -f unifont.hex
+	    Generate($$2)' $(FONTFILE).sfd $(FONTFILE).ttf
+	\rm -f $(FONTFILE).hex $(COMBINING).txt
 
 #
 # This fontforge script reads a BDF font file and generates an SBIT font file.
@@ -96,24 +104,27 @@ sfd2ttf:
 # the settings:
 #
 #	    SetFontNames("","","","","","$(VERSION)"); \
-sbit:
+
+sbit: $(FONTFILE).bdf
 	$(FONTFORGE) -lang=ff -c \
 	   'New(); \
 	    Import($$1); \
+	    SetFontNames("","","","","","$(VERSION)"); \
 	    Generate($$2, "ttf"); \
 	    Close()' \
-	   unifont_sample.bdf unifont_sample.ttf
+	   $(FONTFILE).bdf $(FONTFILE).ttf
+	\rm -f $(FONTFILE).bdf
 
+#
+# Delete files copied into this directory to build TTF fonts.
+#
 clean:
-	\rm -f [0-9A-F].hex
-	\rm -f [0-9A-F].sfd
-	\rm -f *.bdf
+	\rm -f *.bdf *.hex *.txt
 
+#
+# Delete files created within this directory while building TTF fonts.
+#
 distclean: clean
-	\rm -f unifont.bdf
-	\rm -f unifont.hex
-	\rm -f unifont.sfd
-	\rm -f unifont.ttf
-	\rm -f unifont-sbit.ttf
+	\rm -f *.sfd *.ttf
 
-.PHONY: all hex2sfd merge sfd2ttf sbit clean distclean
+.PHONY: all outline sbit clean distclean

@@ -9,7 +9,8 @@
 SHELL = /bin/sh
 INSTALL = install
 
-DATE = 20131221
+PACKAGE = "unifont"
+DATE = 20140202
 MAJORVERSION = 6.3
 VERSION = $(MAJORVERSION).$(DATE)
 
@@ -23,12 +24,12 @@ USRDIR = usr
 PREFIX = $(DESTDIR)/$(USRDIR)
 PKGDEST = $(PREFIX)/share/unifont
 
-VPATH = lib font/hexsrc font/ttfsrc
+VPATH = lib font/plane00 font/ttfsrc
 
 HEXFILES = hangul-syllables.hex nonprinting.hex pua.hex spaces.hex \
 	   unassigned.hex unifont-base.hex wqy.hex
 
-COMBINING = font/ttfsrc/combining.txt
+COMBINING = font/plane00/bmp-combining.txt
 
 TEXTFILES = ChangeLog INSTALL NEWS README
 
@@ -46,6 +47,13 @@ COMPRESS = 1
 
 all: bindir libdir docdir buildfont
 	echo "Make is done."
+
+#
+# Build a distribution tarball.
+#
+dist: distclean
+	(cd .. ; tar cf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION) && \
+		gzip -f -9 $(PACKAGE)-$(VERSION).tar)
 
 bindir:
 	set -e ; $(MAKE) -C src
@@ -82,9 +90,9 @@ precompiled:
 # Create lib/wchardata.c.  If you want to also build the object file
 # wchardata.o, uncomment the last line
 #
-lib/wchardata.c: $(HEXFILES) combining.txt
+lib/wchardata.c: $(HEXFILES) $(COMBINING)
 	$(INSTALL) -m0755 -d lib
-	(cd font/hexsrc && sort $(HEXFILES) > ../../unifonttemp.hex)
+	(cd font/plane00 && sort $(HEXFILES) > ../../unifonttemp.hex)
 	bin/unigenwidth unifonttemp.hex $(COMBINING) > lib/wchardata.c
 	\rm -f unifonttemp.hex
 #	(cd lib && $(CC) $(CFLAGS) -c wchardata.c && chmod 644 wchardata.o )
@@ -99,7 +107,7 @@ install: bindir libdir docdir
 	   gzip -f -9 $(PKGDEST)/$$i ; \
 	done
 	$(INSTALL) -m0644 -p lib/wchardata.c $(PKGDEST)
-	$(INSTALL) -m0644 -p font/ttfsrc/combining.txt $(PKGDEST)
+	$(INSTALL) -m0644 -p font/plane00/bmp-combining.txt $(PKGDEST)
 	# If "make" wasn't run before, font/compiled won't exist.
 	if [ ! -d font/compiled ] ; then \
 	   $(INSTALL) -m0644 -p font/precompiled/unifont-$(VERSION).hex   $(PKGDEST)/unifont.hex ; \

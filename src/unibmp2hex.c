@@ -155,6 +155,17 @@ main (int argc, char *argv[])
 
    wide[0x303F] = 0; /* CJK half-space fill */
 
+   /* Supplemental Multilingual Plane (Plane 01) */
+   for (i = 0x010A00; i <= 0x010A5F; i++) wide[i] = 1; /* Kharoshthi      */
+   for (i = 0x011000; i <= 0x01107F; i++) wide[i] = 1; /* Brahmi          */
+   for (i = 0x011080; i <= 0x0110CF; i++) wide[i] = 1; /* Kaithi          */
+   for (i = 0x011100; i <= 0x01114F; i++) wide[i] = 1; /* Chakma          */
+   for (i = 0x011180; i <= 0x0111DF; i++) wide[i] = 1; /* Sharada         */
+   for (i = 0x011680; i <= 0x0116CF; i++) wide[i] = 1; /* Takri           */
+   for (i = 0x016F00; i <= 0x016F9F; i++) wide[i] = 1; /* Mino            */
+   for (i = 0x01D100; i <= 0x01D1FF; i++) wide[i] = 1; /* Musical Symbols */
+   for (i = 0x01D200; i <= 0x01D24F; i++) wide[i] = 1; /* Ancient Greek Musical Notation */
+
    /*
       Determine whether or not the file is a Microsoft Windows Bitmap file.
       If it starts with 'B', 'M', assume it's a Windows Bitmap file.

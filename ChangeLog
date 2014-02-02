@@ -1,3 +1,85 @@
+2014-02-02  Paul Hardy  <unifoundry@unifoundry.com>
+
+        * Makefiles: updated date for new release.
+	* NEWS: updated for new release.
+	* README: updated for new release, notably mentioning that
+	  "font/hexsrc" has been renamed to "font/plane00".
+	* doc/: regenerated unifont.txt, unifont.info, and unifont.pdf files
+	  after addition of doc/hexkinya.texi.
+	* doc/Makefile (docprep): added new target to remove the files
+	  created by "make doc", in preparation for running "make doc" again.
+	* doc/hexkinya.texi: added Texinfo file for hexkinya Perl script.
+	* doc/unifont.texi: updated file to reflect "font/hexsrc" being
+	  renamed to "font/plane00" and made other changes to reflect
+	  support beyond the Unicode Basic Multilingual Plane.
+	* font/Makefile:
+	  - Added Andrew Miller's name to COPYRIGHT string.
+	  - Add unifont_upper font files for Plane 1 through Plane 14 glyphs.
+	  - Add unifont_upper_csur font files for Plane 1 through Plane 15
+	    glyphs (currently there are no glyphs for Plane 16, the highest
+	    plane that the  Unicode Standard allows).
+	  - Create Unifont-APL8x16.psf.gz console font file, to support
+	    running GNU APL and other APL implementations in console mode.
+	    This font is a 512 glyph subset of Unifont.
+	* font/Makefile (bigpic): construct giant glyph picture using
+	  font/plane00/*.hex rather than font/compiled/unifont_sample*.hex,
+	  because the latter doesn't contain glyphs for U+FFFE or U+FFFF
+	  (removed to appease MS Windows).
+	* font/Makefile (hex): added egrep -v "^FFF[EF]" to make sure
+          U+FFFE and U+FFFF are removed from font, for Windows XP.
+	* font/plane00: new name of previous "font/hexsrc" directory, now
+	  that this package contains multiple Unicode planes.
+	* font/plane00/README: updated to mention new "omit.hex" file.
+	* font/plane00/bmp-combining.txt: formerly "font/ttfsrc/combining.txt".
+        * font/plane00/nonprinting.hex: removed U+FFFE and U+FFFF to
+          appease MS Windows XP (see font/plane00/omit.hex entry below).
+        * font/plane00/omit.hex: consists of U+FFFE and U+FFFF, for the
+          sake of MS Windows XP.
+        * font/plane00/unifont-base.hex: Further tweaks to APL glyphs.
+        * font/plane00csur:
+	  - Created ConScript Unicode Registry directory, for glyphs in Michael
+	    Everson's PUA mapping ("http://www.evertype.com/standards/csur/").
+          - Added contributions of Wojciech Stryjewski: Tengwar and Klingon.
+          - Added contributions of Andrew Miller: Kinya (partial), aUI,
+	    Gargoyle, Ewellic, Unifon, Solresol, Visible Speech, and Monofon.
+	  - Added contributions of Paul Hardy: Cirth and Aiha.
+	* font/plane01: created directory for Unicode Plane 1 glyphs.
+	  - Added glyphs contributed by Roman Czyborra and Andrew Miller:
+	    Old Italic.
+	  - Added glyphs contributed by Andrew Miller: Ancient Symbols,
+	    Lycian, Carian, Ugaritic, Old Persian, Musical Symbols,
+	    Tai Xuan Jing Symbols, Counting Rod Numerals, Mathematical
+	    Alphanumeric Symbols (partial), Mahjong Tiles, Domino Tiles,
+	    Playing Cards, Enclosed Alphanumeric Supplement, and Miscellaneous
+	    Symbols and Pictographs (partial).
+	  - Added glyphs contributed by Paul Hardy: Linear B Syllabary,
+	    Linear B Ideograms, Aegean Numbers, Ancient Greek Numbers,
+	    Gothic, Deseret, Shavian, Osmanya, Cypriot Syllabary, Phoenecian,
+	    Kharoshthi, Byzantine Musical Symbols, and Ancient Greek Musical
+	    Notation.
+	* font/plane0E: added scripts contributed by Andrew Miller: Tags and
+	  Variation Selectors Supplement.
+	* font/plane0Fcsur: added glyphs from Michael Everson's ConScript
+	  Unicode Registry (CSUR) contriubted by Andrew Miller: Kinya Syllables.
+        * font/psf: added directory with files to build new PSF font version,
+	  to allow APL use under GNU/Linux in console mode.
+	* font/ttfsrc: simplified directory to only contain a Makefile;
+	  other files were moved to "font/plane00/" as a precursor to allow
+	  parallel building of multiple fonts.
+	* font/ttfsrc/Makefile:
+	  - Updated VERSION date.
+	  - Added Andrew Miller's name to COPYRIGHT string.
+	* hangul/README: changed mention of "font/hexsrc" to new location
+	  of "font/plane00".
+	* man/hexkinya.1: added man page for Andrew Miller's hexkinya Perl
+	  script, also cross-referenced in all other man pages.
+	* src/hexkinya: new script by Andrew Miller to generate Kinya Private
+	  Use Area glyphs in Plane 15, saved under "font/plane0Fcsur/".
+	* src/unibmp2hex.c: added forced double width for appropriate
+	  Plane 1 (Supplemental Multilingual Plane) scripts now that
+	  this package extends beyond the Basic Multilingual Plane.
+        * src/unipagecount.c: corrected license from GPL3+ to GPL2+.
+
 2013-12-21  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* ChangeLog: corrected date on last entry from 12-27 to 12-17.

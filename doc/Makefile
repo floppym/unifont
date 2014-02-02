@@ -24,6 +24,12 @@ OUTPUT_FILES = unifont.info unifont.txt unifont.pdf
 # in case the target system doesn't have makeinfo and texi2pdf installed.
 #
 all:
+#
+# Type "make docprep" before typing "make doc".
+#
+docprep:
+	\rm -f unifont.info unifont.txt unifont.pdf
+
 doc: $(OUTPUT_FILES)
 
 install:

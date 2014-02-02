@@ -85,6 +85,8 @@ back into a .hex file.
 @b{hex2sfd(1),}
 @comment TROFF INPUT: .BR hexbraille(1),
 @b{hexbraille(1),}
+@comment TROFF INPUT: .BR hexkinya(1),
+@b{hexkinya(1),}
 @comment TROFF INPUT: .BR hexmerge(1),
 @b{hexmerge(1),}
 @comment TROFF INPUT: .BR johab2ucs2(1),

@@ -1,3 +1,56 @@
+2014-02-02: Release 6.3.20140202
+
+   This version is the first designed to easily build multiple fonts.
+   To accomplish this, font/Makefile and font/ttfsrc/Makefile were
+   modified to pass FONT and COMBINING parameters, giving the names
+   of the font file and its associated combining.txt file.
+
+   This version introduces a subset of Unicode's Supplemental Multilingual
+   Plane (SMP, or Plane 1).  The file "font/plane01/plane01.hex" contains
+   a glyph for every visible code point in the Unicode 5.0 SMP except
+   "Cuneiform" and "Cuneiform Numbers and Punctuation"; those two scripts
+   require more resolution than what will fit within a 16 by 16 pixel grid.
+   Andrew Miller drew well over 1,000 glyphs for this effort, and added
+   glyphs for several SMP scripts introduced after Unicode 5.0.
+
+   This version also introduces a subset of the ConScript Unicode
+   Registry (CSUR) Private Use Area glyphs.  Wojciech Stryjewski created
+   glyphs for Tengwar and Klingon -- Tolkien fans and Trekkies rejoice!
+   Paul Hardy drew Cirth to finish the Tolkien set, and drew other scripts.
+   Andrew Miller made very extensive additions for the CSUR; see the
+   ChangeLog for details.
+
+   Finally, this version includes a special PSF font for using APL
+   in console mode on GNU/Linux.  This PSF font contains 512 glyphs
+   as a subset of Unifont; it will not work on systems that only
+   support PSF fonts with 256 glyphs.  This PSF font will support
+   GNU APL and several other APL implementations.
+
+   The names of the font files are as follows:
+
+      unifont-*               Font with Unifont Plane 0 glyphs
+
+      unifont_sample-*        Font with Unifont glyphs, with combining
+                              circles added for illustration
+
+      unifont_csur-*          Font with glyphs from Unifont plus the
+                              CSUR PUA glyphs
+
+      unifont_upper-*         Font with glyphs from Planes 1 through 14
+
+      unifont_upper_csur-*    Font with glyphs from Planes 1 through 15
+
+      Unifont-APL8x16.psf.gz  The APL console font
+
+Glyphs for code points U+FFFE and U+FFFF, previously added for illustration
+purposes in unifont_sample, were removed because they caused problems on
+Microsoft Windows XP.  These glyphs are still included in the large bitmap
+graphic of Unifont but are no longer in the font itself.
+
+Many other small changes were made as noted in the ChangeLog file, but
+support for glyphs beyond Unicode's Basic Multilingual Plane is the most
+notable change.
+
 2013-12-21: Release 6.3.2013121
 
    The default font name that hex2bdf creates has changed from
