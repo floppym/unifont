@@ -1,3 +1,23 @@
+2014-02-04  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* Makefiles:
+	  - Updated date for new release.
+	  - Added Qianqian Fang's name to COPYRIGHT strings, for his glyph
+            contributions in "font/plane00/wqy.hex".
+	* hangul/hangul-generation.html: removed references to three footer
+	  "<img>" links that pointed to external websites.  Those external
+	  icons were saved locally when the original web page
+	  http://unifoundry.com/hangul/hangul-generation.html was saved in
+	  the "hangul/" directory.  That web page is the most comprehensive
+	  documentation of the effort to create the Hangul Syllables block
+	  from scratch.
+	* hangul/hangul-generation_files: removed three external icon files
+	  ("valid-html401.png", "vccs.gif", and "w3c_ab.gif") that were saved
+	  locally when http://unifoundry.com/hangul/hangul-generation.html
+	  was saved.
+	* src/unibmp2hex.c: increased side of "wide" array to be 0x200000,
+	  to cover the entire range of Unicode.
+
 2014-02-02  Paul Hardy  <unifoundry@unifoundry.com>
 
         * Makefiles: updated date for new release.

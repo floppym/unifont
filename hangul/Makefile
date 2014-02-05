@@ -7,7 +7,7 @@ BINDIR = ../bin
 # assembly date of this version
 #
 MAJORVERSION = 6.3
-DATE = 20140202
+DATE = 20140204
 VERSION = $(MAJORVERSION).$(DATE)
 
 COPYRIGHT = "Copyright (C) 2013 Paul Hardy.  \

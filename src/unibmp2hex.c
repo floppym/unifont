@@ -61,7 +61,7 @@ main (int argc, char *argv[])
    int tmpsum;  /* temporary sum to see if a character is blank */
 
    unsigned char bitmap[17*32][18*32/8]; /* final bitmap */
-   char wide[65536]={65536 * 0}; /* 1 = force double width code point */
+   char wide[0x200000]={0x200000 * 0}; /* 1 = force double width code point */
 
    char *infile="", *outfile="";  /* names of input and output files */
    FILE *infp, *outfp;      /* file pointers of input and output files */

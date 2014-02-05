@@ -18,10 +18,11 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 MAJORVERSION = 6.3
-DATE = 20140202
+DATE = 20140204
 VERSION = $(MAJORVERSION).$(DATE)
 
-COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Andrew Miller, et al.  \
+COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Qianqian Fang, \
+Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 

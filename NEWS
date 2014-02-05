@@ -1,3 +1,14 @@
+2014-02-04: Release 6.3.20140204
+
+   This version added Qianqian Fang's name to the COPYRIGHT string now
+   passed to Fontforge when the TTF fonts are built, for his contributions
+   contained in the file "font/plane00/wqy.hex".
+
+   This version also removes "<img>" links to icons on external websites from
+   the "hangul/hangul-generation.html" web page, which were retrieved and
+   stored locally when the original web page was saved in the "hangul/"
+   directory.
+
 2014-02-02: Release 6.3.20140202
 
    This version is the first designed to easily build multiple fonts.
