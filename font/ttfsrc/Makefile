@@ -28,7 +28,7 @@ Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
-VERSION = 6.3.20140204
+VERSION = 6.3.20140214
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex

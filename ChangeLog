@@ -1,3 +1,9 @@
+2014-02-14  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* COPYING: added GNU Free Documentation License 1.3, which covers
+	  the files "doc/unifont.*".
+	* ChangeLog: fixed a typo in 2014-02-04 entry.
+
 2014-02-04  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* Makefiles:
@@ -15,7 +21,7 @@
 	  ("valid-html401.png", "vccs.gif", and "w3c_ab.gif") that were saved
 	  locally when http://unifoundry.com/hangul/hangul-generation.html
 	  was saved.
-	* src/unibmp2hex.c: increased side of "wide" array to be 0x200000,
+	* src/unibmp2hex.c: increased size of "wide" array to be 0x200000,
 	  to cover the entire range of Unicode.
 
 2014-02-02  Paul Hardy  <unifoundry@unifoundry.com>
