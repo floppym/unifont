@@ -36,7 +36,7 @@ main (int argc, char **argv)
    int  loc;                    /* Unicode code point of current input line */
    char *gstart;                /* glyph start, pointing into teststring    */
 
-   char combining[0x10000];
+   char combining[0x110000];
 
    void add_single_circle(char *); /* add a single-width dashed circle */
    void add_double_circle(char *); /* add a double-width dashed circle */
@@ -55,7 +55,7 @@ main (int argc, char **argv)
       Read the combining characters list.
    */
    /* Start with no combining code points flagged */
-   memset (combining, 0, 0x10000 * sizeof (char));
+   memset (combining, 0, 0x110000 * sizeof (char));
 
    if ((infilefp = fopen (argv[1],"r")) == NULL) {
       fprintf (stderr,"ERROR - combining characters file %s not found.\n\n",

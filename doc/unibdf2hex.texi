@@ -54,8 +54,6 @@ extract CJK ideographs from the 16x16 version of Wen Quan Yi's BDF
 font.  Currently the program is hard-coded to only extract those
 code points that comprise the "wqy.hex" source font file used to
 build "unifont.hex" but this source code could easily be modified.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node unibdf2hex FILES
@@ -93,6 +91,8 @@ build "unifont.hex" but this source code could easily be modified.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

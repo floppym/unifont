@@ -107,9 +107,15 @@ if ($boxsize == 32) {
 		$charheight = 16;
 		$charmaxwidth = 3;
 	} elsif ($im->rgb ($pixel) == ($white_red, $white_green, $white_blue)) {
-		$charyoffset = 4;
-		$charheight = 24;
+		$charyoffset = 7;
+		$charheight = 16;
 		$charmaxwidth = 3;
+#
+#		Use the settings below for a height of 24 pixels in the future;
+#		for now, hard code glyph height to 16 pixels.
+#		$charyoffset = 4;
+#		$charheight = 24;
+#		$charmaxwidth = 3;
 	} else {
 		die ("Cannot determine font height\n")
 	}

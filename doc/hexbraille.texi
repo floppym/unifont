@@ -47,8 +47,6 @@ hexbraille @minus{} Algorithmically generate the Unicode Braille range (U+28xx)
 @b{hexbraille}
 generates a GNU Unifont .hex format file (written on stdout) containing
 the Braille dot patterns in the Unicode range U+2800..U+28FF.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node hexbraille FILES
@@ -86,6 +84,8 @@ braille.hex output font files
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

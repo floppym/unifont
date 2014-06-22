@@ -51,8 +51,6 @@ reads a sorted GNU Unifont .hex file (sorted with the Unix
 utility) and prints notification of any duplicate code points on stdout.
 The input file can be specified on the command line.  If no file is
 specified, input will be read from STDIN until end of file.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node unidup FILES
@@ -90,6 +88,8 @@ specified, input will be read from STDIN until end of file.
 @b{unicoverage(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

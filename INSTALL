@@ -23,8 +23,8 @@ glyphs appearing for unassigned code points, and with no glyphs for
 Private Use Area code points or non-printing code points.  As an
 example, to override these defaults in this top-level directory type
 
-     make BUILDFONT=1 UNASSIGNED="" PUA="hexsrc/pua.hex" \
-          NONPRINTING="hexsrc/nonprinting.hex"
+     make BUILDFONT=1 UNASSIGNED="" PUA="plane00/pua.hex" \
+          NONPRINTING="plane00/nonprinting.hex"
 
 To make certain that no unassigned, PUA, or non-printing glyphs are
 included, type
@@ -34,9 +34,9 @@ included, type
 You can similarly build Unifont with your own custom PUA glyphs.
 Just specify where the custom PUA file is, relative to the "font/"
 directory.  Note, though, that unifontpic generates its glyph
-diagram from whatever .hex files are in the "font/hexsrc" directory.
+diagram from whatever .hex files are in the "font/plane00" directory.
 Therefore, to have custom PUA glyphs be part of this generated
-glyph map, replace "font/hexsrc/pua.hex" with a custom pua.hex file.
+glyph map, replace "font/plane00/pua.hex" with a custom pua.hex file.
 
 Other useful make variables that can be overridden on the command line
 from the top-level Makefile include:
@@ -141,8 +141,8 @@ To create a custom version of the font with combining circles (similar
 to what was done to create the large picture of Unifont), type:
 
      cd font/ttfsrc
-     sort ../hexsrc/*.hex | \
-          unigencircles combining.txt ../hexsrc/nonprinting.hex > unifont.hex
+     sort ../plane00/*.hex | \
+          unigencircles combining.txt ../plane00/nonprinting.hex > unifont.hex
      make BUILDFONT=1
 
 When "make" is finished, the ttfsrc directory will contain a "unifont.ttf"

@@ -19,16 +19,20 @@ OUTPUT_FILES = unifont.info unifont.txt unifont.pdf
 	$(TEXI2PDF) $<
 
 #
-# Comment out the "all:" line to make the documents.  The default is
-# to leave the existing unifont.info and unifont.pdf files in place,
-# in case the target system doesn't have makeinfo and texi2pdf installed.
+# The "all:" target does nothing, so that a higher-level "make" invocation
+# does not remake the texinfo files, in case the target system does not have
+# makeinfo and texi2pdf installed.
+# 
+# To rebuild the files, issue the command
+#
+#      make distclean ; make docprep ; make doc ; make clean
 #
 all:
 #
 # Type "make docprep" before typing "make doc".
 #
 docprep:
-	\rm -f unifont.info unifont.txt unifont.pdf
+	\rm -f $(OUTPUT_FILES)
 
 doc: $(OUTPUT_FILES)
 

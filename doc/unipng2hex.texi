@@ -66,8 +66,6 @@ depending on the "-r" parameter specified by
 @b{unihex2png.}
 They can be 8, 16, 24, or 32 pixel columns wide (widths of 32 are only
 supported for 32 pixel row tall characters).
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH OPTIONS
 
 @node unipng2hex OPTIONS
@@ -156,6 +154,8 @@ unipng2hex -i my@t{_}input@t{_}file.png -o my@t{_}output@t{_}file.hex
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

@@ -26,7 +26,8 @@ CPROGS = unibmp2hex unicoverage unidup unibdf2hex unifontpic \
 # only used for generation of Hangul syllables.
 #
 PPROGS = bdfimplode hex2bdf hex2sfd hexbraille hexdraw hexkinya hexmerge \
-	 johab2ucs2 unifontchojung unifontksx unihex2png unipng2hex
+	 johab2ucs2 unifont-viewer unifontchojung unifontksx unihex2png \
+	 unihexfill unipng2hex
 
 PROGS = $(CPROGS) $(PPROGS)
 

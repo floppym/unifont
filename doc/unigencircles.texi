@@ -99,8 +99,8 @@ unigencircles combining.txt nonprinting.hex < unifont.hex > unifont-circles.hex
 for combining code points
 @comment TROFF INPUT: .PP
 
-@comment TROFF INPUT: .B font/hexsrc/nonprinting.hex
-@b{font/hexsrc/nonprinting.hex}
+@comment TROFF INPUT: .B font/plane00/nonprinting.hex
+@b{font/plane00/nonprinting.hex}
 for non-printing code points
 @comment TROFF INPUT: .SH SEE ALSO
 
@@ -134,6 +134,8 @@ for non-printing code points
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

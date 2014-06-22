@@ -49,8 +49,6 @@ reads a GNU Unifont .hex font and uses data in
 @b{coverage.dat}
 (which must reside in the current directory).  The output is
 the percent coverage of each script in the Unicode Basic Multilingual Plane.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH OPTIONS
 
 @node unicoverage OPTIONS
@@ -121,6 +119,8 @@ coverage.dat, *.hex GNU Unifont files.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

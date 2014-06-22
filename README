@@ -5,8 +5,8 @@ GNU Unifont is an official GNU package.  It is a dual-width
 (8x16/16x16) bitmap font, designed to provide coverage for
 all of Unicode Plane 0, the Basic Multilingual Plane (BMP).
 
-This version has a glyph for each visible code point in the
-Unicode 6.3 Basic Multilingual Plane (Plane 0) and some glyphs
+GNU Unifont has a glyph for each visible code point in the
+Unicode Basic Multilingual Plane (Plane 0) and some glyphs
 in the Supplemental Multilingual Plane (Plane 1).  This version
 also includes many glyphs in Michael Everson's ConScript
 Unicode Registry (CSUR).
@@ -107,7 +107,9 @@ Paul Hardy wrote "unifontchojung" and "unifontksx" for extracting subsets
 of Hangul glyphs, as an aid in creating a new Hangul Syllables block.
 
 Andrew Miller wrote "hexkinya".  He also wrote "unihex2png" and "unipng2hex"
-based upon Paul Hardy's "unihex2bmp" and "unibmp2hex" programs.
+based upon Paul Hardy's "unihex2bmp" and "unibmp2hex" programs.  Last but not
+least, he wrote the "unifont-viewer" Perl script to graphically view a Unifont
+hex file dynamically.
 
 Paul Hardy wrote all the C programs.
 
@@ -124,7 +126,7 @@ Qianqian Fang began his Wen Quan Yi font in 2004, by which
 time work on Unifont had stopped.  Most of the almost 30,000
 CJK ideographs in Unifont versions 5.1 and later were taken
 from Wen Quan Yi with permission of Qianqian Fang.  The glyphs
-in "./font/hexsrc/wqy-cjk.hex" are for the most part Qianqian
+in "./font/plane00/wqy-cjk.hex" are for the most part Qianqian
 Fang's Unibit and Wen Quan Yi glyphs.
 
 Paul Hardy drew most of the newly-drawn glyphs added to the BMP
@@ -260,7 +262,7 @@ Five new utility programs have also been added:
 
    - unigencircles - adds dashed combining circles to unifont.hex glyphs
      for code points that are in "font/ttfsrc/combining.txt" but not in
-     "font/hexsrc/nonprinting.hex".  Written by Paul Hardy.
+     "font/plane00/nonprinting.hex".  Written by Paul Hardy.
 
    - unigenwidth - creates an implementation of the POSIX functions
      wcwidth() and wcswidth() as specified in IEEE 1003.1-2008, Vol. 2:
@@ -389,7 +391,7 @@ release of version 5.1:
 The result is now there is just one variation of output font rather than
 four.  That one is used to generate the TrueType "unifont.ttf" font.
 
-The directory "font/hexsrc" contains the .hex input files for building
+The directory "font/plane00" contains the .hex input files for building
 Unifont, and contains these files:
 
      hangul-syllables.hex   Unicode Hangul Syllables, U+AC00..U+D7A3
@@ -543,7 +545,7 @@ Other notable additions include:
        (suggested as an acceptable rendering in the Unicode 5.0 Standard),
        now replaced with optional four-digit hexadecimal code point glyphs;
        thought not built into the final font by default, they are available
-       in "font/hexsrc/pua.hex"
+       in "font/plane00/pua.hex"
 
      - Replacement of the Unifont 5.1 gray box glyphs for unassigned
        code points with four-digit hexadecimal glyphs; these are built

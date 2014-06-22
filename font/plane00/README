@@ -44,7 +44,7 @@ they can all be added by modifying the make file one level above this
 directory (modify the UNIFILES definition in ../Makefile) or with
 the call to "make" in the top-level directory with a command such as:
 
-     make UNASSIGNED="hexsrc/unassigned.hex" PUA="hexsrc/pua.hex"
+     make UNASSIGNED="plane00/unassigned.hex" PUA="plane00/pua.hex"
 
 
 Paul Hardy, 2014

@@ -54,8 +54,6 @@ The subset that is output only contains syllables that contain
 an initial consonant (chojung) plus middle vowel (jungseong),
 with no final consonant (jongseong).
 This lets a font designer focus on this subset during font creation.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node unifontchojung FILES
@@ -95,6 +93,8 @@ This lets a font designer focus on this subset during font creation.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontksx(1),
 @b{unifontksx(1),}
 @comment TROFF INPUT: .BR unifontpic(1),

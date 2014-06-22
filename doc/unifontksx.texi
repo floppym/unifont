@@ -55,8 +55,6 @@ Korean Standard KS X 1001:1992.  These are extracted from the Unicode
 Hangul Syllables block, U+AC00..U+D7A3.
 This lets a font designer focus on those syllables that are most
 common in modern Hangul usage during font development.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node unifontksx FILES
@@ -96,6 +94,8 @@ common in modern Hangul usage during font development.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontpic(1),

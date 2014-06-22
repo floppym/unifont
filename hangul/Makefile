@@ -6,9 +6,9 @@ BINDIR = ../bin
 #
 # assembly date of this version
 #
-MAJORVERSION = 6.3
-DATE = 20140214
-VERSION = $(MAJORVERSION).$(DATE)
+UNICODE_VERSION = 7.0
+PKG_REV = 01
+VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2013 Paul Hardy.  \
 Licensed under the GNU General Public License; either version 2, or \

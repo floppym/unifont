@@ -101,6 +101,7 @@ utility programs to modify a font in the GNU Unifont format.
 * Using Hexdraw:: The Unifont ASCII utility for text editors.
 * Checking Coverage:: Checking Unicode Basic Multilingual Plane coverage.
 * Custom Builds:: Customizing the composition of a Unifont derivative.
+* Viewing a Unifont File Interactively:: Using @code{unifont-viewer}
 * Seeing the Big Picture (Literally!):: Creating a Unifont poster.
 * Combining Circles:: Glyphs with zero width.
 * Installing Fonts on GNU/Linux:: font installation on Unix/Linux.
@@ -224,7 +225,7 @@ files having code points in the full Unicode range of U+0000 through U+10FFFF.
 
 
 @node Using Graphical Tools, Using Hexdraw, Hex File Format, Tutorial
-@section Hex File Format
+@section Using Graphical Tools
 
 
 Let's look at an example.  Suppose you want to modify the Coptic letters
@@ -631,7 +632,7 @@ sort font/plane00/*.hex >unifont-whole.hex
 and run @code{unicoverage} using the resulting @code{unifont-whole.hex} file.
 
 
-@node Custom Builds, Seeing the Big Picture (Literally!), Checking Coverage, Tutorial
+@node Custom Builds, Viewing a Unifont File Interactively, Checking Coverage, Tutorial
 @section Custom Builds
 
 
@@ -738,7 +739,27 @@ em space, or quad space; all spaces are either 8 pixels wide or 16 pixels
 wide.)
 
 
-@node Seeing the Big Picture (Literally!), Combining Circles, Custom Builds, Tutorial
+@node Viewing a Unifont File Interactively, Seeing the Big Picture (Literally!), Custom Builds, Tutorial
+@section Viewing a Unifont File Interactively
+
+The @code{unifont-viewer} Perl script uses the @code{wxWidgets} Perl library
+to present a dynamic graphical representation of a Unifont hex file.
+This is a convenient way to scan quickly through a complete Unifont hex file.
+It is ideal for scanning through a Unifont hex source file after you have made
+changes.
+
+Use @code{unifont-viewer} to open any Unifont hex file, whether in the Basic
+Multilingual Plane up to the maximum Unicode code point of U+10FFFF.  The font
+is displayed graphically in sections of 16-by-16 glyph grids (256 glyphs---a
+"page" in Unifont lingo).  The page numbers (the upper portion of the
+hexadecimal code point range) appear in a list along the left-hand side.
+Only page ranges that are present in the Unifont hex file are listed.
+
+When @code{unifont-viewer} loads a hex file, it begins by displaying the first
+"page" range in that file.
+
+
+@node Seeing the Big Picture (Literally!), Combining Circles, Viewing a Unifont File Interactively, Tutorial
 @section Seeing the Big Picture (Literally!)
 
 
@@ -1012,6 +1033,7 @@ Enjoy!
 * unibmp2hex::
 * unicoverage::
 * unidup::
+* unifont-viewer::
 * unifontchojung::
 * unifontksx::
 * unifontpic::
@@ -1036,6 +1058,7 @@ Enjoy!
 @include unibmp2hex.texi
 @include unicoverage.texi
 @include unidup.texi
+@include unifont-viewer.texi
 @include unifontchojung.texi
 @include unifontksx.texi
 @include unifontpic.texi

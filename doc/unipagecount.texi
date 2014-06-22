@@ -47,8 +47,6 @@ unipagecount @minus{} Count the assigned code points in a GNU Unifont .hex file
 reads a GNU Unifont .hex file from STDIN and prints a 16 by 16 grid of the
 number of defined code points in each 256 character block to STDOUT.
 Code points proceed from left to right, then top to bottom.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH OPTIONS
 
 @node unipagecount OPTIONS
@@ -119,6 +117,8 @@ program.  The bitmaps are assumed to be in the directory "bmp/".
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

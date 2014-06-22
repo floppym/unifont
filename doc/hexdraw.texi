@@ -62,8 +62,6 @@ reads a sorted GNU Unifont .hex file from STDIN and writes a two
 dimensional ASCII art rendering for each glyph to STDOUT.  The
 output file can be edited with any text editor, then converted
 back into a .hex file.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node hexdraw FILES
@@ -101,6 +99,8 @@ back into a .hex file.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

@@ -50,8 +50,6 @@ johab2ucs2 @minus{} Convert a Johab BDF font into GNU Unifont Hangul Syllables
 @b{johab2ucs2}
 reads a Johab encoded BDF font (as used in Hanterm) from STDIN and writes
 a GNU Unifont .hex file containing the Unicode Hangul Syllables to STDOUT.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node johab2ucs2 FILES
@@ -89,6 +87,8 @@ a GNU Unifont .hex file containing the Unicode Hangul Syllables to STDOUT.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

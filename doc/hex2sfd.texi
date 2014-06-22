@@ -52,8 +52,6 @@ reads a GNU Unifont .hex file from STDIN and writes an outline font
 representation in FontForge Spline Font Database (.sfd) format.
 The resulting .sfd file can then be converted by FontForge into
 a TrueType .ttf font.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH FILES
 
 @node hex2sfd FILES
@@ -91,6 +89,8 @@ GNU Unifont .hex font files for input, FontForge .sfd font files for output
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

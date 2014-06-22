@@ -1,3 +1,95 @@
+2014-07-01  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* Changed version numbering from a date at the end to a two-digit
+	  release number for a given Unicode version, where a Unicode version
+	  consists of a major number and a minor number.  So this version is
+	  Unifont 7.0.01, because it is the first revision to implement the
+	  Unifont 7.0 glyphs.  Richard Stallman made this request.
+	* INSTALL: changed "hexsrc" to "plane00" to refer to the new
+	  directory name.
+	* README:
+	  - Changed "hexsrc" to "plane00" to refer to the new directory name.
+	  - Added mention of Andrew Miller writing unifont-viewer.
+	* doc/: incorporated unifont-viewer.texi into unifont.texi.
+	* doc/Makefile: corrected comments for building texinfo output files,
+	  and simplified docprep target.
+	* doc/unifont-viewer.texi: added file.
+	* doc/unifont.texi:
+	  - Corrected naming of section "Using Graphical Tools"; it was
+	    incorrectly named "Hex File Format", which is the name of the
+	    preceding section.
+	  - Added new section on "Dynamically Viewing a Unifont File" to
+	    describe using the unifont-viewer Perl utility.
+	  - Added unifont-viewer man page sub-section to Reference section.
+	* doc/unifontpic.texi: changed "hexsrc" to "plane00" to refer to
+	  the new directory name.
+	* doc/unigencircles.texi: changed "hexsrc" to "plane00" to refer to
+	  the new directory name.
+	* font/Makefile:
+	  - Added font/plane0[1-F]csur/*.hex in hex: target to sort input
+	    for building fonts containing CSUR glyphs above Plane 0.
+	  - Added all combining character code points in uppercsurttf target.
+	  - Added creation of unifont_upper_sample-$(VERSION).hex.  This
+	    involved the creation of combining and nonprinting files in
+	    "font/compiled/" directory.  Also added creation of
+	    unifont_upper_sample-$(VERSION).bdf and
+	    the SBIT font unifont_upper_sample-$(VERSION).ttf.
+	  - Added generation of Supplemental Multilingual Plane glyphs
+	    to "font/compiled/bmp/" directory.
+	  - Renamed "font/compiled/bmp/uni??.bmp" to
+	    "font/compiled/bmp/uni00??.bmp" to appear before SMP bitmap files.
+	  - compiled/bmp no longer created; replaced with compiled/png.
+	  - compiled/png now contains sample glyphs in Portable Network
+	    Graphics format (with combining circles where appropriate),
+	    in subdirectories "plane00", "plane01", "plane0E", and "csur".
+	  - clean target now also removes "$(COMPILED_DIR)/*.sfd.gz".
+	* font/index.html: added table for Supplemental Multilingual Plane.
+	* font/plane00: Added the 327 new glyphs introduced to Plane 0 in
+	  Unicode 7.0.  This involved adding glyphs to unifont-base.hex,
+	  adding combining code points to bmp-combining.txt, and removing
+	  newly-defined glyphs from unassigned.hex.
+	* font/plane00/README: changed "hexsrc" to "plane00" to refer to
+	  the new directory name.
+	* font/plane00/unifont-base.hex:
+	  - Redrew U+0D00 and U+2702.
+	  - Redrew Halfwidth Katakana Variants, U+FF65 through U+FF9F, because
+	    the original glyphs were too tall compared to the rest of Unifont.
+	  - Using new versions of U+2619 (the "Aldus leaf"), U+2622,
+	    and U+26DF that Nils Moskopp submitted.
+	* font/plane00csur/csur.hex: removed U+EFFF as a Copyleft symbol, as
+	  it is not part of the ConScript Unicode Registry.
+	* font/plane01/Makefile: created Makefile to generate "unassigned.hex"
+	  from "unassigned-ranges.txt".
+	* font/plane01/plane01.hex:
+	  - Paul Hardy added these scripts: Phaistos Disc, Coptic Epact
+	    Numbers, Imperial Aramaic, Lydian, Old South Arabian, Old North
+	    Arabian, and Enclosed Ideographic Supplement (modeled after glyphs
+	    in Wen Quan Yi).  Also added new glyphs to complete Phoenician.
+	    Also added glyphs to complete the 7.0 additions for Ancient Greek
+	    Numbers, Ancient Symbols, and Old Italic.
+	  - Andrew Miller added new glyphs for Playing Cards and Enclosed
+	    Alphanumeric Supplement.  Also drew more glyphs for Mathematical
+	    Alphanumeric Supplement.
+	  - Nils Moskopp drew the new Miscellaneous Symbols and Pictographs.
+	* font/plane01/unassigned-ranges.txt: completed all unassigned ranges
+	  for scripts that the Unicode Consortium has assigned.
+	* font/plane01/plane01-nonprinting.hex: created file.
+	* man/:
+	  - Added references to unifont-viewer in all other man pages.
+	  - Removed an extraneous ".PP" that appeared in some man pages before
+	    a new section header.
+	* man/unifont.5: changed "hexsrc" to "plane00".
+	* man/unifont-viewer.1: created file.
+	* man/unifontpic.1: changed "hexsrc" to "plane00".
+	* man/unigencircles.1: changed "hexsrc" to "plane00".
+	* src/unifont-viewer: added new program to view Unifont hex files.
+	* src/unifontpic.c: changed "6.3" version number to "7.0".
+	* src/unigencircles.c: extended to cover the entire Unicode range.
+	* src/unihexfill: new program to pad a script with glyphs that are
+	  four or six digits.  Among other uses, this will allow Debian
+	  GNU/Linux's font review script to report Unicode script completion
+	  percentage accurately for Unifont.
+
 2014-02-14  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* COPYING: added GNU Free Documentation License 1.3, which covers
@@ -80,7 +172,7 @@
 	    Symbols and Pictographs (partial).
 	  - Added glyphs contributed by Paul Hardy: Linear B Syllabary,
 	    Linear B Ideograms, Aegean Numbers, Ancient Greek Numbers,
-	    Gothic, Deseret, Shavian, Osmanya, Cypriot Syllabary, Phoenecian,
+	    Gothic, Deseret, Shavian, Osmanya, Cypriot Syllabary, Phoenician,
 	    Kharoshthi, Byzantine Musical Symbols, and Ancient Greek Musical
 	    Notation.
 	* font/plane0E: added scripts contributed by Andrew Miller: Tags and

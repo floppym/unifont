@@ -59,8 +59,6 @@ with the
 @comment TROFF INPUT: .B unibmp2hex
 @b{unibmp2hex}
 command.
-@comment TROFF INPUT: .PP
-
 @comment TROFF INPUT: .SH OPTIONS
 
 @node unihex2bmp OPTIONS
@@ -154,6 +152,8 @@ unihex2bmp -imy@t{_}input@t{_}file.hex -omy@t{_}output@t{_}file.bmp
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

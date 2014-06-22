@@ -10,9 +10,9 @@ SHELL = /bin/sh
 INSTALL = install
 
 PACKAGE = "unifont"
-DATE = 20140214
-MAJORVERSION = 6.3
-VERSION = $(MAJORVERSION).$(DATE)
+UNICODE_VERSION = 7.0
+PKG_REV = 01
+VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 #
 # The settings below will install software, man pages, and documentation
@@ -65,7 +65,7 @@ bindir:
 buildfont:
 	if [ x$(BUILDFONT) != x ] ; \
         then \
-           set -e ; make -C font ; \
+           set -e ; $(MAKE) -C font ; \
         fi
 
 #

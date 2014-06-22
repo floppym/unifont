@@ -27,7 +27,7 @@
 
 #define MAXSTRING 256
 
-#define HEADER_STRING "GNU Unifont 6.3" /* to be printed as chart title */
+#define HEADER_STRING "GNU Unifont 7.0" /* to be printed as chart title */
 
 /*
    Stylistic Note:
