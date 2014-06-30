@@ -1,4 +1,33 @@
-2014-07-01  Paul Hardy  <unifoundry@unifoundry.com>
+﻿2014-06-29  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* ChangeLog:
+	  - File now begins with UTF-8 encoded Byte Order Mark (U+FEFF),
+	    which is 0xEF, 0xBB, 0xBF.  This will alert some less than
+	    well behaved text applications to expect non-ASCII UTF-8
+	    characters in this file.
+	  - Corrected date in previous ChangeLog entry.
+	* font/Makefile: removed an extra "done" in a "for" loop.
+	* font/plane00/unifont-base.hex:
+	  - Joshua Krämer redrew U+0079 ('y') and U+00B5 (mu).
+	  - Paul Hardy redrew U+00DF (German double s), and Gujarati
+	    characters U+0ACB and U+0ACC.
+	  - Uberon126 redrew symbols U+2672, U+267B, U+267C, U+267D, U+269B,
+	    and U+269C.
+	  - Uberon126 and Paul Hardy redrew U+262F (yin-yang).
+	* font/plane01/plane01.hex:
+	  - Paul Hardy added [in order of appearance in Uniocde Plane 1 /
+            the SMP]: Meroitic Hieroglyphs, Meroitic Cursive, Avestan,
+	    Inscriptional Parthian, Inscriptional Pahlavi, Psalter Pahlavi,
+	    Old Turkic, Rumi Numeral Symbols, Brahmi, Kaithi, Kana Supplement,
+	    Shorthand Format Controls, Emoticons, and Alchemical Symbols.
+	    He also redrew U+01F195 ("NEW").
+	  - Nils Dagsson Moskopp drew more glyphs in the Miscellaneous
+	    Symbols and Pictographs block.
+	  - Ubreon126 contributed the Pahawh Hmong glyphs.  He contributed
+	    new Mah Jong glyphs: U+01F010, U+01F022 through U+01F02A.  He
+	    also redrew U+01F16A ("MC") and U+01F198 ("SOS").
+
+2014-06-21  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* Changed version numbering from a date at the end to a two-digit
 	  release number for a given Unicode version, where a Unicode version

@@ -18,7 +18,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 UNICODE_VERSION = 7.0
-PKG_REV = 01
+PKG_REV = 02
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Qianqian Fang, \
@@ -309,7 +309,6 @@ png: hex $(BINDIR)/unihex2png
 	      $(BINDIR)/unihex2png -p 00$$i \
 	         -i $(COMPILED_DIR)/unifont_csur_sample-$(VERSION).hex \
 	         -o $(PNGDIR)/csur/uni00$$i.png ; \
-	   done ; \
 	done
 	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	   for j in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \

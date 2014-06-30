@@ -1,3 +1,10 @@
+2014-06-22: Release 7.0.02
+
+   Fixes a bug in font/Makefile: there were two "done" statements at the
+   end of one "for" loop.  Also adds many new Supplemental Multilingual
+   Plane (Plane 1) scripts.  See the ChangeLog file for details.
+
+
 2014-06-21: Release 7.0.01
 
    Provides a glyph for every visible code point in the Unicode 7.0 Basic
