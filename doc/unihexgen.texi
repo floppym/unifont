@@ -142,6 +142,8 @@ e000 f8ff
 @b{unihex2bmp(1),}
 @comment TROFF INPUT: .BR unihex2png(1),
 @b{unihex2png(1),}
+@comment TROFF INPUT: .BR unihexfill(1),
+@b{unihexfill(1),}
 @comment TROFF INPUT: .BR unipagecount(1),
 @b{unipagecount(1),}
 @comment TROFF INPUT: .BR unipng2hex(1)

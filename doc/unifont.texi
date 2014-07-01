@@ -1041,6 +1041,7 @@ Enjoy!
 * unigenwidth::
 * unihex2bmp::
 * unihex2png::
+* unihexfill::
 * unihexgen::
 * unipagecount::
 * unipng2hex::
@@ -1066,6 +1067,7 @@ Enjoy!
 @include unigenwidth.texi
 @include unihex2bmp.texi
 @include unihex2png.texi
+@include unihexfill.texi
 @include unihexgen.texi
 @include unipagecount.texi
 @include unipng2hex.texi

@@ -166,6 +166,8 @@ unihex2bmp -imy@t{_}input@t{_}file.hex -omy@t{_}output@t{_}file.bmp
 @b{unigenwidth(1),}
 @comment TROFF INPUT: .BR unihex2png(1),
 @b{unihex2png(1),}
+@comment TROFF INPUT: .BR unihexfill(1),
+@b{unihexfill(1),}
 @comment TROFF INPUT: .BR unihexgen(1),
 @b{unihexgen(1),}
 @comment TROFF INPUT: .BR unipagecount(1),

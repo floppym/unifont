@@ -1,4 +1,20 @@
-﻿2014-06-29  Paul Hardy  <unifoundry@unifoundry.com>
+﻿2014-07-01  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* doc/unifont.texi: include unihexfill.texi.
+	* doc/unihexfill.texi: added file.
+	* doc/*.texi: updated all files to cross-reference unihexfill(1).
+	* font/Makefile: removed spurious "DF" element in "for"
+	  loop to create "compiled/png/csur/" glyphs.
+	* font/plane00/unifont-base.hex: changed "y" glyph (U+0079)
+	  back to previous version.  Added modification to the
+	  German double s glyph (U+00DF) submitted by Joshua Krämer.
+	* font/plane01/Makefile: corrected a comment line.
+	* man/unihexfill.1: created missing man page.  Without that,
+	  this version did not conform to Debian Policy.  The
+	  omission drove this release.
+	* man/*.[15]: updated all man pages to cross-reference unihexfill(1).
+
+2014-06-29  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* ChangeLog:
 	  - File now begins with UTF-8 encoded Byte Order Mark (U+FEFF),
