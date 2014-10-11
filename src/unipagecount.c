@@ -6,11 +6,12 @@
    Synopsis: unipagecount < font_file.hex > count.txt
              unipagecount -phex_page_num < font_file.hex  -- just 256 points
              unipagecount -h < font_file.hex              -- HTML table
+             unipagecount -P1 -h < font.hex > count.html  -- Plane 1, HTML out
              unipagecount -l < font_file.hex              -- linked HTML table
 
    Author: Paul Hardy, unifoundry <at> unifoundry.com, December 2007
    
-   Copyright (C) 2007, 2008, 2013 Paul Hardy
+   Copyright (C) 2007, 2008, 2013, 2014 Paul Hardy
 
    LICENSE:
 
@@ -39,6 +40,7 @@ main (int argc, char *argv[])
 
    char inbuf[MAXBUF]; /* Max 256 characters in an input line */
    int i, j;  /* loop variables */
+   unsigned plane=0; /* Unicode plane number, 0 to 0x16 */
    unsigned page;  /* unicode page (256 bytes wide) */
    unsigned unichar; /* unicode character */
    int pagecount[256] = {256 * 0};
@@ -51,27 +53,33 @@ main (int argc, char *argv[])
    size_t strlen();
 
    if (argc > 1 && argv[1][0] == '-') {  /* Parse option */
-      switch (argv[1][1]) {
-         case 'p':  /* specified -p<hexpage> -- use given page number */
-            sscanf (&argv[1][2], "%x", &pageno);
-            if (pageno >= 0 && pageno <= 255) onepage = 1;
-            break;
-         case 'h':  /* print HTML table instead of text table */
-            html = 1;
-            break;
-         case 'l':  /* print hyperlinks in HTML table */
-            links = 1;
-            html = 1;
-            break;
+      plane = 0;
+      for (i = 1; i < argc; i++) {
+         switch (argv[i][1]) {
+            case 'p':  /* specified -p<hexpage> -- use given page number */
+               sscanf (&argv[1][2], "%x", &pageno);
+               if (pageno >= 0 && pageno <= 255) onepage = 1;
+               break;
+            case 'h':  /* print HTML table instead of text table */
+               html = 1;
+               break;
+            case 'l':  /* print hyperlinks in HTML table */
+               links = 1;
+               html = 1;
+               break;
+            case 'P':  /* Plane number specified */
+               plane = atoi(&argv[1][2]);
+               break;
+         }
       }
    }
    /*
       Initialize pagecount to account for noncharacters.
    */
-   if (!onepage) {
+   if (!onepage && plane==0) {
       pagecount[0xfd] = 32;  /* for U+FDD0..U+FDEF */
-      pagecount[0xff] = 2;   /* for U+FFFE, U+FFFF */
    }
+   pagecount[0xff] = 2;   /* for U+nnFFFE, U+nnFFFF */
    /*
       Read one line at a time from input.  The format is:
 
@@ -92,19 +100,27 @@ main (int argc, char *argv[])
          }
       }
       else { /* counting all characters in all pages */
-         /* Don't add in noncharacters (U+FDD0..U+FDEF, U+FFFE, U+FFFF) */
-         if (unichar < 0xfdd0 || (unichar > 0xfdef && unichar < 0xfffe))
-            pagecount[page]++;
+         if (plane == 0) {
+            /* Don't add in noncharacters (U+FDD0..U+FDEF, U+FFFE, U+FFFF) */
+            if (unichar < 0xfdd0 || (unichar > 0xfdef && unichar < 0xfffe))
+               pagecount[page]++;
+         }
+         else {
+            if ((page >> 8) == plane) { /* code point is in desired plane */
+               pagecount[page & 0xFF]++;
+            }
+         }
       }
    }
    if (html) {
-      mkftable (pagecount, links);
+      mkftable (plane, pagecount, links);
    }
    else {  /* Otherwise, print plain text table */
+      if (plane > 0) fprintf (stdout, "  ");
       fprintf (stdout,
          "   0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F\n");
       for (i=0; i<0x10; i++) {
-         fprintf (stdout,"%X ", i); /* row header */
+         fprintf (stdout,"%02X%X ", plane, i); /* row header */
          for (j=0; j<0x10; j++) {
             if (onepage) {
                if (pagecount[i*16+j])
@@ -125,12 +141,12 @@ main (int argc, char *argv[])
 
 
 /*
-   mkftable - function to create an HTML table to show flipped bmp files
+   mkftable - function to create an HTML table to show PNG files
               in a 16 by 16 grid.
 */
 
 void
-mkftable (int pagecount[256], int links)
+mkftable (unsigned plane, int pagecount[256], int links)
 {
    int i, j;
    int count;
@@ -140,20 +156,23 @@ mkftable (int pagecount[256], int links)
    printf ("<body>\n");
    printf ("<table border=\"3\" align=\"center\">\n");
    printf ("  <tr><th colspan=\"16\" bgcolor=\"#ffcc80\">");
-   printf ("GNU Unifont Page Coverage<br>(Green=100%%, Red=0%%)</th></tr>\n");
+   printf ("GNU Unifont Glyphs<br>with Page Coverage for Plane %d<br>(Green=100%%, Red=0%%)</th></tr>\n", plane);
    for (i = 0x0; i <= 0xF; i++) {
       printf ("  <tr>\n");
       for (j = 0x0; j <= 0xF; j++) {
          count = pagecount[ (i << 4) | j ];
          
          /* print link in cell if links == 1 */
-         if (i < 0xd || (i == 0xd && j < 0x8) || (i == 0xf && j > 0x8)) {
+         if (plane != 0 || (i < 0xd || (i == 0xd && j < 0x8) || (i == 0xf && j > 0x8))) {
             /* background color is light green if completely done */
             if (count == 0x100) bgcolor = 0xccffcc;
             /* otherwise background is a shade of yellow to orange to red */
             else bgcolor = 0xff0000 | (count << 8) | (count >> 1);
             printf ("    <td bgcolor=\"#%06X\">", bgcolor);
-            printf ("<a href=\"bmp/uni%X%X.bmp\">%X%X</a>", i, j, i, j);
+            if (plane == 0)
+               printf ("<a href=\"png/plane%02X/uni%02X%X%X.png\">%X%X</a>", plane, plane, i, j, i, j);
+            else
+               printf ("<a href=\"png/plane%02X/uni%02X%X%X.png\">%02X%X%X</a>", plane, plane, i, j, plane, i, j);
             printf ("</td>\n");
          }
          else if (i == 0xd) {

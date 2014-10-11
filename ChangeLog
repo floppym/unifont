@@ -1,5 +1,86 @@
-﻿2014-07-01  Paul Hardy  <unifoundry@unifoundry.com>
+﻿2014-10-11  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 7.0.04.
+	* Makefiles: bumped version to 7.0.04.
+	* ChangeLog: added "Version" line at the start of all past entries,
+	  since the version number now no longer includes a date as of
+	  Version 7.0.01.  Fixed spelling of "Umbreon126" in 7.0.02 entry.
+	* doc/: updates to include man/unipagecount.1 changes.
+	* font/Makefile:
+	  - Incorporates all font/plane01 glyphs in generated
+	    font/compiled/png/plane01/*.png files, including six-digit
+	    hexadecimal glyphs for code points that the Unicode Consortium
+	    has not yet assigned to scripts.
+	  - Generate font/plane01/all/plane01.html, showing current coverage
+	    and what remains to be done in a color-coded table.
+	  - Modified distclean target to do a "make clean" in font/plane01.
+	* font/plane00/unifont-base.hex:
+	  - Copied U+0070 (lower-case Latin "p") to U+0440 (Cyrillic
+	    small letter "er").  Thanks to Umbreon126 for spotting that.
+	  - Made the angle in symbol U+26BC (SESQUIQUADRATE) a 45 degree
+	    angle, since the symbol is supposed to represent 135 degrees
+	    (so 90 + 45 = 135).  Thanks to Artur Quaglio for noticing that.
+	    The depiction in the Unicode Standard code chart is inaccurate.
+	  - Umbreon126 improved the following glyphs:
+	    U+0026, U+006B, U+0111, U+0127, U+040F, U+041A, U+0444, U+0452,
+	    U+045B, U+045F, U+066F, U+0950, U+1E00, U+1E01, U+20AB, U+2103,
+	    U+2109, U+2118, U+211C, U+213C, U+213D, U+2169, U+26F6, U+2721,
+	    U+A4D2, U+3005, U+3006.
+	* font/plane00/wqy.hex: Umbreon126 improved the following glyphs:
+	  U+3116, U+3464, U+35CA, U+4EAE, U+533F, U+53D7, U+5404, U+569F,
+	  U+56B9, U+56DE, U+5909, U+5967, U+5E38, U+6238, U+796D, U+7981,
+	  U+7A3F, U+7C21, U+7F60, U+840C, U+8276, U+9055, U+907A, U+9089,
+	  U+9EA5, U+9F20.
+	* font/plane01/Makefile:
+	  - Changed name of generated unassigned.hex to plane01-unassigned.hex.
+	  - Added a line to create noscript-ranges-hex.txt from
+	    noscript-ranges.txt.
+	  - Create font/plane01/all/ directory for generating PNG files
+	    when font is compiled.
+	* font/plane01/noscript-ranges.txt: added file that contains
+	  start and stop code points of all ranges in Unicode Plane 1
+	  where Unicode scripts have not yet been assigned.  font/Makefile
+	  uses this to generate filler glyphs for those unassigned script
+	  ranges; they are not included in the main font, but are included
+	  in the PNG graphics files in the font/compiled directory.
+	* font/plane01/plane01-combining.txt: added all Unicode combining
+	  code points in the Unicode 7.0 Plane 1 range, not just ones for
+	  scripts that Unifont Upper contains.
+	* font/plane01/plane01.hex:
+	  - Paul Hardy added Sora Sompeng, Chakma.
+	  - Umbreon126 added Siddham and the script letters in the Mathematical
+	    Alphanumeric Symbols block.
+	  - Artur Quaglio added Elbasan and Caucasian Albanian.
+	  - Paul Hardy, Nils Dagsson Moskopp, and Umbreon126 added more
+	    to the Miscellaneous Symbols and Pictographs, and Nils improved
+	    existing glyphs.
+	  - Umbreon126 improved U+01F200.
+	* font/plane01/plane01-nonprinting.hex: new file contains the
+	  non-printing Unicode Plane 01 glyphs.
+	* font/plane01/unassigned-ranges.txt: fixed a typo; under the
+	  Khojki script, 011122 should have been 011212.
+	* man/Makefile: added unifont-viewer.1 to MAN1PAGES variable.
+	* man/unipagecount.1: updated to reflect src/unipagecount.c changes.
+	* src/hex2sfd:
+	  - Modified comments to include Luis Alejandro González Miranda's
+	    full name.
+	  - Now supports combining characters for glyphs above Plane 0.
+	  - Properly marks fonts with glyphs above Plane 0 as "Unicode"
+	    instead of "UnicodeBmp".
+	  - Explicitly defines glyphs for ".notdef", ".null", and
+	    "nonmarkingreturn" rather than use the Fontforge-supplied defaults.
+	  - Calculate exact number of glyphs in the font for BeginChars entry.
+	  - Moved pixel-outlining portion to a separate subroutine, "outline".
+	  - Add "uni" prefix to StartChar description of code points.
+	* src/unipagecount.c: modified to handle glyphs for any Unicode plane.
+	  Now takes a "-Pnn" parameter, where "nn" is the desired plane
+	  number (0 through 16, inclusive).  The default is Plane 0.
+	  The previous version would only take one command-line argument;
+	  this version can take multiple arguments.
+
+2014-07-01  Paul Hardy  <unifoundry@unifoundry.com>
+
+	* Version: 7.0.03.
 	* doc/unifont.texi: include unihexfill.texi.
 	* doc/unihexfill.texi: added file.
 	* doc/*.texi: updated all files to cross-reference unihexfill(1).
@@ -16,6 +97,7 @@
 
 2014-06-29  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 7.0.02.
 	* ChangeLog:
 	  - File now begins with UTF-8 encoded Byte Order Mark (U+FEFF),
 	    which is 0xEF, 0xBB, 0xBF.  This will alert some less than
@@ -27,9 +109,9 @@
 	  - Joshua Krämer redrew U+0079 ('y') and U+00B5 (mu).
 	  - Paul Hardy redrew U+00DF (German double s), and Gujarati
 	    characters U+0ACB and U+0ACC.
-	  - Uberon126 redrew symbols U+2672, U+267B, U+267C, U+267D, U+269B,
+	  - Umbreon126 redrew symbols U+2672, U+267B, U+267C, U+267D, U+269B,
 	    and U+269C.
-	  - Uberon126 and Paul Hardy redrew U+262F (yin-yang).
+	  - Umbreon126 and Paul Hardy redrew U+262F (yin-yang).
 	* font/plane01/plane01.hex:
 	  - Paul Hardy added [in order of appearance in Uniocde Plane 1 /
             the SMP]: Meroitic Hieroglyphs, Meroitic Cursive, Avestan,
@@ -39,12 +121,13 @@
 	    He also redrew U+01F195 ("NEW").
 	  - Nils Dagsson Moskopp drew more glyphs in the Miscellaneous
 	    Symbols and Pictographs block.
-	  - Ubreon126 contributed the Pahawh Hmong glyphs.  He contributed
+	  - Umbreon126 contributed the Pahawh Hmong glyphs.  He contributed
 	    new Mah Jong glyphs: U+01F010, U+01F022 through U+01F02A.  He
 	    also redrew U+01F16A ("MC") and U+01F198 ("SOS").
 
 2014-06-21  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 7.0.01.
 	* Changed version numbering from a date at the end to a two-digit
 	  release number for a given Unicode version, where a Unicode version
 	  consists of a major number and a minor number.  So this version is
@@ -137,12 +220,14 @@
 
 2014-02-14  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20140214.
 	* COPYING: added GNU Free Documentation License 1.3, which covers
 	  the files "doc/unifont.*".
 	* ChangeLog: fixed a typo in 2014-02-04 entry.
 
 2014-02-04  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20140204.
 	* Makefiles:
 	  - Updated date for new release.
 	  - Added Qianqian Fang's name to COPYRIGHT strings, for his glyph
@@ -163,6 +248,7 @@
 
 2014-02-02  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20140202.
         * Makefiles: updated date for new release.
 	* NEWS: updated for new release.
 	* README: updated for new release, notably mentioning that
@@ -245,6 +331,7 @@
 
 2013-12-21  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20131221.
 	* ChangeLog: corrected date on last entry from 12-27 to 12-17.
 	* Makefiles: updated date for new release.
 	* font/hexsrc/unifont-base.hex: Modified glyphs to appear better
@@ -264,6 +351,7 @@
 
 2013-12-17  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20131217.
 	* doc/Makefile: removed redirection of texi2pdf output.
 	* doc/unifont.pdf: rebuilt file.
 	* font/Makefile:
@@ -276,6 +364,7 @@
 
 2013-12-15  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20131215.
 	* src/unihex2png: new program to convert unifont.hex to PNG image.
 	* src/unipng2hex: new program to convert PNG image to unifont.hex.
 	* src/hex2bdf:
@@ -332,4 +421,5 @@
 
 2013-10-20  Paul Hardy  <unifoundry@unifoundry.com>
 
+	* Version: 6.3.20131020.
 	* First GNU Project version.

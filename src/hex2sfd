@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 #
-# Copyright (C) 2005 Luis Gonzalez Miranda
+# Copyright (C) 2005 Luis Alejandro Gonzalez Miranda
 #
-# hex2sfd created in 2005 by Luis Gonzalez Miranda, http://www.lgm.cl
+# hex2sfd created in 2005 by Luis Alejandro Gonzalez Miranda, http://www.lgm.cl
 #
 # LICENSE:
 #
@@ -20,34 +20,88 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# %combining = ();
-# open(A, "<combining.txt");
-# while(<A>) {
-# 	chomp;
-# 	$combining{$A} = 1;
-# }
-# close(A);
+# June 2008: modifications by Paul Hardy for the Unifont 5.1 build.
 #
-# Modified by Paul Hardy, June 2008.
+# July 2014: modifications by Paul Hardy as follows:
 #
-# The original code above didn't work properly.  The replacement code
-# below wastes RAM, but it works as a quick fix.
+#   - Updated comments to use Luis' full name and add a link to
+#     the Unifont page on savannah.gnu.org.
+#   - Store combining character code points for the entire Unicode
+#     range, not just for the Basic Multilingual Plane.
+#   - Change "Encoding: UnicodeBmp" by detecting whether the highest
+#     glyph is in the Basic Multilingual Plane or above that; if above,
+#     use "Encoding: Unicode" instead.
+#   - Add explicit definitions for three TrueType code points:
+#     ".notdef", ".null", and "nonmarkingreturn".  These override
+#     the defaults that Fontforge creates.  The ".notdef" and
+#     "nonmarkingreturn" glyphs now have widths of 8 pixels
+#     (512 units in the SFD output file).
+#   - Calculate exact number of glyphs in the font for "BeginChars" entry.
+#   - Convert the pixel outline drawing portion of this script
+#     to a subroutine.
+#   - Add "uni" prefix to StartChar description of Unicode code points.
+#
+#
+# Read the list of combining characters, which will have zero width.
 #
 @combining = ();
-for ($i = 0; $i < 65536; $i++) {
-   push(@combining, 0);
+for ($i = 0; $i < 0x110000; $i++) {
+   push (@combining, 0);
 }
 if ($#ARGV < 0) {
-   open(A, "<", "combining.txt");
+   open (A, "<", "combining.txt");
 }
 else {
-   open(A, "<", $ARGV[0]);
+   open (A, "<", $ARGV[0]);
 }
+$maxcombining = 0;
 while (<A>) {
    chomp;
-   $combining[ hex($_) ] = 1;
+   $codepoint = hex ($_);
+   $combining[ $codepoint ] = 1;
+   if ($codepoint > $maxcombining) {
+      $maxcombining = $codepoint;
+   }
 }
-close(A);
+close (A);
+
+$nglyphs    = 0;   # number of glyphs in font (none defined yet)
+@codepoints = ();  # code points of hex bitmaps
+@bitmaps    = ();  # the corresponding hex bitmaps
+
+#
+# Add three special characters for TrueType; use these instead of
+# the Fontforge defaults for these three characters.
+#
+push (@codepoints, ".notdef");
+push (@bitmaps,    "0000007E665A5A7A76767E76767E0000");
+$nglyphs++;
+
+push (@codepoints, ".null");
+push (@bitmaps,    "");
+$nglyphs++;
+
+push (@codepoints, "nonmarkingreturn");
+push (@bitmaps,    "00000000000000000000000000000000");
+$nglyphs++;
+
+while(<STDIN>) {
+	chomp;
+	($c,$d) = split (/:/);
+	push (@codepoints, $c);
+	push (@bitmaps,    $d);
+	$nglyphs++;
+}
+$max_code_point=$codepoints[ $nglyphs - 1 ];
+
+# Encoding tag: Is highest glyph above Plane 0?
+if ($max_code_point > 0xFFFF) {
+   $encoding = "Unicode";
+}
+else {
+   $encoding = "UnicodeBmp";
+}
+
 #
 # Modified by Paul Hardy, July 2008.
 #
@@ -68,13 +122,13 @@ FontName: unifont
 FullName: GNU Unifont
 FamilyName: unifont
 Weight: Medium
-Comments: Created from the 2008-07-06 version of the GNU Unifont
-Comments: with Luis Gonzalez Miranda's Perl and FontForge scripts.
+Comments: Created from GNU Unifont
+Comments: with Luis Alejandro Gonzalez Miranda's Perl and FontForge scripts.
 Comments: See http://www.lgm.cl/trabajos/unifont/index.en.html for
-Comments: information on Luis' scripts.
-Comments: See http://czyborra.com/unifont
-Comments: and http://unifoundry.com/unifont.html
-Comments: for information on GNU Unifont.
+Comments: information on Luis' scripts.  See
+Comments: http://savannah.gnu.org/projects/unifont,
+Comments: http://czyborra.com/unifont, and
+Comments: http://unifoundry.com/unifont.html for information on GNU Unifont.
 Comments: See http://fontforge.sf.net for information on FontForge.
 Version: 1.00
 ItalicAngle: 0
@@ -101,29 +155,70 @@ HheadDescent: 0
 HheadDOffset: 1
 ScriptLang: 1
  1 latn 1 dflt 
-Encoding: UnicodeBmp
+Encoding: $encoding
 UnicodeInterp: none
 DisplaySize: -24
 AntiAlias: 1
 FitToEm: 1
 WinInfo: 0 50 22
 TeXData: 1 0 0 346030 173015 115343 0 1048576 115343 783286 444596 497025 792723 393216 433062 380633 303038 157286 324010 404750 52429 2506097 1059062 262144
-BeginChars: 65536 3
+BeginChars: 65536 $nglyphs
 END
-$count=0;
-while(<STDIN>) {
-	chomp;
-	($c,$d)=split(/:/);
+
+#
+# Print outlines for all glyphs using Fontforge's
+# Spline Font Database (.sfd) format.
+#
+# $count=0;  # number of glyphs created so far.
+
+for ($count = 0; $count < $nglyphs; $count++) {
+	$c = $codepoints[ $count ];
+	$d = $bitmaps[    $count ];
+	outline ($count, $c, $d);
+}
+
+# while (<STDIN>) {
+# 	chomp;
+# 	($c,$d)=split(/:/);
+# 	outline ($count, $c, $d);
+# 	$count++;
+# }
+
+print << "END";
+EndChars
+EndSplineFont
+END
+
+exit;
+
+#
+# Print the outlines of a glyph's pixels.
+#
+# Parameters:
+#    - Position in font
+#    - Glyph non-Unicode name or Unicode hexadecimal code point
+#    - Unifont hexadecimal string to render glyph.
+#
+sub outline {
+	my $count = $_[0];
+	my $c     = $_[1];
+	my $d     = $_[2];
 	$width=length($d)/4;
 	$ptwidth=$pixel * $width;
-#	if($combining{$c}) {             # this was the original "if"
-	if ($combining[ hex($c) ]) {
-		$ptwidth = 0;
+	if ( $c =~ m/^[0-9A-Fa-f]+$/ ) {
+		$charname = "uni$c";
+		if ($combining[ hex($c) ]) {
+			$ptwidth = 0;
+		}
+		$cn = hex ($c);
 	}
-	$cn=hex($c);
+	else {
+		$charname = $c;
+		$cn = -1;
+	}
         # Changed "Flags: H" to "Flags: HW" to fix spaces - Paul Hardy, 2008
 	print << "END";
-StartChar: $c
+StartChar: $charname
 Encoding: $cn $cn $count
 Width: $ptwidth
 Flags: HW
@@ -177,9 +272,5 @@ END
 EndSplineSet
 EndChar
 END
-	$count++;
+
 }
-print << "END";
-EndChars
-EndSplineFont
-END

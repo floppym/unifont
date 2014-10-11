@@ -1,9 +1,26 @@
+2014-10-11: Release 7.0.04
+
+   Added five more Supplemental Multilingual Plane (Plane 01) scripts
+   and improved others thanks to several contributors.  There are now
+   over 5,000 drawn assigned glyphs for Plane 01!
+
+   Reorganized font/plane01 directory.  Several other changes; see
+   ChangeLog file for details.
+
+   unihex2sfd and unipagecount now handle all Unicode planes, not just
+   Plane 0.
+
+
+2014-07-01: Release 7.0.03
+
+   Minor release for Debian.  Added a man page for unihexfill(1);
+   Debian requires a man page for each program.
+
 2014-06-22: Release 7.0.02
 
    Fixes a bug in font/Makefile: there were two "done" statements at the
    end of one "for" loop.  Also adds many new Supplemental Multilingual
    Plane (Plane 1) scripts.  See the ChangeLog file for details.
-
 
 2014-06-21: Release 7.0.01
 

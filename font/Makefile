@@ -18,7 +18,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 UNICODE_VERSION = 7.0
-PKG_REV = 03
+PKG_REV = 04
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Qianqian Fang, \
@@ -284,10 +284,12 @@ png: hex $(BINDIR)/unihex2png
 	if [ ! -d $(PNGDIR)/plane01 ] ; then \
 	   mkdir -p $(PNGDIR)/plane01 ; \
 	fi
+	# Generate files in plane01/all directory to create PNG files.
+	(cd plane01 ; make)
 	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	   for j in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	      $(BINDIR)/unihex2png -p 01$$i$$j \
-	         -i $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).hex \
+	         -i plane01/all/plane01-all.hex \
 	         -o $(PNGDIR)/plane01/uni01$$i$$j.png ; \
 	   done ; \
 	done
@@ -317,6 +319,9 @@ png: hex $(BINDIR)/unihex2png
 	         -o $(PNGDIR)/csur/uni0F$$i$$j.png ; \
 	   done ; \
 	done
+	# Create HTML table showing color-coded percent coverage in Plane 01.
+	../bin/unipagecount -P1 -h < plane01/all/plane01-all.hex \
+	   > plane01.html
 	echo "Done creating $(PNGDIR)"
 
 #
@@ -523,6 +528,7 @@ clean:
 #
 distclean:
 	\rm -rf $(COMPILED_DIR)
+	$(MAKE) -C plane01 distclean
 	$(MAKE) -C ttfsrc distclean
 	\rm -f *~
 	\rm -rf .DS* ._.DS*
