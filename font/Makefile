@@ -18,7 +18,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 UNICODE_VERSION = 7.0
-PKG_REV = 04
+PKG_REV = 05
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Qianqian Fang, \
@@ -321,7 +321,7 @@ png: hex $(BINDIR)/unihex2png
 	done
 	# Create HTML table showing color-coded percent coverage in Plane 01.
 	../bin/unipagecount -P1 -h < plane01/all/plane01-all.hex \
-	   > plane01.html
+	   > compiled/plane01.html
 	echo "Done creating $(PNGDIR)"
 
 #

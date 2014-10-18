@@ -9,8 +9,14 @@ all: plane01.hex plane01-nonprinting.hex plane01-unassigned.hex
 	if [ ! -d all ]; then \
 		mkdir all; \
 	fi
-	../../bin/unihexfill < unassigned-ranges.txt > plane01-unassigned.hex
-	../../bin/unihexfill < noscript-ranges.txt   > all/noscript.hex
+	grep "^[0-9A-Fa-f]" unassigned-ranges.txt | \
+	   awk 'NF == 1 {print "../../bin/unihexgen " $$1 " " $$1;} \
+		NF == 2 {print "../../bin/unihexgen " $$1 " " $$2;}' | \
+	   /bin/sh -s > plane01-unassigned.hex
+	grep "^[0-9A-Fa-f]" noscript-ranges.txt | \
+	   awk 'NF == 1 {print "../../bin/unihexgen " $$1 " " $$1;} \
+		NF == 2 {print "../../bin/unihexgen " $$1 " " $$2;}' | \
+	   /bin/sh -s > all/noscript.hex
 	sort -u all/noscript.hex *.hex > all/plane01-all.hex
 
 clean:

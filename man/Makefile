@@ -27,7 +27,7 @@ COMPRESS = 1
 
 all:
 
-install: $(MANPAGES)
+install:
 	install -m0755 -d $(INSTALLDIR)
 	install -m0755 -d $(INSTALLDIR)/man1
 	install -m0755 -d $(INSTALLDIR)/man5

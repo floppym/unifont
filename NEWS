@@ -1,8 +1,29 @@
+2014-10-17: Release 7.0.05
+
+   Modified ASCII letter 'l' so it would have the same height as
+   the other lower-case letters with ascenders; this is one pixel
+   taller than the capital letters.  Lowered the horizontal stroke 
+   in 't' by one pixel so it would line up with the horizontal
+   stroke in 'f'; this is one pixel lower than the x-height of
+   the ASCII letters.  Letters elsewhere in Plane 0 that were formed
+   with 'k', 'l', or 't' were checked and modified where appropriate
+   to conform with the new ASCII glyphs.
+
+   Completed the Miscellaneous Symbols and Pictographs script in Plane 1,
+   and modified Plane 1 Emoticons and Transport and Map Symbols scripts.
+
+   Now create file font/compiled/plane01.html, showing a color-coded
+   indication of completion of all of Unicode Plane 1 as an HTML
+   table in a self-contained HTML file.  That and the compiled/index.html
+   are the two HTML files that building the font creates.  The plane01.html
+   file gives a color coding to show completion of each 256-glyph block,
+   from 0% (pure red) to 100% (pure green).
+
 2014-10-11: Release 7.0.04
 
-   Added five more Supplemental Multilingual Plane (Plane 01) scripts
+   Added five more Supplemental Multilingual Plane (Plane 1) scripts
    and improved others thanks to several contributors.  There are now
-   over 5,000 drawn assigned glyphs for Plane 01!
+   over 5,000 drawn assigned glyphs for Plane 1!
 
    Reorganized font/plane01 directory.  Several other changes; see
    ChangeLog file for details.

@@ -1,4 +1,44 @@
-﻿2014-10-11  Paul Hardy  <unifoundry@unifoundry.com>
+﻿2014-10-17 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 7.0.05.
+	* ChangeLog: updated list of Plane 1 scripts added in 7.0.04 entry.
+	* font/Makefile:
+	  - Put plane01.html in font/compiled/ instead of font/.
+	* font/plane00.hex:
+	  Following Umbreon126's discovery that the ASCII letter 'k' was
+	  one pixel too short, Paul Hardy examined the rest of the ASCII
+	  alphabet and made these changes:
+	  - The letter 'l' was raised by one pixel to make it the same
+	    height as all other lower-case letters with ascenders:
+	    'b', 'd', 'f', 'h', 'k', and also the same height as 'i' and 'j'.
+	    These are all one pixel taller than the upper-case letters.
+	  - The horizontal stroke of the letter 't' was lowered by one
+	    pixel row to line up with the horizontal stroke in 'f'.
+	    This is one pixel shorter than the font's x-height, and
+	    is a compromise.
+	  - The following scripts were modified where appropriate to
+	    include the changes to the letters 'k', 'l', and 't':
+	       U+00A0..U+00FF Latin-1 Supplement [no changes]
+	       U+0100..U+017F Latin Extended-A
+	       U+0180..U+024F Latin Extended-B
+	       U+0250..U+02A0 IPA Extensions
+	       U+1E00..U+1EFF Latin Extended Additional
+	       U+2C60..U+2C7F Latin Extended-C
+	       U+3300..U+33FF CJK Compatibility
+	       U+A720..U+A7FF Latin Extended-D
+	       U+FB00..U+FB4F Alphabetic Presentation Forms
+	       U+FF00..U+FFEF Halfwidth and Fullwidth Forms.
+	* font/plane01.hex:
+	- Paul Hardy and Nils Dagsson Moskopp completed Miscellaneous
+	  Symbols and Pictographs (U+01F300..U+01F5FF).
+	- Nils modified several Plane 1 glyphs from what were in the
+	  Unifont-7.0.04 release in these scripts:
+	     U+01F300..U+01F5FF Miscellaneous Symbols and Pictographs
+	     U+01F600..U+01F4F Emoticons
+	     U+01F680..U+01F6FF and Transport and Map Symbols scripts.
+	* man/Makefile: remove $(MANPAGES) from "install" target.
+
+2014-10-11  Paul Hardy  <unifoundry@unifoundry.com>
 
 	* Version: 7.0.04.
 	* Makefiles: bumped version to 7.0.04.
@@ -47,13 +87,17 @@
 	  code points in the Unicode 7.0 Plane 1 range, not just ones for
 	  scripts that Unifont Upper contains.
 	* font/plane01/plane01.hex:
-	  - Paul Hardy added Sora Sompeng, Chakma.
+	  - Artur Quaglio added Elbasan and Caucasian Albanian.
+	  - Paul Hardy added Sora Sompeng, Chakma, Sharada, Takri, Miao,
+	    Arabic Mathematical Alphabetic Supplement, and Transport and
+	    Map Symbols.
 	  - Umbreon126 added Siddham and the script letters in the Mathematical
 	    Alphanumeric Symbols block.
-	  - Artur Quaglio added Elbasan and Caucasian Albanian.
 	  - Paul Hardy, Nils Dagsson Moskopp, and Umbreon126 added more
 	    to the Miscellaneous Symbols and Pictographs, and Nils improved
 	    existing glyphs.
+	  - Nils Dagsson Moskopp made improvements to some Transport and
+	    Map Symbols.
 	  - Umbreon126 improved U+01F200.
 	* font/plane01/plane01-nonprinting.hex: new file contains the
 	  non-printing Unicode Plane 01 glyphs.
