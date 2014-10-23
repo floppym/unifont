@@ -1,7 +1,7 @@
 
 SHELL = /bin/sh
 
-CFLAGS   = -g -O -Wall
+CFLAGS   = -g -O2 -Wall
 
 LOCALBINDIR = ../bin
 
@@ -26,8 +26,8 @@ CPROGS = unibmp2hex unicoverage unidup unibdf2hex unifontpic \
 # only used for generation of Hangul syllables.
 #
 PPROGS = bdfimplode hex2bdf hex2sfd hexbraille hexdraw hexkinya hexmerge \
-	 johab2ucs2 unifont-viewer unifontchojung unifontksx unihex2png \
-	 unihexfill unipng2hex
+	 johab2ucs2 unifontchojung unifontksx unihex2png unihexfill \
+	 unipng2hex unifont-viewer
 
 PROGS = $(CPROGS) $(PPROGS)
 
@@ -38,27 +38,27 @@ all: $(CPROGS) bin
 
 bin: bin-stamp
 
-bin-stamp: $(CPROGS) $(PPROGS)
+bin-stamp: $(CPROGS) $(PPROGS) $(PNGPROGS)
 	install    -m0755 -d $(LOCALBINDIR)
-	install    -m0755 $? $(LOCALBINDIR)
+#	install    -m0755 $? $(LOCALBINDIR)
+	install -s -m0755 $(CPROGS) $(LOCALBINDIR)
+	install    -m0755 $(PPROGS) $(LOCALBINDIR)
 	\rm -f $(CPROGS)
 	touch $@
-#	install -s -m0755 $(CPROGS) $(LOCALBINDIR)
-#	install    -m0755 $(PPROGS) $(LOCALBINDIR)
 
 install:
 	if [ x$(PREFIX) = x ] ; \
 	then \
-	   echo "Fatal error: PREFIX directory is not defined." ; \
-	   echo "Run 'make install' from top-level directory" ; \
+	   echo "Fatal error: PREFIX directory is not defined." && \
+	   echo "Run 'make install' from top-level directory" && \
 	   exit 1 ; \
 	fi
 	install -m0755 -d $(INSTALLDIR)
-	set -e ; \
-	   cd $(LOCALBINDIR) ; \
+	set -e && \
+	   cd $(LOCALBINDIR) && \
 	   install -s -m0755 $(CPROGS) $(INSTALLDIR)
-	set -e ; \
-	   cd ../bin ; \
+	set -e && \
+	   cd ../bin && \
 	   install    -m0755 $(PPROGS) $(INSTALLDIR)
 
 #

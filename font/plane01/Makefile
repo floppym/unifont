@@ -9,11 +9,13 @@ all: plane01.hex plane01-nonprinting.hex plane01-unassigned.hex
 	if [ ! -d all ]; then \
 		mkdir all; \
 	fi
-	grep "^[0-9A-Fa-f]" unassigned-ranges.txt | \
+	set -e && \
+	   grep "^[0-9A-Fa-f]" unassigned-ranges.txt | \
 	   awk 'NF == 1 {print "../../bin/unihexgen " $$1 " " $$1;} \
 		NF == 2 {print "../../bin/unihexgen " $$1 " " $$2;}' | \
 	   /bin/sh -s > plane01-unassigned.hex
-	grep "^[0-9A-Fa-f]" noscript-ranges.txt | \
+	set -e && \
+	   grep "^[0-9A-Fa-f]" noscript-ranges.txt | \
 	   awk 'NF == 1 {print "../../bin/unihexgen " $$1 " " $$1;} \
 		NF == 2 {print "../../bin/unihexgen " $$1 " " $$2;}' | \
 	   /bin/sh -s > all/noscript.hex

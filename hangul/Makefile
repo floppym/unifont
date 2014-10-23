@@ -2,12 +2,13 @@
 SHELL = /bin/sh
 
 BINDIR = ../bin
+GZFLAGS = -f -9 -n
 
 #
 # assembly date of this version
 #
 UNICODE_VERSION = 7.0
-PKG_REV = 05
+PKG_REV = 06
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2013 Paul Hardy.  \
@@ -32,7 +33,7 @@ hangul-hex:
 	   < hangul-base.hex | \
 	   sed -e "s/[Ii][Ss][Oo]10646/Johab/g" >hangul-base.bdf
 	bdftopcf < hangul-base.bdf > hangul-base.pcf
-	gzip -f -9 hangul-base.pcf
+	gzip $(GZFLAGS) hangul-base.pcf
 	$(BINDIR)/johab2ucs2 < hangul-base.bdf > hangul-syllables.hex
 
 # Convert the .hex file containing all Unicode Hangul Syllables

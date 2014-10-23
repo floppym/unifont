@@ -44,5 +44,5 @@ for ($c = 0; $c < 256; ++ $c)
 	     $c & 64 ? 3 : 2, $c & 128 ? 6 : 2,
 	     $c & 64 ? 3 : 0, $c & 128 ? 6 : 0
 
-	     );
+	     ) or die ("Cannot print to stdout.\n");
 }

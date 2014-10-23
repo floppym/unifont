@@ -8,10 +8,11 @@
 #
 SHELL = /bin/sh
 INSTALL = install
+GZFLAGS = -f -9 -n
 
 PACKAGE = "unifont"
 UNICODE_VERSION = 7.0
-PKG_REV = 05
+PKG_REV = 06
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 #
@@ -52,11 +53,11 @@ all: bindir libdir docdir buildfont
 # Build a distribution tarball.
 #
 dist: distclean
-	(cd .. ; tar cf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION) && \
-		gzip -f -9 $(PACKAGE)-$(VERSION).tar)
+	(cd .. && tar cf $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION) && \
+		gzip $(GZFLAGS) $(PACKAGE)-$(VERSION).tar)
 
 bindir:
-	set -e ; $(MAKE) -C src
+	set -e && $(MAKE) -C src
 
 #
 # Conditionally build the font, depending on the value of BUILDFONT.
@@ -65,7 +66,7 @@ bindir:
 buildfont:
 	if [ x$(BUILDFONT) != x ] ; \
         then \
-           set -e ; $(MAKE) -C font ; \
+           set -e && $(MAKE) -C font ; \
         fi
 
 #
@@ -73,18 +74,18 @@ buildfont:
 # font/precompiled by default.
 #
 fontdir:
-	set -e ; $(MAKE) -C font
+	set -e && $(MAKE) -C font
 
 libdir: lib/wchardata.c
 
 docdir:
-	set -e ; $(MAKE) -C doc
+	set -e && $(MAKE) -C doc
 
 mandir:
-	set -e ; $(MAKE) -C man
+	set -e && $(MAKE) -C man
 
 precompiled:
-	set -e ; $(MAKE) precompiled -C font
+	set -e && $(MAKE) precompiled -C font
 
 #
 # Create lib/wchardata.c.  If you want to also build the object file
@@ -104,16 +105,16 @@ install: bindir libdir docdir
 	$(INSTALL) -m0755 -d $(PKGDEST)
 	$(INSTALL) -m0644 -p $(TEXTFILES) doc/unifont.txt doc/unifont.info $(PKGDEST)
 	for i in $(TEXTFILES) unifont.txt unifont.info ; do \
-	   gzip -f -9 $(PKGDEST)/$$i ; \
+	   gzip $(GZFLAGS) $(PKGDEST)/$$i ; \
 	done
 	$(INSTALL) -m0644 -p lib/wchardata.c $(PKGDEST)
 	$(INSTALL) -m0644 -p font/plane00/bmp-combining.txt $(PKGDEST)
 	# If "make" wasn't run before, font/compiled won't exist.
 	if [ ! -d font/compiled ] ; then \
-	   $(INSTALL) -m0644 -p font/precompiled/unifont-$(VERSION).hex   $(PKGDEST)/unifont.hex ; \
+	   $(INSTALL) -m0644 -p font/precompiled/unifont-$(VERSION).hex   $(PKGDEST)/unifont.hex && \
 	   $(INSTALL) -m0644 -p font/precompiled/unifont-$(VERSION).bmp $(PKGDEST)/unifont.bmp ; \
 	else \
-	   $(INSTALL) -m0644 -p font/compiled/unifont-$(VERSION).hex   $(PKGDEST)/unifont.hex ; \
+	   $(INSTALL) -m0644 -p font/compiled/unifont-$(VERSION).hex   $(PKGDEST)/unifont.hex && \
 	   $(INSTALL) -m0644 -p font/compiled/unifont-$(VERSION).bmp $(PKGDEST)/unifont.bmp ; \
 	fi
 
@@ -137,4 +138,4 @@ distclean:
 	\rm -rf *~
 	\rm -rf .DS* ._.DS*
 
-.PHONY: all bindir docdir mandir fontdir precompiled install clean distclean
+.PHONY: all dist bindir buildfont fontdir libdir docdir mandir precompiled install clean distclean

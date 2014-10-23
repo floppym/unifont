@@ -1,3 +1,24 @@
+2014-10-23: Release 7.0.06
+
+   A few new scripts were added:
+      U+010350..U+01037F Old Permic
+      U+01F650..U+01F67F Ornamental Dingbats
+      U+01F780..U+01F7FF Geometrical Shapes Extended
+      U+01F800..U+01F8FF Supplemental Arrows-C
+
+   Various changes were made to Makefiles, Perl scripts, and one bash
+   shell script to conform to Debian Policy Manual version 3.9.6.
+
+   Several changes were made to Makefiles:
+      * Use "set -e" at the start of multi-command shell invocations,
+        to trap errors.
+      * Use "&&" rather than ";" in multi-command shell invocations,
+        to fail on errors.
+      * install now uses "-s" flag for C program binaries.
+
+   Other minor changes were made to scripts; see ChangeLog
+   for details.
+
 2014-10-17: Release 7.0.05
 
    Modified ASCII letter 'l' so it would have the same height as

@@ -79,7 +79,7 @@ FONT_ASCENT 14
 FONT_DESCENT 2
 DEFAULT_CHAR 65533
 ENDPROPERTIES
-CHARS $nchars\n";
+CHARS $nchars\n" or die ("Cannot print to stdout.\n");
 
 # TODO: $swidth needs to be modified to accomodate different widths better
 #       for glyphs with height different than 16 pixels.
@@ -101,7 +101,7 @@ SWIDTH $swidth 0
 DWIDTH $dwidth 0
 BBX $dwidth $vpixels 0 -2
 BITMAP $glyph
-ENDCHAR\n";
+ENDCHAR\n" or die ("Cannot print to stdout.\n");
 }
 
-print "ENDFONT\n";
+print "ENDFONT\n" or die ("Cannot print to stdout.\n");

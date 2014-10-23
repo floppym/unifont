@@ -1,4 +1,38 @@
-﻿2014-10-17 Paul Hardy <unifoundry@unifoundry.com>
+﻿2014-10-23 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 7.0.06.
+	* Makefiles:
+	  - Updated version to 7.0.06.
+	  - Added "GZFLAGS = -f -9 -n" to use with gzip in all cases.
+	  - Changed ';' to "&&" for multiple shell commands, to fail if
+	    a preceding step caused an error.
+	  - Use "install -s" instead of "install" on C binaries.
+	* Makefile: regenerated .PHONY: target entries.
+	* font/Makefile:
+	  - Added GRAPHICS declaration, settable to "png" or "bmp" depending
+	    on the type of Unifont font pages desired.  The default is set
+	    to "png".
+	  - Added bmp: target to create bitmapped graphics (.bmp) images of
+	    Unifont.
+	  - Create font/compiled/plane00.html along with
+	    font/compiled/plane01.html in "png" and "bmp" targets.
+	* font/plane01/plane01.hex:
+          - Added one glyph inadvertently omitted from Old Italic:
+            U+01031F (Paul Hardy).
+          - Improved animals in U+01F400..U+01F43F (Nils Dagsson Moskopp).
+	  - Added more scripts:
+	     U+010350..U+01037F Old Permic (Paul Hardy)
+	     U+01F650..U+01F67F Ornamental Dingbats (Paul Hardy)
+	     U+01F780..U+01F7FF Geometric Shapes Extended (Paul Hardy)
+	     U+01F800..U+01F8FF Supplemental Arrows-C (Paul Hardy)
+	  - Emoticons (Paul Hardy)
+	     U+01F608: made horns look more like horns
+	* src/: in all Perl scripts, added "or die" for open, close, and
+	  print system calls.  Made some error messages more descriptive.
+	* src/Makefile: Changed CFLAGS parameter "-O" to explicitly be "-O2".
+	* src/unihexfill: added "set -e" at beginning of bash script.
+
+2014-10-17 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 7.0.05.
 	* ChangeLog: updated list of Plane 1 scripts added in 7.0.04 entry.

@@ -25,7 +25,7 @@ while (<>)
 
 for (sort keys %G)
 {
-	print "$_:$G{$_}\n";
+	print "$_:$G{$_}\n" or die ("Cannot print to stdout.\n");
 }
 
 # hexmerge taipei16.hex cns-2-16.hex jisksp16.hex jiskan16.hex

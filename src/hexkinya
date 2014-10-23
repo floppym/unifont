@@ -64,7 +64,7 @@ for ($i = 0; $i < 21 ; $i++) {
 	for ($m = 0; $m < 8 ; $m++) {
 		for ($f = 0; $f < 22 ; $f++) {
 			$c = ($i * 176) + ($m * 22) + $f + 0xF0000;
-			printf ("%06X:%s%s%s\n", $c, substr ($init[$i], 0, 10), substr ($medi[$m], 10, 10), substr ($fina[$f], 20, 12));
+			printf ("%06X:%s%s%s\n", $c, substr ($init[$i], 0, 10), substr ($medi[$m], 10, 10), substr ($fina[$f], 20, 12)) or die ("Cannot print to stdout.\n");
 		}
 	}
 }

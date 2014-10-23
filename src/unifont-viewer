@@ -12,7 +12,7 @@ sub LoadHexFile {
 	my ($input) = @_;
 	my %hexlist = ();
 
-	open (HEXFILE, "$input") or die ("Cannot open file\n");
+	open (HEXFILE, "$input") or die ("Cannot open hex file for input\n");
 
 	while (<HEXFILE>) {
 		chomp;
@@ -35,7 +35,7 @@ sub Hex2PNG {
 	my %hexlist = %$hexlist_ref;
 
 	if ($pagenum > 0x10FF) {
-		die ("Invalid page\n");
+		die ("Invalid page.\n");
 	}
 
 	my $charxoffset = 4;
@@ -66,7 +66,7 @@ sub Hex2PNG {
 		$ymax = 3;
 		$charmaxwidth = 8;
 	} else {
-		die ("Invalid height\n");
+		die ("Invalid height.\n");
 	}
 
 	# Create box and set as tile pattern
@@ -217,12 +217,12 @@ sub load_gd {
 	my ($self, $gd) = @_;
 	my $png = $gd->png;
 
-	open my $fh, '<', \$png;
+	open my $fh, '<', \$png or die ("Cannot create PNG file for viewing.\n");
 	my $handler = Wx::PNGHandler->new ();
 	my $image = Wx::Image->new ();
 	my $bitmap;
 	$handler->LoadFile ($image, $fh);
-	close $fh;
+	close $fh or die ("Cannot properly close output file.\n");
 	$bitmap = Wx::Bitmap->new ($image);
 
 	if ($bitmap->Ok ()) {
@@ -341,7 +341,7 @@ sub OpenFile {
 		$self->{filename} = $dlg->GetPath ();
 		$self->SetTitle ("Unifont Viewer - " . $dlg->GetFilename ());
 
-		open HEXFILE, "<$self->{filename}" || die "Cannot open $self->{filename}\n";
+		open HEXFILE, "<$self->{filename}" || die "Cannot open $self->{filename}.\n";
 
 		while (<HEXFILE>) {
 			chomp;
@@ -395,10 +395,10 @@ sub SaveFile {
 
 			$self->{imagepanel}->load_gd ($im);
 
-			open (PICTURE, ">$filename") or die ("Cannot save image\n");
+			open (PICTURE, ">$filename") or die ("Cannot save image.\n");
 			binmode PICTURE;
-			print PICTURE $im->png;
-			close PICTURE;
+			print PICTURE $im->png or die;
+			close PICTURE or die ("Cannot properly close output file.\n");
 		}
 	}
 }

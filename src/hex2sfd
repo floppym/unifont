@@ -49,10 +49,10 @@ for ($i = 0; $i < 0x110000; $i++) {
    push (@combining, 0);
 }
 if ($#ARGV < 0) {
-   open (A, "<", "combining.txt");
+   open (A, "<", "combining.txt") or die ("Cannot open combining.txt.\n");
 }
 else {
-   open (A, "<", $ARGV[0]);
+   open (A, "<", $ARGV[0]) or die ("Cannot open specified combining file for input.\n");
 }
 $maxcombining = 0;
 while (<A>) {
@@ -63,7 +63,7 @@ while (<A>) {
       $maxcombining = $codepoint;
    }
 }
-close (A);
+close (A) or die ("Cannot properly close combining input file.\n");
 
 $nglyphs    = 0;   # number of glyphs in font (none defined yet)
 @codepoints = ();  # code points of hex bitmaps
@@ -116,7 +116,7 @@ $descent = 2 * $pixel;
 $ascent  = 16 * $pixel - $descent;
 $bitmask = 25;  # round in x (doesn't really work), corner point selected
 
-print << "END";
+print << "END" or die ("Cannot print to stdout.\n");
 SplineFontDB: 1.0
 FontName: unifont
 FullName: GNU Unifont
@@ -184,7 +184,7 @@ for ($count = 0; $count < $nglyphs; $count++) {
 # 	$count++;
 # }
 
-print << "END";
+print << "END" or die ("Cannot print to stdout.\n");
 EndChars
 EndSplineFont
 END
@@ -217,7 +217,7 @@ sub outline {
 		$cn = -1;
 	}
         # Changed "Flags: H" to "Flags: HW" to fix spaces - Paul Hardy, 2008
-	print << "END";
+	print << "END" or die ("Cannot print to stdout.\n");
 StartChar: $charname
 Encoding: $cn $cn $count
 Width: $ptwidth
@@ -245,7 +245,7 @@ END
 			} else {
 				if($prev) {
 					$x2=$x * $pixel + $pixel;
-					print << "END";
+					print << "END" or die ("Cannot print to stdout.\n");
 $x1 $y1 m $bitmask
  $x1 $y2 l $bitmask
  $x2 $y2 l $bitmask
@@ -259,7 +259,7 @@ END
 		}
 		if($prev) {
 			$x2=0;
-			print << "END";
+			print << "END" or die ("Cannot print to stdout.\n");
 $x1 $y1 m $bitmask
  $x1 $y2 l $bitmask
  $x2 $y2 l $bitmask
@@ -268,7 +268,7 @@ $x1 $y1 m $bitmask
 END
 		}
 	}
-	print << "END";
+	print << "END" or die ("Cannot print to stdout.\n");
 EndSplineSet
 EndChar
 END

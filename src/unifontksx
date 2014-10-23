@@ -386,7 +386,7 @@ $nextksx = shift(@ksx); # get first code point to find
 
 while (<>) {
    if (substr($nextksx, 0, 5) eq substr($_, 0, 5)) {
-      print;  # this is one of the syllables we're seeking; print it
+      print or die ("Cannot print to stdout.\n");  # this is one of the syllables we're seeking; print it
       # Now get next Hangul Syllable to find; if no more, exit.
       if ($#ksx < 0) {
          exit;

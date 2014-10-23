@@ -37,7 +37,7 @@ $result = GetOptions (
 );
 
 if ($opt_help) {
-	print << "END";
+	print << "END" or die ("Cannot print to stdout.\n");
 
 Turn a .png glyph matrix into a GNU Unifont hex glyph set of 256 characters
 
@@ -70,7 +70,7 @@ if (not $input) {
 #}
 
 GD::Image->trueColor (1);
-$im = new GD::Image ("$input") or die ("Cannot open image\n");
+$im = new GD::Image ("$input") or die ("Cannot open image.\n");
 
 if ($im->isTrueColor ()) {
 	$im->trueColorToPalette ();
@@ -185,7 +185,7 @@ $codepoint = ($codepoint << 4);
 $display_width = $codepoint > 0xFFFF ? 6 : 4;
 
 if ($output) {
-	open (HEXFILE, ">$output") or die ("Cannot save file\n");
+	open (HEXFILE, ">$output") or die ("Cannot save hex file.\n");
 } else {
 	*HEXFILE = *STDOUT;
 }
@@ -226,7 +226,7 @@ for ($col = 0; $col < 16; $col++) {
 				$char = $char . sprintf ("%0*X", $charwidth * 2, $line);
 			}
 
-			print HEXFILE "$char\n";
+			print HEXFILE "$char\n" or die ("Cannot print to hex file.\n");
 		}
 
 		$codepoint += 1;
@@ -235,5 +235,5 @@ for ($col = 0; $col < 16; $col++) {
 
 # Only close HEXFILE if it isn't mapped to STDOUT.
 if ($output) {
-	close HEXFILE;
+	close HEXFILE or die ("Cannot properly close hex file.\n");
 }

@@ -277,7 +277,7 @@ for ( $j=0 ; $j <  11172 ;  $j++ ) {
    $medial = int($j / 28 ) % 21+1 ; 
    $final = $j % 28;
   
-   printf ("%04X:%64s\n", $j+0xAC00, &compose_hangul($init,$medial,$final));
+   printf ("%04X:%64s\n", $j+0xAC00, &compose_hangul($init,$medial,$final)) or die ("Cannot print to stdout.\n");
 
 }
 
@@ -292,7 +292,7 @@ sub compose_hangul
 
    for ( $i = 0; $i < 32; $i++) {
       $bit[$i]=sprintf("%02X", 
-         hex($l_bit[$i]) | hex($m_bit[$i]) | hex($f_bit[$i]) );
+         hex($l_bit[$i]) | hex($m_bit[$i]) | hex($f_bit[$i]) ) or die ("Cannot print to stdout.\n");
    }
 
    return pack("a2" x 32, @bit );

@@ -38,7 +38,7 @@ $result = GetOptions (
 );
 
 if ($opt_help) {
-	print << "END";
+	print << "END" or die ("Cannot print to stdout.\n");
 
 Turn a GNU Unifont hex glyph page of 256 code points into a PNG file
 
@@ -160,7 +160,7 @@ for ($count = 0; $count <= 15; $count++) {
 }
 
 if ($input) {
-	open (HEXFILE, "$input") or die ('Cannot open file\n');
+	open (HEXFILE, "$input") or die ('Cannot open hex file for input.\n');
 } else {
    *HEXFILE = *STDIN;
 }
@@ -197,11 +197,11 @@ while (<HEXFILE>) {
 }
 # Only close input file handler if it isn't STDIN.
 if ($input) {
-	close HEXFILE;
+	close HEXFILE or die ("Cannot properly close input file.\n");
 }
 
 # Save image
-open (PICTURE, ">$output") or die ("Cannot save image\n");
+open (PICTURE, ">$output") or die ("Cannot save image.\n");
 binmode PICTURE;
-print PICTURE $im->png;
-close PICTURE;
+print PICTURE $im->png or die ("Cannot write to picture file.\n");
+close PICTURE or die ("Cannot properly close output file.\n");

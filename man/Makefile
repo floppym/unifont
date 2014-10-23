@@ -1,12 +1,13 @@
 
 SHELL = /bin/sh
+GZFLAGS = -f -9 -n
 
 MAN1PAGES = bdfimplode.1 hex2bdf.1 hex2sfd.1 \
 	hexbraille.1 hexdraw.1 hexmerge.1 hexkinya.1 johab2ucs2.1 \
 	unibdf2hex.1 unibmp2hex.1 unicoverage.1 unidup.1 \
-	unifontpic.1 unifontchojung.1 unifontksx.1 unifont-viewer.1 \
-	unigencircles.1 unigenwidth.1 unihex2bmp.1 unihex2png.1 unihexgen.1 \
-	unihexfill.1 unipagecount.1 unipng2hex.1
+	unifontpic.1 unifontchojung.1 unifontksx.1 unigencircles.1 \
+	unigenwidth.1 unihex2bmp.1 unihex2png.1 unihexgen.1 \
+	unihexfill.1 unipagecount.1 unipng2hex.1 unifont-viewer.1
 
 MAN5PAGES = unifont.5
 
@@ -35,8 +36,8 @@ install:
 	   if [ $(COMPRESS) = 0 ] ; then \
 	      install -m0644 $(MAN1PAGES) $(INSTALLDIR)/man1 ; \
 	   else \
-	      gzip -f -9 < $$i >$$i.gz ; \
-	      chmod 644 $$i.gz ; \
+	      gzip $(GZFLAGS) < $$i >$$i.gz && \
+	      chmod 644 $$i.gz && \
 	      mv $$i.gz $(INSTALLDIR)/man1 ; \
 	   fi \
 	done
@@ -44,8 +45,8 @@ install:
 	   if [ $(COMPRESS) = 0 ] ; then \
 	      install -m0644 $(MAN5PAGES) $(INSTALLDIR)/man5 ; \
 	   else \
-	      gzip -f -9 < $$i >$$i.gz ; \
-	      chmod 644 $$i.gz ; \
+	      gzip $(GZFLAGS) < $$i >$$i.gz && \
+	      chmod 644 $$i.gz && \
 	      mv $$i.gz $(INSTALLDIR)/man5 ; \
 	   fi \
 	done
