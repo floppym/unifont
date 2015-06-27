@@ -27,7 +27,7 @@
 
 #define MAXSTRING 256
 
-#define HEADER_STRING "GNU Unifont 7.0" /* to be printed as chart title */
+#define HEADER_STRING "GNU Unifont 8.0" /* to be printed as chart title */
 
 /*
    Stylistic Note:
@@ -126,7 +126,7 @@ gethex (int bitarray[0x10000][16])
    */
    while (fgets (instring, MAXSTRING, stdin) != NULL) {
       sscanf (instring, "%X", &codept);
-      for (i = 0; (instring[i] != ':') && (i < 9); i++); /* find the colon separator */
+      for (i = 0; (i < 9) && (instring[i] != ':'); i++); /* find the colon separator */
       i++; /* position past it */
       bitstring = &instring[i];
       /*

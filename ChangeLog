@@ -1,4 +1,61 @@
-﻿2014-10-23 Paul Hardy <unifoundry@unifoundry.com>
+﻿2015-06-28 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 8.0.01.
+	* Makefiles: updated version to 8.0.01; fonts now Copyright 2015.
+	* font/Makefile:
+	  - No longer create BDF or PCF fonts from glyphs above Plane 0.
+	* font/plane00:
+	- Tibetan: Modified "nga" glyphs (U+0F44 and U+0F94) so they would not
+	    resemble "da" (U+0F51 and U+0FA1, respectively) as closely.
+	  - Made U+202F a single-width space glyph rather than nonprinting;
+	    its entry was moved from nonprinting.hex to spaces.hex.
+	  - Modified U+2FF* and moved block from wqy.hex to unifont-base.hex;
+	    U+2FF7 was incorrect, and others in the range weren't symmetrical.
+	* font/plane00/bmp-combining.hex: 4 new combining characters from
+	  above scripts added and 19 combining characters from New Tai Lue
+	  removed.
+	* font/plane00/unassigned.hex: newly assigned code points removed
+	  from list of unassigned code points.
+	* font/plane00/unifont-base.hex:
+	  - Paul Hardy added changes to these scripts for Unicode 8.0:
+	    Arabic Extended-A, Gujarati, Telugu, Malayalam, Cherokee,
+	    New Tai Lue (all combining characters are no longer combining),
+	    Currency Symbols, Number Forms, Miscellaneous Symbols and Arrows,
+	    Cyrillic Extended-B, Latin Extended-D, Devanagari Extended,
+	    Latin Extended-E, Cherokee Supplement (new in Unicode 8.0.0),
+	    and Combining Half Marks.
+	* font/plane00/wqy.hex:
+	  - Umbreon126 drew U+9FCD..U+9FD5, new in Unicode 8.0.
+	  - Moved U+2FF* to unifont-base.hex following modification; see above.
+	* font/plane01/noscript-ranges.txt: updated to remove scripts that are
+	  new in Uniocde 8.0.0.  "noscript-hex.txt" is generated from this.
+	* font/plane01/plane01.hex:
+	  - Paul Hardy added the scripts Linear A, Palmyrene, Nabataean, Hatran,
+	    Meroitic Cursive, Manichaean, Old Hungarian, Mahajani, Sharada,
+	    Sinhala Archaic Numbers.
+	  - Paul Hardy added the new Unicode 8.0 glyphs in Siddham,
+	    Musical Symbols, Miscellaneous Symbols and Pictographs, Emoticons,
+	    and Transport and Map Symbols.
+	  - Umbreon126 drew most of the Blackletter (Fraktur) in the
+	    Mathematical Alphanumeric Symbols block.  Currently the regular and
+	    bold versions of those glyphs are identical, from limitations of
+	    Unifont's bitmap format.
+	* font/plane01/plane01-combining.txt: added code points that are new
+	  combining characters in Unicode 8.0.0.
+	* font/plane01/plane01-nonprinting.hex: updated with new nonprinting
+	  code points that are new in Unicode 8.0.0.
+	* font/plane01/noscript-ranges-hex.txt: removed script ranges that
+	  are new in Unicode 8.0.0.  "noscript-hex.txt" is generated from
+	  this file.
+	* font/plane01/plane01-unassigned-ranges.txt: removed code points that
+	  are newly assigned in scripts in Unicode 8.0.0.
+	  "unassigned-ranges.txt" is generated from this file.
+	* src/hex2bdf: improved hex string pattern match to go beyond Plane 0.
+	* src/unifontpic.c:
+	  - Changed version string from "7.0" to "8.0".
+	  - Line 129: moved "(i < 9)" range check before use of i in array.
+
+2014-10-23 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 7.0.06.
 	* Makefiles:

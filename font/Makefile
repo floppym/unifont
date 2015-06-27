@@ -18,11 +18,11 @@ FONTFORGE = fontforge
 #
 # assembly date of this version
 #
-UNICODE_VERSION = 7.0
-PKG_REV = 06
+UNICODE_VERSION = 8.0
+PKG_REV = 01
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
-COPYRIGHT = "Copyright (C) 2014 Roman Czyborra, Paul Hardy, Qianqian Fang, \
+COPYRIGHT = "Copyright (C) 2015 Roman Czyborra, Paul Hardy, Qianqian Fang, \
 Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
@@ -124,13 +124,14 @@ all: compiled
 compiled: $(UNIFILES) $(COMBINING) $(UPPER_FILES) $(UPPER_COMBINING)
 	$(MAKE) compiled-files
 
-compiled-files: pcf psf $(GRAPHICS) ttf csurttf upperttf uppercsurttf bigpic coverage
+compiled-files: pcf psf $(GRAPHICS) ttf csurttf upperttf uppercsurttf \
+	   bigpic coverage
 	install -p index.html $(COMPILED_DIR)/index.html
 
 #
 # Build the aggregate .hex font files
 #
-hex: distclean
+hex:
 	if [ ! -d $(COMPILED_DIR) ] ; then \
 	   mkdir -p $(COMPILED_DIR) ; \
 	fi
@@ -224,15 +225,19 @@ pcf: bdf
 	bdftopcf <$(COMPILED_DIR)/unifont_csur-$(VERSION).bdf \
 	         >$(COMPILED_DIR)/unifont_csur-$(VERSION).pcf
 	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_csur-$(VERSION).pcf
-	bdftopcf <$(COMPILED_DIR)/unifont_upper-$(VERSION).bdf \
-	         >$(COMPILED_DIR)/unifont_upper-$(VERSION).pcf
-	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_upper-$(VERSION).pcf
-	bdftopcf <$(COMPILED_DIR)/unifont_upper_sample-$(VERSION).bdf \
-	         >$(COMPILED_DIR)/unifont_upper_sample-$(VERSION).pcf
-	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).pcf
-	bdftopcf <$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf \
-	         >$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf
-	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf
+
+
+# The following are removed from the pcf: target, as PCF fonts
+# don't support glyphs above Plane 0.
+#	bdftopcf <$(COMPILED_DIR)/unifont_upper-$(VERSION).bdf \
+#	         >$(COMPILED_DIR)/unifont_upper-$(VERSION).pcf
+#	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_upper-$(VERSION).pcf
+#	bdftopcf <$(COMPILED_DIR)/unifont_upper_sample-$(VERSION).bdf \
+#	         >$(COMPILED_DIR)/unifont_upper_sample-$(VERSION).pcf
+#	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).pcf
+#	bdftopcf <$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf \
+#	         >$(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf
+#	gzip $(GZFLAGS) $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf
 
 #
 # Make the PSF (console) font for APL (A Programming Language).
@@ -533,18 +538,21 @@ precompiled: all
 	                  $(COMPILED_DIR)/coverage.txt \
 	                  $(COMPILED_DIR)/unifont-$(VERSION).bmp \
 	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).hex \
-	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).bdf.gz \
-	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).pcf.gz \
 	                  $(COMPILED_DIR)/unifont_upper-$(VERSION).ttf \
 	                  $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).hex \
-	                  $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).bdf.gz \
-	                  $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).pcf.gz \
 	                  $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).ttf \
 	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).hex \
-	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf.gz \
-	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf.gz \
 	                  $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).ttf \
 	   precompiled
+
+# Removed from the "precompiled" target above:
+# $(COMPILED_DIR)/unifont_upper-$(VERSION).bdf.gz \
+# $(COMPILED_DIR)/unifont_upper-$(VERSION).pcf.gz \
+# $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).bdf.gz \
+# $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).pcf.gz \
+# $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).bdf.gz \
+# $(COMPILED_DIR)/unifont_upper_csur-$(VERSION).pcf.gz \
+#
 
 #
 # This is set up for Debian.  Solaris places fonts in

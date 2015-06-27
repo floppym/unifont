@@ -44,7 +44,7 @@ if (not $version) {
 $point_size   = $vpixels;
 $point_size10 = 10 * $point_size;
 
-while (<>) { chomp; $glyph{$1} = $2 if /(....):(.+)/; }
+while (<>) { chomp; $glyph{$1} = $2 if /^([0-9a-fA-F]+):([0-9a-fA-F]+)/; }
 @chars = sort keys %glyph;
 $nchars = $#chars + 1;
 

@@ -28,7 +28,9 @@
 ; Imperial Aramaic
 ; Palmyrene
 ; Nabataean
-0108B0 0108FF
+0108B0 0108DF
+; Hatran
+010900 0108FF
 ; Phoenecian
 ; Lydian
 010940 01097F
@@ -45,7 +47,9 @@
 ; Psalter Pahlavi
 010BB0 010BFF
 ; Old Turkic
-010C50 010E5F
+010C50 010C7F
+; Old Hungarian
+010D00 010E5F
 ; Rumi Numeral Symbols
 010E80 010FFF
 ; Brahmi
@@ -56,7 +60,8 @@
 ; Sharada
 ; Sinhala Archaic Numbers
 ; Khojki
-011250 0112AF
+011250 01127F
+; Multani
 ; Khudawadi
 ; Grantha
 011380 01147F
@@ -66,16 +71,21 @@
 ; Modi
 011660 01167F
 ; Takri
-0116D0 01189F
+0116D0 0116FF
+; Ahom
+011740 01189F
 ; Warang Citi
 011900 011ABF
 ; Pau Cin Hau
 011B00 011FFF
 ; Cuneiform
 ; Cuneiform Numbers and Punctuation
-012480 012FFF
+; Early Dynastic Cuneiform
+012550 012FFF
 ; Egyptian Hieroglyphs
-013430 0167FF
+013430 0143FF
+; Anatolian Hieroglyphs
+014680 0167FF
 ; Bamum Supplement
 # 0168C0 016A3F
 ; Mro
@@ -98,7 +108,8 @@
 ; Counting Rod Numerals
 01D380 01D3FF
 ; Mathematical Alphanumeric Symbols
-01D800 01E7FF
+; Sutton SignWriting
+01DAB0 01E7FF
 ; Mende Kikakui
 01E8E0 01EDFF
 ; Arabic Mathematical Alphabetic Symbols
@@ -115,4 +126,5 @@
 ; Alchemical Symbols
 ; Geometric Shapes Extended
 ;  Supplemental Arrows - C
-01F900 01FFFD
+; Supplemental Symbols and Pictographs
+01FA00 01FFFD
