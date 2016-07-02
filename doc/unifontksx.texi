@@ -35,11 +35,11 @@ unifontksx @minus{} Extract Hangul syllables that comprise KS X 1001:1992
 @comment TROFF INPUT: .B unifontksx
 @b{unifontksx}
 <
-@comment TROFF INPUT: .I input-font.hex
-@i{input-font.hex}
+@comment TROFF INPUT: .I input\-font.hex
+@i{input@minus{}font.hex}
 >
-@comment TROFF INPUT: .I output-font.hex
-@i{output-font.hex}
+@comment TROFF INPUT: .I output\-font.hex
+@i{output@minus{}font.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unifontksx DESCRIPTION
@@ -48,7 +48,7 @@ unifontksx @minus{} Extract Hangul syllables that comprise KS X 1001:1992
 
 @comment TROFF INPUT: .B unifontksx
 @b{unifontksx}
-reads a Unifont-format .hex font file from STDIN and writes
+reads a Unifont@minus{}format .hex font file from STDIN and writes
 a Unifont .hex file containing a subset to STDOUT.
 The subset that is output only contains the 2,350 syllables that comprise
 Korean Standard KS X 1001:1992.  These are extracted from the Unicode
@@ -94,8 +94,8 @@ common in modern Hangul usage during font development.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontpic(1),

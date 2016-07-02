@@ -28,7 +28,7 @@ Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
-UNICODE_VERSION = 8.0
+UNICODE_VERSION = 9.0
 PKG_REV = 01
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 

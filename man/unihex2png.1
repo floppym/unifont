@@ -4,14 +4,14 @@ unihex2png \- GNU Unifont .hex file to Portable Network Graphics converter
 .SH SYNOPSIS
 .br
 .B unihex2png
-[-i
+[\-i
 .I input_file.hex
 ]
--o
+\-o
 .I output_file.png
-[-p 
+[\-p 
 .I pagenum
-] [-r
+] [\-r
 .I rows
 ]
 .SH DESCRIPTION
@@ -20,27 +20,27 @@ reads a page of 256 Unicode code points from a GNU Unifont .hex file
 and converts the page into a Portable Network Graphics (PNG) file.
 The graphics file displays the glyphs
 of a Unicode block of 256 code points in a 32 by 32 pixel grid,
-or in a 40 by 40 pixel grid if "-r 32" is specified.
+or in a 40 by 40 pixel grid if "\-r 32" is specified.
 The glyphs themselves can be either 16, 24, or 32 pixels tall depending on
-the "-r" parameter.  They can be 8, 16, 24, or 32 pixels wide (widths of 32
-are only supported if "-r 32" is specified).
+the "\-r" parameter.  They can be 8, 16, 24, or 32 pixels wide (widths of 32
+are only supported if "\-r 32" is specified).
 The default page is 0; that is, the range U+0000 through U+00FF, inclusive.
 .PP
 The PNG file can be printed.  It can also be edited with a graphics editor.
-An edited PNG file can then be re-converted into a GNU Unifont .hex file
+An edited PNG file can then be re\-converted into a GNU Unifont .hex file
 with the
 .B unipng2hex
 command.
 .SH OPTIONS
 .TP 12
--i
+\-i
 Specify the input file.  If not omitted, a Unifont .hex file
 is read from STDIN.
 .TP
--o
+\-o
 Specify the output file.
 .TP
--p pagenum
+\-p pagenum
 Extract page
 .I pagenum
 from the .hex file.  The default is Page 0 (Unicode range
@@ -48,19 +48,19 @@ U+0000 through U+00FF).  Note that "page" is not a standard
 Unicode term.  It refers to an output bitmap graphics page of
 16 by 16 code points.
 .TP
--r rows
+\-r rows
 Specify the
 .I rows
 of pixels in the output glyphs.  Valid values are 16, 24, and 32.
 The default is 16 pixel rows tall.
 .TP
--h
+\-h
 Print a help message of options and exit.
 .SH EXAMPLE
 Sample usage:
 .PP
 .RS
-unihex2png -i my_input_file.hex -o my_output_file.png
+unihex2png \-i my_input_file.hex \-o my_output_file.png
 .RE
 .SH FILES
 *.hex GNU Unifont font files
@@ -78,7 +78,7 @@ unihex2png -i my_input_file.hex -o my_output_file.png
 .BR unicoverage(1),
 .BR unidup(1),
 .BR unifont(5),
-.BR unifont-viewer(1),
+.BR unifont\-viewer(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),

@@ -36,17 +36,17 @@ unihex2png @minus{} GNU Unifont .hex file to Portable Network Graphics converter
 @comment .br
 @comment TROFF INPUT: .B unihex2png
 @b{unihex2png}
-[-i
+[@minus{}i
 @comment TROFF INPUT: .I input_file.hex
 @i{input@t{_}file.hex}
 ]
--o
+@minus{}o
 @comment TROFF INPUT: .I output_file.png
 @i{output@t{_}file.png}
-[-p
+[@minus{}p
 @comment TROFF INPUT: .I pagenum
 @i{pagenum}
-] [-r
+] [@minus{}r
 @comment TROFF INPUT: .I rows
 @i{rows}
 ]
@@ -62,15 +62,15 @@ reads a page of 256 Unicode code points from a GNU Unifont .hex file
 and converts the page into a Portable Network Graphics (PNG) file.
 The graphics file displays the glyphs
 of a Unicode block of 256 code points in a 32 by 32 pixel grid,
-or in a 40 by 40 pixel grid if "-r 32" is specified.
+or in a 40 by 40 pixel grid if "@minus{}r 32" is specified.
 The glyphs themselves can be either 16, 24, or 32 pixels tall depending on
-the "-r" parameter.  They can be 8, 16, 24, or 32 pixels wide (widths of 32
-are only supported if "-r 32" is specified).
+the "@minus{}r" parameter.  They can be 8, 16, 24, or 32 pixels wide (widths of 32
+are only supported if "@minus{}r 32" is specified).
 The default page is 0; that is, the range U+0000 through U+00FF, inclusive.
 @comment TROFF INPUT: .PP
 
 The PNG file can be printed.  It can also be edited with a graphics editor.
-An edited PNG file can then be re-converted into a GNU Unifont .hex file
+An edited PNG file can then be re@minus{}converted into a GNU Unifont .hex file
 with the
 @comment TROFF INPUT: .B unipng2hex
 @b{unipng2hex}
@@ -85,16 +85,16 @@ command.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item -i
+@item @minus{}i
 Specify the input file.  If not omitted, a Unifont .hex file
 is read from STDIN.
 @comment TROFF INPUT: .TP
 
-@item -o
+@item @minus{}o
 Specify the output file.
 @comment TROFF INPUT: .TP
 
-@item -p pagenum
+@item @minus{}p pagenum
 Extract page
 @comment TROFF INPUT: .I pagenum
 @i{pagenum}
@@ -104,7 +104,7 @@ Unicode term.  It refers to an output bitmap graphics page of
 16 by 16 code points.
 @comment TROFF INPUT: .TP
 
-@item -r rows
+@item @minus{}r rows
 Specify the
 @comment TROFF INPUT: .I rows
 @i{rows}
@@ -112,7 +112,7 @@ of pixels in the output glyphs.  Valid values are 16, 24, and 32.
 The default is 16 pixel rows tall.
 @comment TROFF INPUT: .TP
 
-@item -h
+@item @minus{}h
 Print a help message of options and exit.
 @comment TROFF INPUT: .SH EXAMPLE
 
@@ -131,7 +131,7 @@ Sample usage:
 
 @c ---------------------------------------------------------------------
 @quotation
-unihex2png -i my@t{_}input@t{_}file.hex -o my@t{_}output@t{_}file.png
+unihex2png @minus{}i my@t{_}input@t{_}file.hex @minus{}o my@t{_}output@t{_}file.png
 @comment TROFF INPUT: .RE
 
 @end quotation
@@ -176,8 +176,8 @@ unihex2png -i my@t{_}input@t{_}file.hex -o my@t{_}output@t{_}file.png
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

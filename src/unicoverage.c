@@ -11,6 +11,9 @@
    
    Copyright (C) 2008, 2013 Paul Hardy
 
+   2016: Modified in Unifont 9.0.01 release to remove non-existent "-p" option
+   and empty example from help printout.
+
    LICENSE:
 
       This program is free software: you can redistribute it and/or modify
@@ -70,7 +73,6 @@ main (int argc, char *argv[])
                   fprintf (stderr, "\nSyntax:\n\n");
                   fprintf (stderr, "   %s -p<Unicode_Page> ", argv[0]);
                   fprintf (stderr, "-i<Input_File> -o<Output_File> -w\n\n");
-                  fprintf (stderr, "\nExample:\n\n");
                   exit (1);
             }
          }

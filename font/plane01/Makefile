@@ -5,7 +5,8 @@
 # these are placed in directory "all/" so they are not included with
 # the main font build, which reads "plane01/*.hex".
 #
-all: plane01.hex plane01-nonprinting.hex plane01-unassigned.hex
+all: plane01.hex plane01-nonprinting.hex unassigned-ranges.txt \
+	noscript-ranges.txt
 	if [ ! -d all ]; then \
 		mkdir all; \
 	fi
@@ -18,12 +19,13 @@ all: plane01.hex plane01-nonprinting.hex plane01-unassigned.hex
 	   grep "^[0-9A-Fa-f]" noscript-ranges.txt | \
 	   awk 'NF == 1 {print "../../bin/unihexgen " $$1 " " $$1;} \
 		NF == 2 {print "../../bin/unihexgen " $$1 " " $$2;}' | \
-	   /bin/sh -s > all/noscript.hex
-	sort -u all/noscript.hex *.hex > all/plane01-all.hex
+	   /bin/sh -s > noscript.hex
+	sort -u *.hex > all/plane01-all.hex
 
 clean:
+	\rm -f noscript.hex plane01-unassigned.hex
 
-distclean:
+distclean: clean
 	\rm -rf all
 
 .PHONY: all clean distclean

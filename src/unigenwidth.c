@@ -214,7 +214,7 @@ main (int argc, char **argv)
    printf ("   int lowpt, midpt, highpt; /* for binary searching in plane1zeroes[]             */\n");
    printf ("   int found;                /* for binary searching in plane1zeroes[]             */\n");
    printf ("   int totalwidth;           /* total width of string, in charcells (1 or 2/glyph) */\n");
-   printf ("   int illegalchar;          /* Whether or not tihs code point is illegal          */\n");
+   printf ("   int illegalchar;          /* Whether or not this code point is illegal          */\n");
    putchar ('\n');
 
    /*

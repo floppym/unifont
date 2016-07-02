@@ -19,7 +19,7 @@ string, with code points appearing in ascending order.
 .PP
 A
 .B unifont.hex
-file consists of single-line entries for each Unicode code point.
+file consists of single\-line entries for each Unicode code point.
 Each line contains the code point, a colon (':') field separator,
 and the glyph bitmap.
 .B The glyphs in a unifont.hex format file must appear in ascending
@@ -45,14 +45,14 @@ code points U+0000 through U+FFFF, respectively.
 .RS
 The second field is the glyph's bitmap string.  This is a series of
 hexadecimal digits.  Currently Unifont encodes two glyph sizes:
-8 pixels wide by 16 pixels tall (single-width), and
-16 pixels wide by 16 pixels tall (double-width).
+8 pixels wide by 16 pixels tall (single\-width), and
+16 pixels wide by 16 pixels tall (double\-width).
 .LP
 As each hexadecimal digit can encode four bits, one pixel row of a glyph
-is either two hexadecimal digits long (single-width) or four hexadecimal
-digits long (double-width).  The glyphs are 16 pixels tall, so
-a single-width glyph is (2)(16) = 32 hexadecimal digits long and
-a double-width glyph is (4)(16) = 64 hexadecimal digits long.
+is either two hexadecimal digits long (single\-width) or four hexadecimal
+digits long (double\-width).  The glyphs are 16 pixels tall, so
+a single\-width glyph is (2)(16) = 32 hexadecimal digits long and
+a double\-width glyph is (4)(16) = 64 hexadecimal digits long.
 .RE
 .PP
 Previous versions of this package supplied a file named
@@ -63,7 +63,7 @@ with a first field that was a Unicode code point in hexadecimal,
 followed by a colon (':') field separator,
 followed by a second field that was a hexadecimal string representing
 a glyph bitmap.  Code points were in ascending order.  The glyph bitmaps
-were bitmaps that would be exclusive-ored with the glyph in
+were bitmaps that would be exclusive\-ored with the glyph in
 .B unifont.hex
 that had the same code point.
 The original
@@ -80,17 +80,17 @@ will read such a
 .B masks.hex
 file, read a
 .B unifont.hex
-format file, and apply the exclusive-or masks in
+format file, and apply the exclusive\-or masks in
 .B masks.hex
 to
 .B unifont.hex.
 The output is another file in
 .B unifont.hex
-format with the masked-off bits (i.e., combining circles) removed.
+format with the masked\-off bits (i.e., combining circles) removed.
 .PP
-Because the operation is an exclusive-or,
+Because the operation is an exclusive\-or,
 .B masks.hex
-could also be used to turn on pixels in selective glyphs, for exmaple
+could also be used to turn on pixels in selective glyphs, for example
 to add combining circles to selective glyphs that do not show them.
 However, the program
 .B unigencircles (1)
@@ -140,7 +140,7 @@ Perl script might appear somewhat magical.  It can read a file in
 .B unifont.hex
 format and generate a text file with each glyph appearing
 as a grid of characters in an 8 by 16 or 16 by 16 grid:
-a '-' character indicates a corresponding white pixel, and
+a '\-' character indicates a corresponding white pixel, and
 a '#' character indicates a corresponding black pixel.  These pixel grids
 are indented.  The first line shows the code point for a glyph, followed
 by a colon (':').  This text file can then be modified with any text
@@ -150,7 +150,7 @@ is that it will read in
 this text file, detect that it is in this converted format, and produce
 as output a second file in Unifont's .hex format.  Thus
 .B hexdraw (1)
-automagically provides round-trip coverage between an original font file in
+automagically provides round\-trip coverage between an original font file in
 .B unifont.hex
 format and an intermediate text graphics format for editing.
 .PP
@@ -174,7 +174,7 @@ and
 .B unibmp2hex (1)
 are the central programs that handle conversion of a
 .B unifont.hex
-file to and from two-dimensional glyph representations for visual editing.
+file to and from two\-dimensional glyph representations for visual editing.
 See the
 .B TUTORIAL
 file included in the source pakcage for more information on these and
@@ -208,7 +208,7 @@ Tutorial on customizing Unifont
 .BR unibmp2hex(1),
 .BR unicoverage(1),
 .BR unidup(1),
-.BR unifont-viewer(1),
+.BR unifont\-viewer(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),
@@ -226,8 +226,8 @@ The
 format was created by Roman Czyborra, who drew the original set of glyphs.
 .SH LICENSE
 .B unifont
-is Copyright \(co 1998 Roman Czyborra, with portions Copyright \(co 2007-2013
-Paul Hardy, Copyright \(co 2004-2013 Qianqian Fang, and others.
+is Copyright \(co 1998 Roman Czyborra, with portions Copyright \(co 2007\-2013
+Paul Hardy, Copyright \(co 2004\-2013 Qianqian Fang, and others.
 .PP
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

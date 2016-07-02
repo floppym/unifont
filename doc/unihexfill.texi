@@ -25,7 +25,7 @@
 @subsection unihexfill NAME
 @c DEBUG: print_menu("unihexfill NAME")
 
-unihexfill @minus{} Generate range of Unifont 4- or 6-digit hexadecimal glyphs
+unihexfill @minus{} Generate range of Unifont 4@minus{} or 6@minus{}digit hexadecimal glyphs
 @comment TROFF INPUT: .SH SYNOPSIS
 
 @node unihexfill SYNOPSIS
@@ -37,11 +37,11 @@ unihexfill @minus{} Generate range of Unifont 4- or 6-digit hexadecimal glyphs
 @comment TROFF INPUT: .B unihexfill
 @b{unihexfill}
 <
-@comment TROFF INPUT: .I unassigned-ranges.txt
-@i{unassigned-ranges.txt}
+@comment TROFF INPUT: .I unassigned\-ranges.txt
+@i{unassigned@minus{}ranges.txt}
 >
-@comment TROFF INPUT: .I filler-glyphs.hex
-@i{filler-glyphs.hex}
+@comment TROFF INPUT: .I filler\-glyphs.hex
+@i{filler@minus{}glyphs.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unihexfill DESCRIPTION
@@ -51,7 +51,7 @@ unihexfill @minus{} Generate range of Unifont 4- or 6-digit hexadecimal glyphs
 @comment TROFF INPUT: .B unihexfill
 @b{unihexfill}
 is a shell script that reads a list of code point ranges from STDIN
-and produces filler glyphs of 4- or 6-digit code points on STDOUT.
+and produces filler glyphs of 4@minus{} or 6@minus{}digit code points on STDOUT.
 @comment TROFF INPUT: .P
 @comment .P
 The format of the input file is a combination of comment lines,
@@ -66,10 +66,10 @@ digits, by convention either four or six digits.
 invokes
 @comment TROFF INPUT: .B unihexgen
 @b{unihexgen}
-for each non-comment line in its input file.  If a codepoint is less than
-or equal to "FFFF" (i.e., 0xFFFF), a four-digit hexadecimal number is encoded
+for each non@minus{}comment line in its input file.  If a codepoint is less than
+or equal to "FFFF" (i.e., 0xFFFF), a four@minus{}digit hexadecimal number is encoded
 within the corresponding Unifont glyph as two digits on each of
-two rows.  Otherwise, a six-digit hexadecimal number is encoded as
+two rows.  Otherwise, a six@minus{}digit hexadecimal number is encoded as
 three digits on each of two rows.
 @comment TROFF INPUT: .SH OPTIONS
 
@@ -93,7 +93,7 @@ There are no options.
 
 In the Unifont source package, the file font/plane01/Makefile generates
 Unicode Plane 1 hexadecimal filler glyphs of unassigned code points within
-assigned scripts with this single-line command:
+assigned scripts with this single@minus{}line command:
 @comment TROFF INPUT: .PP
 
 @comment TROFF INPUT: .RS
@@ -102,7 +102,7 @@ assigned scripts with this single-line command:
 @quotation
 @comment TROFF INPUT: .B ../../bin/unihexfill
 @b{../../bin/unihexfill}
-< unassigned-ranges.txt > unassigned.hex
+< unassigned@minus{}ranges.txt > unassigned.hex
 @comment TROFF INPUT: .RE
 
 @end quotation
@@ -140,8 +140,8 @@ assigned scripts with this single-line command:
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

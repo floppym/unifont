@@ -25,7 +25,7 @@
 @subsection unihexgen NAME
 @c DEBUG: print_menu("unihexgen NAME")
 
-unihexgen @minus{} Generate Unifont 4- or 6-digit hexadecimal glyphs
+unihexgen @minus{} Generate Unifont 4@minus{} or 6@minus{}digit hexadecimal glyphs
 @comment TROFF INPUT: .SH SYNOPSIS
 
 @node unihexgen SYNOPSIS
@@ -52,11 +52,11 @@ produces unifont.hex entries in the Unicode code point range
 to
 @comment TROFF INPUT: .I endpoint
 @i{endpoint}
-(specified as the two command-line arguments).
+(specified as the two command@minus{}line arguments).
 Output is to STDOUT.  If a codepoint is less than or equal to
-"FFFF" (i.e., 0xFFFF), a four-digit hexadecimal number is encoded
+"FFFF" (i.e., 0xFFFF), a four@minus{}digit hexadecimal number is encoded
 within the corresponding Unifont glyph as two digits on each of
-two rows.  Otherwise, a six-digit hexadecimal number is encoded as
+two rows.  Otherwise, a six@minus{}digit hexadecimal number is encoded as
 three digits on each of two rows.
 @comment TROFF INPUT: .SH OPTIONS
 
@@ -126,8 +126,8 @@ e000 f8ff
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),
@@ -179,7 +179,7 @@ the Free Software Foundation; either version 2 of the License, or
 @c DEBUG: print_menu("unihexgen BUGS")
 
 No known real bugs exist, except that this software does not perform
-extensive error checking on its command-line arguments.  If they're not
+extensive error checking on its command@minus{}line arguments.  If they're not
 in the format of the original bitmapped output from
 @comment TROFF INPUT: .B unihexgen,
 @b{unihexgen,}

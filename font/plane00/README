@@ -18,16 +18,16 @@ The number of lines can be conveniently determined in this directory with
    wc -l *.hex
 
 The last line will be a grand total, and this should equal 63,488.  Here
-is the current output of "wc -l *.hex" with the Unifont 6.3 glyph files:
+is the output of "wc -l *.hex" with the Unifont 9.0 glyph files:
 
   11172 hangul-syllables.hex
-     96 nonprinting.hex
+     95 nonprinting.hex
       2 omit.hex
    6400 pua.hex
-     16 spaces.hex
-   2325 unassigned.hex
-  15651 unifont-base.hex
-  27826 wqy.hex
+     17 spaces.hex
+   1818 unassigned.hex
+  16161 unifont-base.hex
+  27823 wqy.hex
   63488 total
 
 If there are any duplicates, most likely these will be from new glyphs
@@ -47,4 +47,4 @@ the call to "make" in the top-level directory with a command such as:
      make UNASSIGNED="plane00/unassigned.hex" PUA="plane00/pua.hex"
 
 
-Paul Hardy, 2014
+Paul Hardy, 2014, 2016

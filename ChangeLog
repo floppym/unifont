@@ -1,11 +1,107 @@
-﻿2015-06-28 Paul Hardy <unifoundry@unifoundry.com>
+﻿2016-07-01 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 9.0.01, implementing changes in Unicode 9.0.0.
+	* Makefiles: updated version to 9.0.01; fonts now Copyright 2016.
+	* doc: updated as per man/*.[15] man page changes of "-" to "\-".
+	* font/Makefile: now creates both bmp and png graphics outputs.
+	* font/plane00/README: updated "wc -l *.hex" output.
+	* font/plane00/unifont-base.hex: Paul Hardy made these changes except
+	  for new power symbols, which Terrence Eden contributed:
+	  - Michael Walden drew my attention (pun intended) to many glyphs,
+	    providing very detailed feedback that resulted in my changing
+	    these glyphs:
+	       - U+00A4 (currency symbol)
+	       - U+2426 (reverse question mark)
+	       - U+2543 (box drawing glyph)
+	       - U+249C..U+24B5 (lower-case letters in parentheses), and
+	       - Many arrow glyphs in the U+21xx, U+27xx, U+29xx, and U+2Bxx
+	         blocks to align horizontal arrows with U+2500 (horizontal
+	         line) for extension.
+	  - Added a slash to '0' (U+0030) and U+FF10 to distinguish from
+	    letter 'O' following multiple requests.
+	  - Increased height of U+0220 to Latin cap height.
+	  - Unified Canadian Aboriginal Syllabics (U+1400..U+167F) and
+	    Unified Canadian Aboriginal Syllabics Exnteded (U+18B0..U+18FF)
+	    redrawn; this was precipitated by The Unicode Consortium changing
+	    a number of those glyphs.
+	  - Rotated Mongolian script as per Unicode change to switch from
+	    traditional vertical writing to left-to-right horizontal writing.
+	  - Modified U+1B8F as per Unicode errata.
+	  - U+2FF9 no longer identical to U+2FF7.
+	  - U+202F (NARROW NO-BREAK SPACE) now is a space glyph.
+	  - U+20BA (Turkish Lira) moved down 2 rows--thanks to Johnny Weaver
+	    for noticing that.
+	  - Rotated Mongolian script (U+1800..U+18AF) as per Unicode change
+	    from traditional vertical writing to horizontal writing.
+	  - Rotated Phags Pa script (U+A840..U+A87F) as per Unicode change
+	    from traditional vertical writing to horizontal writing.
+	  - All additions for Unicode 9.0.0 made:
+	    to horizontal writing):
+	    - Added glyphs in Arabic Extended-A, Kannada,
+	          Malayalam, Cyrillic Extended-C, Combining Diacritical
+	          Marks Supplement, Supplemental Punctuation, and Saurashtra.
+	    - Terrence Eden contributed the 4 Miscellaneous Technical glyphs
+	      (he was the author of the Unicode proposal to add those glyphs).
+	    - Paul Hardy updated Currency Symbols and Latin Extended-D glyphs.
+	      (Control Pictures "Shift Out" glyph did not need to be modified;
+	      it was incorrectly rendered in the Unicode Standard but was
+	      correctly rendered in Unifont.)
+	  - Vertically flipped U+301C as per Unicode errata for 8.0.0.
+	* font/plane01/:
+	  - Removed noscript-hex.txt and noscript-ranges-hex.txt.  They
+	    are no longer used.
+	* font/plane01/Makefile:
+	  - Now places noscript.hex in the font/plane01 directory rather than
+	    in the font/plane01/all directory.
+	  - Now depend on unassigned-ranges.txt rather than depending on
+	    plane01-unassigned.hex, since plane01-unassigned.hex is generated
+	    from unassigned-ranges.txt.
+	  - The "clean" target now removes plane01-unassigned.hex and
+	    noscript.hex, but leaves all/plane01-all.hex.  The "distclean"
+	    target additionally removes all/plane01-all.hex.
+	* font/plane01/README: added file to describe how to add new Plane 1
+	  glyphs to the distribution.
+	* font/plane01/plane01.hex:
+	  - Johnny Weaver made these additions:
+	    - Osage       (U+0104B0..U+0104FF)
+	    - Multani     (U+011280..U+0112AF)
+	    - Khudawadi   (U+0112B0..U+0112FF)
+	    - Modi        (U+011600..U+01165F)
+	    - Ahom        (U+011700..U+01173F)
+	    - Warang Citi (U+0118A0..U+0118FF) [Allan Gardner began script]
+	    - Pau Cin Hau (U+011AC0..U+011AFF)
+	    - Bhaiksuki   (U+011C00..U+011C6F)
+	    - Marchen     (U+011C70..U+011CBF)
+	    - Mro         (U+016A40..U+016A6F)
+	    - Bassa Vah   (U+016AD0..U+016A6F)
+	    - Glagolitic Supplement (U+01E000..U+01E02F)
+	    - Adlam       (U+01E900..U+01E95F)
+	  - Paul Hardy made these additions:
+	    - Modified Miao       (U+016F2C..U+016F32) as per Unicode errata.
+	    - Modified Sharada    (U+0111BA..U+0111BB) as per Unicode errata.
+	    - Added Duployan      (U+01BC00..U+01BC9F)
+	    - Added Mende Kikakui (U+01E800..U+01E8DF)
+	    - Enclosed Ideographic Supplement:
+	      - Modified U+01F210, U+01F221, U+01F231, U+01F23A
+	      - Added    U+01F23B
+	* man/unifont.5: changed typo "exmaple" to "example".
+	* man/*.[15]: changed "-" to "\-".
+	* src/unibmp2hex.c: added new scripts to force to double-width;
+	  Unified Canadian Aboriginal Syllabics and Extended block are now
+	  all double-width.
+	* src/unicoverage.c: removed non-supported "-p" flag and empty
+	  example from help printout.
+	* src/unifontpic.c: changed header string from "8.0" to "9.0".
+	* src/unigenwidth.c: changed typo "tihs" to "this".
+
+2015-06-28 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 8.0.01.
 	* Makefiles: updated version to 8.0.01; fonts now Copyright 2015.
 	* font/Makefile:
 	  - No longer create BDF or PCF fonts from glyphs above Plane 0.
 	* font/plane00:
-	- Tibetan: Modified "nga" glyphs (U+0F44 and U+0F94) so they would not
+	  - Tibetan: Modified "nga" glyphs (U+0F44 and U+0F94) so they would not
 	    resemble "da" (U+0F51 and U+0FA1, respectively) as closely.
 	  - Made U+202F a single-width space glyph rather than nonprinting;
 	    its entry was moved from nonprinting.hex to spaces.hex.

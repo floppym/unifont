@@ -8,7 +8,7 @@ unigencircles \- Add dashed combining circles to a unifont.hex file
 <
 .I unifont.hex
 >
-.I unifont-circles.hex
+.I unifont\-circles.hex
 .SH DESCRIPTION
 .B unigencircles
 reads a unifont.hex file from STDIN, adds dashed combining
@@ -21,14 +21,14 @@ code charts.
 For each code point listed in the "combining.txt" file but not listed
 in the "nonprinting.hex" file,
 .B unigencircles
-will superimpose a single-width dashed circle in glyphs that are
-single-width (i.e., their hex glyph strings are 32 characters long)
-and will superimpose a double-width dashed circle in glyphs that
-are double-width (i.e., their hex glyph strings are 64 characters long).
+will superimpose a single\-width dashed circle in glyphs that are
+single\-width (i.e., their hex glyph strings are 32 characters long)
+and will superimpose a double\-width dashed circle in glyphs that
+are double\-width (i.e., their hex glyph strings are 64 characters long).
 .SH EXAMPLE
 .PP
 .RS
-unigencircles combining.txt nonprinting.hex < unifont.hex > unifont-circles.hex
+unigencircles combining.txt nonprinting.hex < unifont.hex > unifont\-circles.hex
 .RE
 .SH FILES
 *.hex files for Unifont glyph data
@@ -37,7 +37,7 @@ unigencircles combining.txt nonprinting.hex < unifont.hex > unifont-circles.hex
 for combining code points
 .PP
 .B font/plane00/nonprinting.hex
-for non-printing code points
+for non\-printing code points
 .SH SEE ALSO
 .BR bdfimplode(1),
 .BR hex2bdf(1),
@@ -52,7 +52,7 @@ for non-printing code points
 .BR unicoverage(1),
 .BR unidup(1),
 .BR unifont(5),
-.BR unifont-viewer(1),
+.BR unifont\-viewer(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),

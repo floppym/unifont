@@ -18,7 +18,7 @@
 ; Deseret
 ; Shavian
 ; Osmanya
-0104B0 0104FF
+; Osage
 ; Elbasan
 ; Caucasian Albanian
 010570 0105FF
@@ -30,7 +30,6 @@
 ; Nabataean
 0108B0 0108DF
 ; Hatran
-010900 0108FF
 ; Phoenecian
 ; Lydian
 010940 01097F
@@ -64,12 +63,13 @@
 ; Multani
 ; Khudawadi
 ; Grantha
-011380 01147F
+011380 0113FF
+; Newa
 ; Tirhuta
 0114E0 01157F
 ; Siddham
 ; Modi
-011660 01167F
+; Mongolian Supplement
 ; Takri
 0116D0 0116FF
 ; Ahom
@@ -77,7 +77,10 @@
 ; Warang Citi
 011900 011ABF
 ; Pau Cin Hau
-011B00 011FFF
+011B00 011AFF
+; Bhaiksuki
+' Marchen
+011CC0 011FFF
 ; Cuneiform
 ; Cuneiform Numbers and Punctuation
 ; Early Dynastic Cuneiform
@@ -87,14 +90,17 @@
 ; Anatolian Hieroglyphs
 014680 0167FF
 ; Bamum Supplement
-# 0168C0 016A3F
 ; Mro
 016A70 016ACF
 ; Bassa Vah
 ; Pahawh Hmong
 016B90 016EFF
 ; Miao
-016FA0 01AFFF
+016FA0 016FDF
+; Ideographic Symbols and Punctuation
+; Tangut
+; Tangut Components
+018B00 01AFFF
 ; Kana Supplement
 01B100 01BBFF
 ; Duployan
@@ -109,9 +115,13 @@
 01D380 01D3FF
 ; Mathematical Alphanumeric Symbols
 ; Sutton SignWriting
-01DAB0 01E7FF
+01DAB0 01DFFF
+; Glagolitic Supplement
+01E030 01E7FF
 ; Mende Kikakui
-01E8E0 01EDFF
+01E8E0 01E8FF
+; Adlam
+01E960 01EDFF
 ; Arabic Mathematical Alphabetic Symbols
 01EF00 01EFFF
 ; Mahjong Tiles

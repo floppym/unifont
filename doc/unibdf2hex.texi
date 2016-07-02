@@ -35,11 +35,11 @@ unibdf2hex @minus{} Convert BDF font glyphs into Unifont .hex glyphs
 @comment TROFF INPUT: .B unibdf2hex
 @b{unibdf2hex}
 <
-@comment TROFF INPUT: .I input-font.bdf
-@i{input-font.bdf}
+@comment TROFF INPUT: .I input\-font.bdf
+@i{input@minus{}font.bdf}
 >
-@comment TROFF INPUT: .I output-font.hex
-@i{output-font.hex}
+@comment TROFF INPUT: .I output\-font.hex
+@i{output@minus{}font.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unibdf2hex DESCRIPTION
@@ -51,7 +51,7 @@ unibdf2hex @minus{} Convert BDF font glyphs into Unifont .hex glyphs
 reads a BDF font file, extracting selected code points and printing
 them on stdout in Unifont .hex format.  This program was used to
 extract CJK ideographs from the 16x16 version of Wen Quan Yi's BDF
-font.  Currently the program is hard-coded to only extract those
+font.  Currently the program is hard@minus{}coded to only extract those
 code points that comprise the "wqy.hex" source font file used to
 build "unifont.hex" but this source code could easily be modified.
 @comment TROFF INPUT: .SH FILES
@@ -91,8 +91,8 @@ build "unifont.hex" but this source code could easily be modified.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

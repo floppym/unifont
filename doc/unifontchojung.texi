@@ -35,11 +35,11 @@ unifontchojung @minus{} Extract Hangul syllables that have no final consonant
 @comment TROFF INPUT: .B unifontchojung
 @b{unifontchojung}
 <
-@comment TROFF INPUT: .I input-font.hex
-@i{input-font.hex}
+@comment TROFF INPUT: .I input\-font.hex
+@i{input@minus{}font.hex}
 >
-@comment TROFF INPUT: .I output-font.hex
-@i{output-font.hex}
+@comment TROFF INPUT: .I output\-font.hex
+@i{output@minus{}font.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unifontchojung DESCRIPTION
@@ -48,7 +48,7 @@ unifontchojung @minus{} Extract Hangul syllables that have no final consonant
 
 @comment TROFF INPUT: .B unifontchojung
 @b{unifontchojung}
-reads a Unifont-format .hex font file from STDIN and writes
+reads a Unifont@minus{}format .hex font file from STDIN and writes
 a Unifont .hex file containing a subset to STDOUT.
 The subset that is output only contains syllables that contain
 an initial consonant (chojung) plus middle vowel (jungseong),
@@ -93,8 +93,8 @@ This lets a font designer focus on this subset during font creation.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontksx(1),
 @b{unifontksx(1),}
 @comment TROFF INPUT: .BR unifontpic(1),

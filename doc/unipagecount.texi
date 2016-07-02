@@ -35,7 +35,7 @@ unipagecount @minus{} Count the assigned code points in a GNU Unifont .hex file
 @comment .br
 @comment TROFF INPUT: .B unipagecount
 @b{unipagecount}
-[-ppagenum] [-h|-l]
+[@minus{}ppagenum] [@minus{}h|@minus{}l]
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unipagecount DESCRIPTION
@@ -59,25 +59,25 @@ hex file; they are reserved and always counted as being present in a plane.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item -Pplanenum
+@item @minus{}Pplanenum
 Select a Unicode plane, from 0 through 16, inclusive.  If not specified,
 @comment TROFF INPUT: .B unipagecount
 @b{unipagecount}
 defaults to Plane 0 (the Basic Multilingual Plane).
 @comment TROFF INPUT: .TP
 
-@item -ppagenum
+@item @minus{}ppagenum
 Just print information on one 256 code point "page" rather than
 the entire Basic Multilingual Plane.  This prints a 16 by 16 table with
 an asterisk in every code point that has an assigned glyph.
 @comment TROFF INPUT: .TP
 
-@item -h
-Print an HTML table with color-coded cell background colors
+@item @minus{}h
+Print an HTML table with color@minus{}coded cell background colors
 instead of a plain text table.
 @comment TROFF INPUT: .TP
 
-@item -l
+@item @minus{}l
 [The letter "l"]: Print hyperlinks to font bitmaps in the HTML table.
 To create the bitmaps themselves, use the
 @comment TROFF INPUT: .B unihex2bmp
@@ -126,8 +126,8 @@ program.  The bitmaps are assumed to be in the directory "bmp/".
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

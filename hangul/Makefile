@@ -7,7 +7,7 @@ GZFLAGS = -f -9 -n
 #
 # assembly date of this version
 #
-UNICODE_VERSION = 8.0
+UNICODE_VERSION = 9.0
 PKG_REV = 01
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 

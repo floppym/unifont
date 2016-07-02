@@ -1,6 +1,6 @@
 .TH UNIHEXGEN 1 "2013 Sep 03"
 .SH NAME
-unihexgen \- Generate Unifont 4- or 6-digit hexadecimal glyphs
+unihexgen \- Generate Unifont 4\- or 6\-digit hexadecimal glyphs
 .SH SYNOPSIS
 .br
 .B unihexgen
@@ -11,11 +11,11 @@ produces unifont.hex entries in the Unicode code point range
 .I startpoint
 to
 .I endpoint
-(specified as the two command-line arguments).
+(specified as the two command\-line arguments).
 Output is to STDOUT.  If a codepoint is less than or equal to
-"FFFF" (i.e., 0xFFFF), a four-digit hexadecimal number is encoded
+"FFFF" (i.e., 0xFFFF), a four\-digit hexadecimal number is encoded
 within the corresponding Unifont glyph as two digits on each of
-two rows.  Otherwise, a six-digit hexadecimal number is encoded as
+two rows.  Otherwise, a six\-digit hexadecimal number is encoded as
 three digits on each of two rows.
 .SH OPTIONS
 There are no options.
@@ -43,7 +43,7 @@ e000 f8ff
 .BR unicoverage(1),
 .BR unidup(1),
 .BR unifont(5),
-.BR unifont-viewer(1),
+.BR unifont\-viewer(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),
@@ -67,7 +67,7 @@ the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 .SH BUGS
 No known real bugs exist, except that this software does not perform
-extensive error checking on its command-line arguments.  If they're not
+extensive error checking on its command\-line arguments.  If they're not
 in the format of the original bitmapped output from
 .B unihexgen,
 all bets are off.

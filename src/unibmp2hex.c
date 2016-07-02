@@ -136,6 +136,8 @@ main (int argc, char *argv[])
    for (i = 0x0900; i <= 0x0DFF; i++) wide[i] = 1; /* Indic                  */
    for (i = 0x0F00; i <= 0x0FFF; i++) wide[i] = 1; /* Tibetan                */
    for (i = 0x1100; i <= 0x11FF; i++) wide[i] = 1; /* Hangul Jamo            */
+   for (i = 0x1400; i <= 0x167F; i++) wide[i] = 1; /* Canadian Aboriginal    */
+   for (i = 0x18B0; i <= 0x18FF; i++) wide[i] = 1; /* Ext. Can. Aboriginal   */
    for (i = 0x1800; i <= 0x18AF; i++) wide[i] = 1; /* Mongolian              */
    for (i = 0x1900; i <= 0x194F; i++) wide[i] = 1; /* Limbu                  */
    for (i = 0x1980; i <= 0x19DF; i++) wide[i] = 1; /* New Tai Lue            */
@@ -161,11 +163,16 @@ main (int argc, char *argv[])
    for (i = 0x011080; i <= 0x0110CF; i++) wide[i] = 1; /* Kaithi          */
    for (i = 0x011100; i <= 0x01114F; i++) wide[i] = 1; /* Chakma          */
    for (i = 0x011180; i <= 0x0111DF; i++) wide[i] = 1; /* Sharada         */
+   for (i = 0x011300; i <= 0x01137F; i++) wide[i] = 1; /* Grantha         */
+   for (i = 0x011400; i <= 0x01147F; i++) wide[i] = 1; /* Newa            */
+   for (i = 0x011480; i <= 0x0114DF; i++) wide[i] = 1; /* Tirhuta         */
    for (i = 0x011680; i <= 0x0116CF; i++) wide[i] = 1; /* Takri           */
+   for (i = 0x0112B0; i <= 0x0112FF; i++) wide[i] = 1; /* Khudawadi       */
+   for (i = 0x011600; i <= 0x01165F; i++) wide[i] = 1; /* Modi            */
    for (i = 0x016F00; i <= 0x016F9F; i++) wide[i] = 1; /* Mino            */
    for (i = 0x01D100; i <= 0x01D1FF; i++) wide[i] = 1; /* Musical Symbols */
    for (i = 0x01D200; i <= 0x01D24F; i++) wide[i] = 1; /* Ancient Greek Musical Notation */
-
+   for (i = 0x01E800; i <= 0x01E8Df; i++) wide[i] = 1; /* Mende Kikakui   */
    /*
       Determine whether or not the file is a Microsoft Windows Bitmap file.
       If it starts with 'B', 'M', assume it's a Windows Bitmap file.

@@ -4,7 +4,7 @@ unicoverage \- Print coverage of each Unicode BMP Script
 .SH SYNOPSIS
 .br
 .B unicoverage
-[-iinput-file] [-ooutput-file]
+[\-iinput\-file] [\-ooutput\-file]
 .SH DESCRIPTION
 .B unicoverage
 reads a GNU Unifont .hex font and uses data in
@@ -13,10 +13,10 @@ reads a GNU Unifont .hex font and uses data in
 the percent coverage of each script in the Unicode Basic Multilingual Plane.
 .SH OPTIONS
 .TP 12
--i
+\-i
 Specify the input file. The default is STDIN.
 .TP
--o
+\-o
 Specify the output file. The default is STDOUT.
 Sample usage:
 .PP
@@ -38,7 +38,7 @@ coverage.dat, *.hex GNU Unifont files.
 .BR unibmp2hex(1),
 .BR unidup(1),
 .BR unifont(5),
-.BR unifont-viewer(1),
+.BR unifont\-viewer(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),

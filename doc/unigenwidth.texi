@@ -54,7 +54,7 @@ and
 @comment TROFF INPUT: .BR wcswidth(3)
 @b{wcswidth(3)}
 functions.  The format of these definitions is based upon
-POSIX 1003.1-2008 System Interfaces, pages 2251 and 2241, respectively.
+POSIX 1003.1@minus{}2008 System Interfaces, pages 2251 and 2241, respectively.
 @comment TROFF INPUT: .SH EXAMPLE
 
 @node unigenwidth EXAMPLE
@@ -115,8 +115,8 @@ unigenwidth unifont.hex combining.txt > wccode.c
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont-viewer(1),
-@b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont\-viewer(1),
+@b{unifont@minus{}viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),
