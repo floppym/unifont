@@ -35,21 +35,21 @@ hexdraw @minus{} Convert a GNU Unifont .hex file to and from an ASCII text file
 @comment TROFF INPUT: .B hexdraw
 @b{hexdraw}
 <
-@comment TROFF INPUT: .I input\-font.hex
-@i{input@minus{}font.hex}
+@comment TROFF INPUT: .I input-font.hex
+@i{input-font.hex}
 >
-@comment TROFF INPUT: .I output\-font.txt
-@i{output@minus{}font.txt}
+@comment TROFF INPUT: .I output-font.txt
+@i{output-font.txt}
 @comment TROFF INPUT: .br
 @comment .br
 @comment TROFF INPUT: .B hexdraw
 @b{hexdraw}
 <
-@comment TROFF INPUT: .I input\-font.txt
-@i{input@minus{}font.txt}
+@comment TROFF INPUT: .I input-font.txt
+@i{input-font.txt}
 >
-@comment TROFF INPUT: .I output\-font.hex
-@i{output@minus{}font.hex}
+@comment TROFF INPUT: .I output-font.hex
+@i{output-font.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node hexdraw DESCRIPTION
@@ -99,8 +99,8 @@ back into a .hex file.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

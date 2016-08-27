@@ -37,11 +37,11 @@ hex2bdf @minus{} Convert a GNU Unifont .hex file into a BDF font
 @comment TROFF INPUT: .B hex2bdf
 @b{hex2bdf}
 <
-@comment TROFF INPUT: .I input\-font.hex
-@i{input@minus{}font.hex}
+@comment TROFF INPUT: .I input-font.hex
+@i{input-font.hex}
 >
-@comment TROFF INPUT: .I output\-font.bdf
-@i{output@minus{}font.bdf}
+@comment TROFF INPUT: .I output-font.bdf
+@i{output-font.bdf}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node hex2bdf DESCRIPTION
@@ -65,22 +65,22 @@ to STDOUT.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item @minus{}f "font@minus{}name"
+@item -f "font-name"
 Specify the target font name.  If omitted, the default
 font name "Unifont" is assigned.
 @comment TROFF INPUT: .TP
 
-@item @minus{}v "font@minus{}version"
+@item -v "font-version"
 Specify the target font version.  If omitted, the default
 version "1.0" is assigned.
 @comment TROFF INPUT: .TP
 
-@item @minus{}c "font@minus{}copyright"
+@item -c "font-copyright"
 Specify the target font copyright information.  The default
 is the null string.
 @comment TROFF INPUT: .TP
 
-@item @minus{}r <pixel@minus{}rows>
+@item -r <pixel-rows>
 Specify how many pixel rows tall a glyph is.  The default
 is the traditional Unifont 16 rows of pixels.  This is an
 addition to support
@@ -108,7 +108,7 @@ Sample usage:
 
 @c ---------------------------------------------------------------------
 @quotation
-hex2bdf @minus{}f "Unifont" @minus{}c "(C) 2013..." unifont.hex > unifont.bdf
+hex2bdf -f "Unifont" -c "(C) 2013..." unifont.hex > unifont.bdf
 @comment TROFF INPUT: .RE
 
 @end quotation
@@ -151,8 +151,8 @@ hex2bdf @minus{}f "Unifont" @minus{}c "(C) 2013..." unifont.hex > unifont.bdf
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

@@ -23,13 +23,13 @@ COMBINING="combining"
 # Could also use bash string replacement if you know you're using bash.
 #
 
-COPYRIGHT = "Copyright (C) 2015 Roman Czyborra, Paul Hardy, Qianqian Fang, \
+COPYRIGHT = "Copyright (C) 2016 Roman Czyborra, Paul Hardy, Qianqian Fang, \
 Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
 UNICODE_VERSION = 9.0
-PKG_REV = 01
+PKG_REV = 02
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 #

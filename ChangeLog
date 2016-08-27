@@ -1,4 +1,51 @@
-﻿2016-07-01 Paul Hardy <unifoundry@unifoundry.com>
+2016-08-27 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 9.0.02.
+	* Makefiles: fonts copyright updated to 2016 if not already done.
+	* NEWS: fixed date for 9.0.01 release.
+	* doc: updated as per man/*.[15] man page changes of "\-" back to "-".
+	* font/Makefile:
+	  - Cleaned up (removed commented out lines, etc.)
+	  - Removed compiled/unifont_all_csur* and compiled/unifont_upper_csur*
+	    files.
+	  - Created compiled/unifont_csur_lower-*.hex to contain Plane 0
+	    CSUR glyphs and Plane 0 non-CSUR glyphs, for building BDF and
+	    PCF fonts.
+	  - unifont_csur-*.ttf only includes CSUR glyphs, not other Plane 0
+	    glyphs, decreasing size of CSUR TTF font by about 14 Megabytes.
+	    Plane 0 glyphs are still in the BDF and PCF CSUR fonts, because
+	    they are used in the X Window System, where one font is used
+	    for an entire window.
+	* font/plane00/unifont-base.hex:
+	  - U+0030: slash changed to a perfectly straight pixel line;
+	    now it looks less like the zero on an ASR-33 teletype.
+	  - U+A7AE: moved from U+A72E (where it was accidentally placed)
+	  - Discrepancies noticed by Johnnie Weaver:
+	    U+2766 (Floral Heart) and U+2767 (Rotated Floral Heart Bullet)
+	    redrawn to use the same base glyph as U+2619 (Reversed Rotated
+	    Floral Heart Bullet) for consistency
+	  - Changes requested by Michael Walden:
+	    - U+2906: moved vertical bar to edge of arrow so it is now
+	              a mirror image of U+2907.
+	    - U+2BC7, U+2BC8, U+2BEC, and U+2BEE: moved up one pixel.
+	* font/plane00csur/csur.hex:
+	  - Name changed to plane00csur.hex to resemble the name of
+	    font/plane0Fcsur/plane0Fcsur.hex.
+	  - U+E1B0..U+E1CF: Ilianóre drawn by Paul Hardy
+	  - U+E200..U+E26F: Verdurian drawn by Paul Hardy, with advice from
+	                    the script's creator, Mark Rosenfelder.
+	  - U+E630..U+E64F: Seussian Latin Extensions drawn by Johnnie Weaver
+	* font/plane00csur/csur-combining.txt: name changed to
+	  plane00csur-combining.txt to resemble the name of
+	  font/plane0Fcsur/plane0Fcsur-combining.txt.
+	* font/plane01/plane01.hex:
+	  - Changes requested by Johnnie Weaver:
+	    - Osage: U+0104B6 and U+0104DE made single-width.
+	    - Adlam: U+01E95F made single-width.
+	  - Fixed error found by Johnnie Weaver: U+01F67F flipped horizontally.
+	* man/*.[15]: changed "\-" back to "-".
+
+2016-07-01 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 9.0.01, implementing changes in Unicode 9.0.0.
 	* Makefiles: updated version to 9.0.01; fonts now Copyright 2016.

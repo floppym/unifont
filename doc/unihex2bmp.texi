@@ -35,7 +35,7 @@ unihex2bmp @minus{} GNU Unifont .hex file to bitmap graphics file converter
 @comment .br
 @comment TROFF INPUT: .B unihex2bmp
 @b{unihex2bmp}
-[@minus{}phexpage] [@minus{}iinput@t{_}file.hex] [@minus{}ooutput@t{_}file.bmp] [@minus{}f] [@minus{}w]
+[-phexpage] [-iinput@t{_}file.hex] [-ooutput@t{_}file.bmp] [-f] [-w]
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unihex2bmp DESCRIPTION
@@ -54,7 +54,7 @@ U+0000 through U+00FF.
 @comment TROFF INPUT: .PP
 
 The bitmap can be printed.  It can also be edited with a bitmap editor.
-An edited bitmap can then be re@minus{}converted into a GNU Unifont .hex file
+An edited bitmap can then be re-converted into a GNU Unifont .hex file
 with the
 @comment TROFF INPUT: .B unibmp2hex
 @b{unibmp2hex}
@@ -69,7 +69,7 @@ command.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item @minus{}ppagenum
+@item -ppagenum
 Extract page
 @comment TROFF INPUT: .I pagenum
 @i{pagenum}
@@ -79,19 +79,19 @@ Unicode term.  It refers to an output bitmap graphics page of
 16 by 16 code points.
 @comment TROFF INPUT: .TP
 
-@item @minus{}i
+@item -i
 Specify the input file. The default is STDIN.
 @comment TROFF INPUT: .TP
 
-@item @minus{}o
+@item -o
 Specify the output file. The default is STDOUT.
 @comment TROFF INPUT: .TP
 
-@item @minus{}f
+@item -f
 "Flip" (transpose) the grid so it matches the Unicode standard order.
 @comment TROFF INPUT: .TP
 
-@item @minus{}w
+@item -w
 Produce a Wireless Bitmap format file instead of a Microsoft Windows
 Bitmap file.
 @comment TROFF INPUT: .PP
@@ -103,7 +103,7 @@ Sample usage:
 
 @c ---------------------------------------------------------------------
 @quotation
-unihex2bmp @minus{}imy@t{_}input@t{_}file.hex @minus{}omy@t{_}output@t{_}file.bmp
+unihex2bmp -imy@t{_}input@t{_}file.hex -omy@t{_}output@t{_}file.bmp
 @comment TROFF INPUT: .RE
 
 @end quotation
@@ -152,8 +152,8 @@ unihex2bmp @minus{}imy@t{_}input@t{_}file.hex @minus{}omy@t{_}output@t{_}file.bm
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

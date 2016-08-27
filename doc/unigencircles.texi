@@ -41,8 +41,8 @@ unigencircles @minus{} Add dashed combining circles to a unifont.hex file
 @comment TROFF INPUT: .I unifont.hex
 @i{unifont.hex}
 >
-@comment TROFF INPUT: .I unifont\-circles.hex
-@i{unifont@minus{}circles.hex}
+@comment TROFF INPUT: .I unifont-circles.hex
+@i{unifont-circles.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unigencircles DESCRIPTION
@@ -63,10 +63,10 @@ For each code point listed in the "combining.txt" file but not listed
 in the "nonprinting.hex" file,
 @comment TROFF INPUT: .B unigencircles
 @b{unigencircles}
-will superimpose a single@minus{}width dashed circle in glyphs that are
-single@minus{}width (i.e., their hex glyph strings are 32 characters long)
-and will superimpose a double@minus{}width dashed circle in glyphs that
-are double@minus{}width (i.e., their hex glyph strings are 64 characters long).
+will superimpose a single-width dashed circle in glyphs that are
+single-width (i.e., their hex glyph strings are 32 characters long)
+and will superimpose a double-width dashed circle in glyphs that
+are double-width (i.e., their hex glyph strings are 64 characters long).
 @comment TROFF INPUT: .SH EXAMPLE
 
 @node unigencircles EXAMPLE
@@ -79,7 +79,7 @@ are double@minus{}width (i.e., their hex glyph strings are 64 characters long).
 
 @c ---------------------------------------------------------------------
 @quotation
-unigencircles combining.txt nonprinting.hex < unifont.hex > unifont@minus{}circles.hex
+unigencircles combining.txt nonprinting.hex < unifont.hex > unifont-circles.hex
 @comment TROFF INPUT: .RE
 
 @end quotation
@@ -101,7 +101,7 @@ for combining code points
 
 @comment TROFF INPUT: .B font/plane00/nonprinting.hex
 @b{font/plane00/nonprinting.hex}
-for non@minus{}printing code points
+for non-printing code points
 @comment TROFF INPUT: .SH SEE ALSO
 
 @node unigencircles SEE ALSO
@@ -134,8 +134,8 @@ for non@minus{}printing code points
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

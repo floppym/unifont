@@ -1,17 +1,17 @@
 .TH UNIHEXFILL 1 "2014 Jun 30"
 .SH NAME
-unihexfill \- Generate range of Unifont 4\- or 6\-digit hexadecimal glyphs
+unihexfill \- Generate range of Unifont 4- or 6-digit hexadecimal glyphs
 .SH SYNOPSIS
 .br
 .B unihexfill
 <
-.I unassigned\-ranges.txt
+.I unassigned-ranges.txt
 >
-.I filler\-glyphs.hex
+.I filler-glyphs.hex
 .SH DESCRIPTION
 .B unihexfill
 is a shell script that reads a list of code point ranges from STDIN
-and produces filler glyphs of 4\- or 6\-digit code points on STDOUT.
+and produces filler glyphs of 4- or 6-digit code points on STDOUT.
 .P
 The format of the input file is a combination of comment lines,
 single code points on a line, and start/stop pairs of code points on
@@ -22,10 +22,10 @@ digits, by convention either four or six digits.
 .B unihexfill
 invokes
 .B unihexgen
-for each non\-comment line in its input file.  If a codepoint is less than
-or equal to "FFFF" (i.e., 0xFFFF), a four\-digit hexadecimal number is encoded
+for each non-comment line in its input file.  If a codepoint is less than
+or equal to "FFFF" (i.e., 0xFFFF), a four-digit hexadecimal number is encoded
 within the corresponding Unifont glyph as two digits on each of
-two rows.  Otherwise, a six\-digit hexadecimal number is encoded as
+two rows.  Otherwise, a six-digit hexadecimal number is encoded as
 three digits on each of two rows.
 .SH OPTIONS
 There are no options.
@@ -34,11 +34,11 @@ There are no options.
 .SH EXAMPLE
 In the Unifont source package, the file font/plane01/Makefile generates
 Unicode Plane 1 hexadecimal filler glyphs of unassigned code points within
-assigned scripts with this single\-line command:
+assigned scripts with this single-line command:
 .PP
 .RS
 .B ../../bin/unihexfill
-< unassigned\-ranges.txt > unassigned.hex
+< unassigned-ranges.txt > unassigned.hex
 .RE
 .SH SEE ALSO
 .BR bdfimplode(1),
@@ -54,7 +54,7 @@ assigned scripts with this single\-line command:
 .BR unicoverage(1),
 .BR unidup(1),
 .BR unifont(5),
-.BR unifont\-viewer(1),
+.BR unifont-viewer(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),

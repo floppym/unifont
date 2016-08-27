@@ -1,59 +1,59 @@
-@comment TROFF INPUT: .TH UNIFONT\-VIEWER 1 "2014 Jun 01"
+@comment TROFF INPUT: .TH UNIFONT-VIEWER 1 "2014 Jun 01"
 
-@node unifont@minus{}viewer
-@section unifont@minus{}viewer
+@node unifont-viewer
+@section unifont-viewer
 @c DEBUG: print_menu("@section")
 
 @menu
-* unifont@minus{}viewer NAME::
-* unifont@minus{}viewer SYNOPSIS::
-* unifont@minus{}viewer DESCRIPTION::
-* unifont@minus{}viewer FILES::
-* unifont@minus{}viewer SEE ALSO::
-* unifont@minus{}viewer AUTHOR::
-* unifont@minus{}viewer LICENSE::
-* unifont@minus{}viewer BUGS::
+* unifont-viewer NAME::
+* unifont-viewer SYNOPSIS::
+* unifont-viewer DESCRIPTION::
+* unifont-viewer FILES::
+* unifont-viewer SEE ALSO::
+* unifont-viewer AUTHOR::
+* unifont-viewer LICENSE::
+* unifont-viewer BUGS::
 
 @end menu
 
 
 @comment TROFF INPUT: .SH NAME
 
-@node unifont@minus{}viewer NAME
-@subsection unifont@minus{}viewer NAME
-@c DEBUG: print_menu("unifont@minus{}viewer NAME")
+@node unifont-viewer NAME
+@subsection unifont-viewer NAME
+@c DEBUG: print_menu("unifont-viewer NAME")
 
-unifont@minus{}viewer @minus{} View a .hex font file with a graphical user interface
+unifont-viewer @minus{} View a .hex font file with a graphical user interface
 @comment TROFF INPUT: .SH SYNOPSIS
 
-@node unifont@minus{}viewer SYNOPSIS
-@subsection unifont@minus{}viewer SYNOPSIS
-@c DEBUG: print_menu("unifont@minus{}viewer SYNOPSIS")
+@node unifont-viewer SYNOPSIS
+@subsection unifont-viewer SYNOPSIS
+@c DEBUG: print_menu("unifont-viewer SYNOPSIS")
 
 @comment TROFF INPUT: .br
 @comment .br
-@comment TROFF INPUT: .B unifont\-viewer &
-@b{unifont@minus{}viewer &}
+@comment TROFF INPUT: .B unifont-viewer &
+@b{unifont-viewer &}
 @comment TROFF INPUT: .SH DESCRIPTION
 
-@node unifont@minus{}viewer DESCRIPTION
-@subsection unifont@minus{}viewer DESCRIPTION
-@c DEBUG: print_menu("unifont@minus{}viewer DESCRIPTION")
+@node unifont-viewer DESCRIPTION
+@subsection unifont-viewer DESCRIPTION
+@c DEBUG: print_menu("unifont-viewer DESCRIPTION")
 
-@comment TROFF INPUT: .B unifont\-viewer
-@b{unifont@minus{}viewer}
+@comment TROFF INPUT: .B unifont-viewer
+@b{unifont-viewer}
 reads a GNU Unifont .hex file and displays glyphs in blocks of 16 by 16,
 256 glyphs per screen with a graphical user interface.  The .hex file
 is selected by opening it with the
 @comment TROFF INPUT: .B File > Open
 @b{File > Open}
-menu item or by typing Control@minus{}O.  After loading a file, a list of "pages" of
-256 glyphs will appear in the left@minus{}hand column of the window.  The first
+menu item or by typing Control-O.  After loading a file, a list of "pages" of
+256 glyphs will appear in the left-hand column of the window.  The first
 such page of glyphs in the file will appear in the main window.
 @comment TROFF INPUT: .PP
 
-@comment TROFF INPUT: .B unifont\-viewer
-@b{unifont@minus{}viewer}
+@comment TROFF INPUT: .B unifont-viewer
+@b{unifont-viewer}
 supports glyph heights of 16, 24, and 32 pixels.  The height of a .hex font
 file is selected under the
 @comment TROFF INPUT: .B File
@@ -64,24 +64,24 @@ menu.  The default selection is
 @comment TROFF INPUT: .PP
 
 Exit
-@comment TROFF INPUT: .B unifont\-viewer
-@b{unifont@minus{}viewer}
+@comment TROFF INPUT: .B unifont-viewer
+@b{unifont-viewer}
 by selecting
 @comment TROFF INPUT: .B File > Exit
 @b{File > Exit}
-or by typing Control@minus{}X.
+or by typing Control-X.
 @comment TROFF INPUT: .SH FILES
 
-@node unifont@minus{}viewer FILES
-@subsection unifont@minus{}viewer FILES
-@c DEBUG: print_menu("unifont@minus{}viewer FILES")
+@node unifont-viewer FILES
+@subsection unifont-viewer FILES
+@c DEBUG: print_menu("unifont-viewer FILES")
 
 *.hex GNU Unifont font files
 @comment TROFF INPUT: .SH SEE ALSO
 
-@node unifont@minus{}viewer SEE ALSO
-@subsection unifont@minus{}viewer SEE ALSO
-@c DEBUG: print_menu("unifont@minus{}viewer SEE ALSO")
+@node unifont-viewer SEE ALSO
+@subsection unifont-viewer SEE ALSO
+@c DEBUG: print_menu("unifont-viewer SEE ALSO")
 
 @comment TROFF INPUT: .BR bdfimplode(1),
 @b{bdfimplode(1),}
@@ -133,21 +133,21 @@ or by typing Control@minus{}X.
 @b{unipng2hex(1)}
 @comment TROFF INPUT: .SH AUTHOR
 
-@node unifont@minus{}viewer AUTHOR
-@subsection unifont@minus{}viewer AUTHOR
-@c DEBUG: print_menu("unifont@minus{}viewer AUTHOR")
+@node unifont-viewer AUTHOR
+@subsection unifont-viewer AUTHOR
+@c DEBUG: print_menu("unifont-viewer AUTHOR")
 
-@comment TROFF INPUT: .B unifont\-viewer
-@b{unifont@minus{}viewer}
+@comment TROFF INPUT: .B unifont-viewer
+@b{unifont-viewer}
 was written by Andrew Miller.
 @comment TROFF INPUT: .SH LICENSE
 
-@node unifont@minus{}viewer LICENSE
-@subsection unifont@minus{}viewer LICENSE
-@c DEBUG: print_menu("unifont@minus{}viewer LICENSE")
+@node unifont-viewer LICENSE
+@subsection unifont-viewer LICENSE
+@c DEBUG: print_menu("unifont-viewer LICENSE")
 
-@comment TROFF INPUT: .B unifont\-viewer
-@b{unifont@minus{}viewer}
+@comment TROFF INPUT: .B unifont-viewer
+@b{unifont-viewer}
 is Copyright @copyright{} 2014 Andrew Miller.
 @comment TROFF INPUT: .PP
 
@@ -157,8 +157,8 @@ the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 @comment TROFF INPUT: .SH BUGS
 
-@node unifont@minus{}viewer BUGS
-@subsection unifont@minus{}viewer BUGS
-@c DEBUG: print_menu("unifont@minus{}viewer BUGS")
+@node unifont-viewer BUGS
+@subsection unifont-viewer BUGS
+@c DEBUG: print_menu("unifont-viewer BUGS")
 
 No known bugs exist.

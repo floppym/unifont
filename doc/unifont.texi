@@ -1033,7 +1033,7 @@ Enjoy!
 * unibmp2hex::
 * unicoverage::
 * unidup::
-* unifont@minus{}viewer::
+* unifont-viewer::
 * unifontchojung::
 * unifontksx::
 * unifontpic::

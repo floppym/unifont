@@ -34,11 +34,11 @@ hexmerge @minus{} Merge two or more GNU Unifont .hex font files into one
 @comment .br
 @comment TROFF INPUT: .B hexmerge
 @b{hexmerge}
-@comment TROFF INPUT: .I input\-font1.hex input\-font2.hex
-@i{input@minus{}font1.hex input@minus{}font2.hex}
+@comment TROFF INPUT: .I input-font1.hex input-font2.hex
+@i{input-font1.hex input-font2.hex}
 >
-@comment TROFF INPUT: .I output\-font.hex
-@i{output@minus{}font.hex}
+@comment TROFF INPUT: .I output-font.hex
+@i{output-font.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node hexmerge DESCRIPTION
@@ -86,8 +86,8 @@ the combined font to stdout.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

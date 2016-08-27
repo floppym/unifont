@@ -35,11 +35,11 @@ hex2sfd @minus{} Convert a GNU Unifont .hex file into a FontForge .sfd format
 @comment TROFF INPUT: .B hex2sfd
 @b{hex2sfd}
 <
-@comment TROFF INPUT: .I input\-font.hex
-@i{input@minus{}font.hex}
+@comment TROFF INPUT: .I input-font.hex
+@i{input-font.hex}
 >
-@comment TROFF INPUT: .I output\-font.sfd
-@i{output@minus{}font.sfd}
+@comment TROFF INPUT: .I output-font.sfd
+@i{output-font.sfd}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node hex2sfd DESCRIPTION
@@ -89,8 +89,8 @@ GNU Unifont .hex font files for input, FontForge .sfd font files for output
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

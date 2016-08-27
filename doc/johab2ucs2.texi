@@ -35,11 +35,11 @@ johab2ucs2 @minus{} Convert a Johab BDF font into GNU Unifont Hangul Syllables
 @comment TROFF INPUT: .B johab2ucs2
 @b{johab2ucs2}
 <
-@comment TROFF INPUT: .I input\-font.bdf
-@i{input@minus{}font.bdf}
+@comment TROFF INPUT: .I input-font.bdf
+@i{input-font.bdf}
 >
-@comment TROFF INPUT: .I output\-font.hex
-@i{output@minus{}font.hex}
+@comment TROFF INPUT: .I output-font.hex
+@i{output-font.hex}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node johab2ucs2 DESCRIPTION
@@ -87,8 +87,8 @@ a GNU Unifont .hex file containing the Unicode Hangul Syllables to STDOUT.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
-@comment TROFF INPUT: .BR unifont\-viewer(1),
-@b{unifont@minus{}viewer(1),}
+@comment TROFF INPUT: .BR unifont-viewer(1),
+@b{unifont-viewer(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),
