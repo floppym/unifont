@@ -1,3 +1,42 @@
+2016-10-21 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 9.0.03.
+	* NEWS: changed 2015 to 2016 for 9.0.02 release year.
+	* Makefile:
+	  - Revised to include ConScript Unicode Registry (CSUR) Private
+	    Use Area (PUA) glyphs in width functions in lib directory.
+	  - Revised to treat nonprinting code points as having zero width,
+	    though they have glyphs defined in font/plane00/nonprinting.hex.
+	* font/Makefile:
+	  - Add Plane 0 CSUR glyphs to giant Plane 0 unifont-<version>.bmp
+	    picture even though they are an optional part of the font in
+	    a separate file.
+	* font/plane00/nonprinting.hex:
+	  - Changed the dotted border around all glyphs (where necessary)
+	    to match Roman's control character borders.
+	* font/plane00csur/plane00csur.hex:
+	  - Tonal System: added Under CSUR Tonal script at U+E8E0..U+E8F4.
+	    This is the base 16 system devised by John William Nystrom in
+	    the mid-19th century.
+	  - Aiha: Added doubling combining glyph at U+F8C8, which was omitted
+	    from the original CSUR code chart but is being added to the
+	    Under CSUR code chart.
+	  - Added remainder of Kinya glyphs that Andrew Miller drew.
+	* font/plane00csur/plane00csur-combining.txt:
+	  - Added combining code points for newly added Kinya combining glyphs.
+	* font/plane00csur/plane00csur-spaces.hex:
+	  - Created file to contain Kinya Alternate Space, U+E16E.
+	* src/hexkinya:
+	  - Added copyright and license header.
+	  - Added comments with Unicode CSUR code points of each syllable
+	    component.
+	* src/unigenwidth.c:
+	  - Modified to cover widths for CSUR glyphs up through and including
+	    Plane 15, to cover the newly-added Pikto glyphs.  If someone
+	    is using this file but not using CSUR glyphs, simply ignore
+	    the Private Use Area glyph ranges or set the width to 2 for
+	    all glyphs in that range.
+
 2016-08-27 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 9.0.02.

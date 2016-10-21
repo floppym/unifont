@@ -26,6 +26,11 @@
 
 #define MAXSTRING	256
 
+/* Definitions for Pikto in Plane 15 */
+#define PIKTO_START	0x0F0E70
+#define PIKTO_END	0x0F11EF
+#define PIKTO_SIZE	(PIKTO_END - PIKTO_START + 1)
+
 
 int
 main (int argc, char **argv)
@@ -37,16 +42,15 @@ main (int argc, char **argv)
    int  loc;
    char *gstart;
 
-   char plane0width[0x10000];
+   char glyph_width[0x20000];
+   char pikto_width[PIKTO_SIZE];
 
    FILE *infilefp;
 
-   /*
-      if (argc != 3) {
-         fprintf (stderr, "\n\nUsage: %s <unifont-file.hex> <combining.txt>\n\n");
-         exit (EXIT_FAILURE);
-      }
-   */
+   if (argc != 3) {
+      fprintf (stderr, "\n\nUsage: %s <unifont.hex> <combining.txt>\n\n", argv[0]);
+      exit (EXIT_FAILURE);
+   }
 
    /*
       Read the collection of hex glyphs.
@@ -56,13 +60,21 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
    }
 
-   memset (plane0width, 0, 0x10000 * sizeof (char));
+   /* Flag glyph as non-existent until found. */
+   memset (glyph_width, -1, 0x20000 * sizeof (char));
+   memset (pikto_width, -1, (PIKTO_SIZE) * sizeof (char));
 
    teststring[MAXSTRING-1] = '\0';
    while (fgets (teststring, MAXSTRING-1, infilefp) != NULL) {
       sscanf (teststring, "%X", &loc);
-      gstart = index (teststring,':') + 1;
-      plane0width[loc] = strlen (gstart) <= 34 ? 1 : 2;
+      if (loc < 0x20000) {
+         gstart = index (teststring,':') + 1;
+         glyph_width[loc] = strlen (gstart) <= 34 ? 1 : 2;
+      }
+      else if ((loc >= PIKTO_START) && (loc <= PIKTO_END)) {
+         gstart = index (teststring,':') + 1;
+         pikto_width[loc - PIKTO_START] = strlen (gstart) <= 34 ? 1 : 2;
+      }
    }
 
    fclose (infilefp);
@@ -75,59 +87,54 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
    }
 
-   while (fscanf (infilefp, "%X", &loc) != EOF) plane0width[loc] = 0;
+   while (fgets (teststring, MAXSTRING-1, infilefp) != NULL) {
+      sscanf (teststring, "%X", &loc);
+      if (loc < 0x20000) glyph_width[loc] = 0;
+   }
 
    fclose (infilefp);
 
    /*
       Code Points with Unusual Properties (Unicode Standard, Chapter 4)
    */
-   plane0width[0]=0; /* NULL character */
-   for (i = 0x0001; i <= 0x001F; i++) plane0width[i]=-1; /* Control Characters */
-   for (i = 0x007F; i <= 0x009F; i++) plane0width[i]=-1; /* Control Characters */
+   glyph_width[0]=0; /* NULL character */
+   for (i = 0x0001; i <= 0x001F; i++) glyph_width[i]=-1; /* Control Characters */
+   for (i = 0x007F; i <= 0x009F; i++) glyph_width[i]=-1; /* Control Characters */
 
-   plane0width[0x034F]=0; /* combining grapheme joiner               */
-   plane0width[0x180B]=0; /* Mongolian free variation selector one   */
-   plane0width[0x180C]=0; /* Mongolian free variation selector two   */
-   plane0width[0x180D]=0; /* Mongolian free variation selector three */
-   plane0width[0x180E]=0; /* Mongolian vowel separator               */
-   plane0width[0x200B]=0; /* zero width space                        */
-   plane0width[0x200C]=0; /* zero width non-joiner                   */
-   plane0width[0x200D]=0; /* zero width joiner                       */
-   plane0width[0x200E]=0; /* left-to-right mark                      */
-   plane0width[0x200F]=0; /* right-to-left mark                      */
-   plane0width[0x202A]=0; /* left-to-right embedding                 */
-   plane0width[0x202B]=0; /* right-to-left embedding                 */
-   plane0width[0x202C]=0; /* pop directional formatting              */
-   plane0width[0x202D]=0; /* left-to-right override                  */
-   plane0width[0x202E]=0; /* right-to-left override                  */
-   plane0width[0x2060]=0; /* word joiner                             */
-   plane0width[0x2061]=0; /* function application                    */
-   plane0width[0x2062]=0; /* invisible times                         */
-   plane0width[0x2063]=0; /* invisible separator                     */
-   plane0width[0x2064]=0; /* invisible plus                          */
-   plane0width[0x206A]=0; /* inhibit symmetric swapping              */
-   plane0width[0x206B]=0; /* activate symmetric swapping             */
-   plane0width[0x206C]=0; /* inhibit arabic form shaping             */
-   plane0width[0x206D]=0; /* activate arabic form shaping            */
-   plane0width[0x206E]=0; /* national digit shapes                   */
-   plane0width[0x206F]=0; /* nominal digit shapes                    */
-
-   /*
-      Ideographic Description Character Left to Right..
-      Ideographic Description Character Overlaid
-   */
-   for (i = 0x2FF0; i <= 0x2FFB; i++) plane0width[i] = 0;
-
-   plane0width[0x303E] = 0; /* ideographic variation indicator */
+   glyph_width[0x034F]=0; /* combining grapheme joiner               */
+   glyph_width[0x180B]=0; /* Mongolian free variation selector one   */
+   glyph_width[0x180C]=0; /* Mongolian free variation selector two   */
+   glyph_width[0x180D]=0; /* Mongolian free variation selector three */
+   glyph_width[0x180E]=0; /* Mongolian vowel separator               */
+   glyph_width[0x200B]=0; /* zero width space                        */
+   glyph_width[0x200C]=0; /* zero width non-joiner                   */
+   glyph_width[0x200D]=0; /* zero width joiner                       */
+   glyph_width[0x200E]=0; /* left-to-right mark                      */
+   glyph_width[0x200F]=0; /* right-to-left mark                      */
+   glyph_width[0x202A]=0; /* left-to-right embedding                 */
+   glyph_width[0x202B]=0; /* right-to-left embedding                 */
+   glyph_width[0x202C]=0; /* pop directional formatting              */
+   glyph_width[0x202D]=0; /* left-to-right override                  */
+   glyph_width[0x202E]=0; /* right-to-left override                  */
+   glyph_width[0x2060]=0; /* word joiner                             */
+   glyph_width[0x2061]=0; /* function application                    */
+   glyph_width[0x2062]=0; /* invisible times                         */
+   glyph_width[0x2063]=0; /* invisible separator                     */
+   glyph_width[0x2064]=0; /* invisible plus                          */
+   glyph_width[0x206A]=0; /* inhibit symmetric swapping              */
+   glyph_width[0x206B]=0; /* activate symmetric swapping             */
+   glyph_width[0x206C]=0; /* inhibit arabic form shaping             */
+   glyph_width[0x206D]=0; /* activate arabic form shaping            */
+   glyph_width[0x206E]=0; /* national digit shapes                   */
+   glyph_width[0x206F]=0; /* nominal digit shapes                    */
 
    /* Variation Selector-1 to Variation Selector-16 */
-   for (i = 0xFE00; i <= 0xFE0F; i++) plane0width[i] = 0;
+   for (i = 0xFE00; i <= 0xFE0F; i++) glyph_width[i] = 0;
 
-   plane0width[0xFEFF]=0; /* zero width no-break space         */
-   plane0width[0xFFF9]=0; /* interlinear annotation anchor     */
-   plane0width[0xFFFA]=0; /* interlinear annotation separator  */
-   plane0width[0xFFFB]=0; /* interlinear annotation terminator */
+   glyph_width[0xFEFF]=0; /* zero width no-break space         */
+   glyph_width[0xFFF9]=0; /* interlinear annotation anchor     */
+   glyph_width[0xFFFA]=0; /* interlinear annotation separator  */
+   glyph_width[0xFFFB]=0; /* interlinear annotation terminator */
    /*
       Let glyph widths represent 0xFFFC (object replacement character)
       and 0xFFFD (replacement character).
@@ -146,7 +153,7 @@ main (int argc, char **argv)
          glyph.  As of Unicode 5.2, the Hangul Jamo block (U+1100..U+11FF)
          is completely filled.
    */
-   for (i = 0x1160; i <= 0x11FF; i++) plane0width[i]=0; /* Vowels & Final Consonants */
+   // for (i = 0x1160; i <= 0x11FF; i++) glyph_width[i]=0; /* Vowels & Final Consonants */
 
    /*
       Private Use Area -- the width is undefined, but likely
@@ -159,20 +166,24 @@ main (int argc, char **argv)
       Standard Version 5.0, p. 91.  This same default is
       used for higher plane PUA code points below.
    */
-   for (i = 0xE000; i <= 0xF8FF; i++) {
-      if (plane0width[i] == 0) plane0width[i]=2;
-   }
+   // for (i = 0xE000; i <= 0xF8FF; i++) {
+   //    if (glyph_width[i] == 0) glyph_width[i]=2;
+   // }
 
    /*
       <not a character>
    */
-   for (i = 0xFDD0; i <= 0xFDEF; i++) plane0width[i] = -1;
-   plane0width[0xFFFE] = -1; /* Byte Order Mark */
-   plane0width[0xFFFF] = -1; /* Byte Order Mark */
+   for (i = 0xFDD0; i <= 0xFDEF; i++) glyph_width[i] = -1;
+   glyph_width[0xFFFE] = -1; /* Byte Order Mark */
+   glyph_width[0xFFFF] = -1; /* Byte Order Mark */
 
    /* Surrogate Code Points */
-   for (i = 0xD800; i <= 0xDFFF; i++) plane0width[i]=-1;
+   for (i = 0xD800; i <= 0xDFFF; i++) glyph_width[i]=-1;
 
+   /* CJK Code Points */
+   for (i = 0x4E00; i <= 0x9FFF; i++) if (glyph_width[i] < 0) glyph_width[i] = 2;
+   for (i = 0x3400; i <= 0x4DBF; i++) if (glyph_width[i] < 0) glyph_width[i] = 2;
+   for (i = 0xF900; i <= 0xFAFF; i++) if (glyph_width[i] < 0) glyph_width[i] = 2;
 
    /*
       Now generate the output file.
@@ -199,7 +210,10 @@ main (int argc, char **argv)
    printf ("*/\n\n");
 
    printf ("#include <wchar.h>\n\n");
-   printf ("#define PLANE1_ZEROES 177\n\n");
+   printf ("/* Definitions for Pikto CSUR Private Use Area glyphs */\n");
+   printf ("#define PIKTO_START\t0x%06X\n", PIKTO_START);
+   printf ("#define PIKTO_END\t0x%06X\n", PIKTO_END);
+   printf ("#define PIKTO_SIZE\t(PIKTO_END - PIKTO_START + 1)\n");
    printf ("\n\n");
    printf ("/* wcwidth -- return charcell positions of one code point */\n");
    printf ("inline int\nwcwidth (wchar_t wc)\n{\n");
@@ -210,6 +224,7 @@ main (int argc, char **argv)
    printf ("   int i;                    /* loop variable                                      */\n");
    printf ("   unsigned codept;          /* Unicode code point of current character            */\n");
    printf ("   unsigned plane;           /* Unicode plane, 0x00..0x10                          */\n");
+   printf ("   unsigned lower17;         /* lower 17 bits of Unicode code point                */\n");
    printf ("   unsigned lower16;         /* lower 16 bits of Unicode code point                */\n");
    printf ("   int lowpt, midpt, highpt; /* for binary searching in plane1zeroes[]             */\n");
    printf ("   int found;                /* for binary searching in plane1zeroes[]             */\n");
@@ -218,67 +233,34 @@ main (int argc, char **argv)
    putchar ('\n');
 
    /*
-      Print the plane0width[] array for glyphs widths in the
+      Print the glyph_width[] array for glyphs widths in the
       Basic Multilingual Plane (Plane 0).
    */
-   printf ("   char plane0width[0x10000] = {");
+   printf ("   char glyph_width[0x20000] = {");
    for (i = 0; i < 0x10000; i++) {
       if ((i & 0x1F) == 0)
          printf ("\n      /* U+%04X */ ", i);
-      printf ("%d,", plane0width[i]);
+      printf ("%d,", glyph_width[i]);
    }
-   printf ("};\n\n");
+   for (i = 0x10000; i < 0x20000; i++) {
+      if ((i & 0x1F) == 0)
+         printf ("\n      /* U+%06X */ ", i);
+      printf ("%d", glyph_width[i]);
+      if (i < 0x1FFFF) putchar (',');
+   }
+   printf ("\n   };\n\n");
 
    /*
-      Print wide zero-width glyph code points in the
-      Supplemental Lingual Plane (Plane 1).
+      Print the pikto_width[] array for Pikto glyph widths.
    */
-   printf ("\n");
-   printf ("   /*\n");
-   printf ("      Zero-width code points in Supplemental Multilingual Plane\n");
-   printf ("   */\n");
-   printf ("   int plane1zeroes[PLANE1_ZEROES] = {\n");
-   printf ("      /* Phaistos Disc */\n");
-   printf ("      0x0101FD,\n");
-   printf ("      /* Kharoshthi Combining Glyphs */\n");
-   printf ("      0x010A01,0x010A02,0x010A03,0x010A05,0x010A06,0x010A0C,0x010A0D,\n");
-   printf ("      0x010A0E,0x010A0F,0x010A38,0x010A39,0x010A3A,0x010A3F,\n");
-   printf ("      /* Brahmi Combining Glyphs */\n");
-   printf ("      0x011000,0x011001,0x011002,0x011038,0x011039,0x01103A,0x01103B,\n");
-   printf ("      0x01103C,0x01103D,0x01103E,0x01103F,0x011040,0x011041,0x011042,\n");
-   printf ("      0x011043,0x011044,0x011045,0x011046,\n");
-   printf ("      /* Kaithi Combining Glyphs */\n");
-   printf ("      0x011080,0x011081,0x011082,0x0110B0,0x0110B1,0x0110B2,0x0110B3,\n");
-   printf ("      0x0110B4,0x0110B5,0x0110B6,0x0110B7,0x0110B8,0x0110B9,0x0110BA,\n");
-   printf ("      /* Chakma Combining Glyphs */\n");
-   printf ("      0x011100,0x011101,0x011102,0x011127,0x011128,0x011129,0x01112A,\n");
-   printf ("      0x01112B,0x01112C,0x01112D,0x01112E,0x01112F,0x011130,0x011131,\n");
-   printf ("      0x011132,0x011133,0x011134,\n");
-   printf ("      /* Sharada Combining Glyphs */\n");
-   printf ("      0x011180,0x011181,0x011182,0x0111B3,0x0111B4,0x0111B5,0x0111B6,\n");
-   printf ("      0x0111B7,0x0111B8,0x0111B9,0x0111BA,0x0111BB,0x0111BC,0x0111BD,\n");
-   printf ("      0x0111BE,0x0111BF,0x0111C0,\n");
-   printf ("      /* Takri Combining Glyphs */\n");
-   printf ("      0x0116AB,0x0116AC,0x0116AD,0x0116AE,0x0116AF,0x0116B0,0x0116B1,\n");
-   printf ("      0x0116B2,0x0116B3,0x0116B4,0x0116B5,0x0116B6,0x0116B7,\n");
-   printf ("      /* Miao Combining Glyphs */\n");
-   printf ("      0x016F51,0x016F52,0x016F53,0x016F54,0x016F55,0x016F56,0x016F57,\n");
-   printf ("      0x016F58,0x016F59,0x016F5A,0x016F5B,0x016F5C,0x016F5D,0x016F5E,\n");
-   printf ("      0x016F5F,0x016F60,0x016F61,0x016F62,0x016F63,0x016F64,0x016F65,\n");
-   printf ("      0x016F66,0x016F67,0x016F68,0x016F69,0x016F6A,0x016F6B,0x016F6C,\n");
-   printf ("      0x016F6D,0x016F6E,0x016F6F,0x016F70,0x016F71,0x016F72,0x016F73,\n");
-   printf ("      0x016F74,0x016F75,0x016F76,0x016F77,0x016F78,0x016F79,0x016F7A,\n");
-   printf ("      0x016F7B,0x016F7C,0x016F7D,0x016F7E,\n");
-   printf ("      0x016F8F,0x016F90,0x016F91,0x016F92,\n");
-   printf ("      /* Musical Symbols Combining Glyphs */\n");
-   printf ("      0x01D159,0x01D165,0x01D166,0x01D167,0x01D168,0x01D169,0x01D16D,\n");
-   printf ("      0x01D16E,0x01D16F,0x01D170,0x01D171,0x01D172,0x01D17B,0x01D17C,\n");
-   printf ("      0x01D17D,0x01D17E,0x01D17F,0x01D180,0x01D181,0x01D182,0x01D185,\n");
-   printf ("      0x01D186,0x01D187,0x01D188,0x01D189,0x01D18A,0x01D18B,0x01D1AA,\n");
-   printf ("      0x01D1AB,0x01D1AC,0x01D1AD,\n");
-   printf ("      /* Ancient Greek Musical Notation */\n");
-   printf ("      0x01D242,0x01D243,0x01D244\n");
-   printf ("   };\n\n");
+   printf ("   char pikto_width[PIKTO_SIZE] = {");
+   for (i = 0; i < PIKTO_SIZE; i++) {
+      if ((i & 0x1F) == 0)
+         printf ("\n      /* U+%06X */ ", PIKTO_START + i);
+      printf ("%d", pikto_width[i]);
+      if ((PIKTO_START + i) < PIKTO_END) putchar (',');
+   }
+   printf ("\n   };\n\n");
 
    /*
       Execution part of wcswidth.
@@ -288,47 +270,30 @@ main (int argc, char **argv)
    printf ("   for (i = 0; !illegalchar && i < n; i++) {\n");
    printf ("      codept  = pwcs[i];\n");
    printf ("      plane   = codept >> 16;\n");
+   printf ("      lower17 = codept & 0x1FFFF;\n");
    printf ("      lower16 = codept & 0xFFFF;\n");
-   printf ("      if (plane == 0) { /* the most common case */\n");
-   printf ("         if (plane0width[lower16] < 0) illegalchar = 1;\n");
-   printf ("         else totalwidth += plane0width[lower16];\n");
+   printf ("      if (plane < 2) { /* the most common case */\n");
+   printf ("         if (glyph_width[lower17] < 0) illegalchar = 1;\n");
+   printf ("         else totalwidth += glyph_width[lower17];\n");
    printf ("      }\n");
    printf ("      else { /* a higher plane or beyond Unicode range */\n");
-   printf ("         if  (lower16 == 0xFFFE || lower16 == 0xFFFF) {\n");
+   printf ("         if  ((lower16 == 0xFFFE) || (lower16 == 0xFFFF)) {\n");
    printf ("            illegalchar = 1;\n");
+   printf ("         }\n");
+   printf ("         else if (plane < 4) {  /* Ideographic Plane */\n");
+   printf ("            totalwidth += 2; /* Default ideographic width */\n");
+   printf ("         }\n");
+   printf ("         else if (plane == 0x0F) {  /* CSUR Private Use Area */\n");
+   printf ("            if (lower16 <= 0x0E6F) { /* Kinya */\n");
+   printf ("               totalwidth++; /* all Kinya syllables have width 1 */\n");
+   printf ("            }\n");
+   printf ("            else if (lower16 <= (PIKTO_END & 0xFFFF)) { /* Pikto */\n");
+   printf ("               if (pikto_width[lower16 - (PIKTO_START & 0xFFFF)] < 0) illegalchar = 1;\n");
+   printf ("               else totalwidth += pikto_width[lower16 - (PIKTO_START & 0xFFFF)];\n");
+   printf ("            }\n");
    printf ("         }\n");
    printf ("         else if (plane > 0x10) {\n");
    printf ("            illegalchar = 1;\n");
-   printf ("         }\n");
-   printf ("         else if (plane == 1) { /* Supplementary Multilingual Plane */\n");
-   printf ("            /*\n");
-   printf ("               Perform a binary search in plane1zeroes[] sparse list for\n");
-   printf ("               combining code points and other zero-width code points.\n");
-   printf ("            */\n");
-   printf ("            lowpt  = 0;\n");
-   printf ("            highpt = PLANE1_ZEROES - 1;\n");
-   printf ("\n");
-   printf ("            while (lowpt < highpt) {\n");
-   printf ("               midpt  = (lowpt + highpt) >> 1;\n");
-   printf ("               if (plane1zeroes[midpt] < codept)\n");
-   printf ("                  lowpt = midpt + 1;\n");
-   printf ("               else if (plane1zeroes[midpt] > codept)\n");
-   printf ("                  highpt = midpt - 1;\n");
-   printf ("               else\n");
-   printf ("                  lowpt = highpt = midpt; /* found the match */\n");
-   printf ("            }\n");
-   printf ("\n");
-   printf ("            if (lowpt >= 0 && codept == plane1zeroes[lowpt]) {\n");
-   printf ("               found = 1;\n");
-   printf ("            }\n");
-   printf ("            else if (highpt < PLANE1_ZEROES && codept == plane1zeroes[highpt]) {\n");
-   printf ("               found = 1;\n");
-   printf ("            }\n");
-   printf ("            else {\n");
-   printf ("               found = 0;\n");
-   printf ("            }\n");
-   printf ("\n");
-   printf ("            if (!found) totalwidth += 2; /* default for SMP glyphs */\n");
    printf ("         }\n");
    printf ("         /* Other non-printing in higher planes; return -1 as per IEEE 1003.1-2008. */\n");
    printf ("         else if (/* language tags */\n");
@@ -341,7 +306,7 @@ main (int argc, char **argv)
    printf ("            Unicode plane 0x02..0x10 printing character\n");
    printf ("         */\n");
    printf ("         else {\n");
-   printf ("            totalwidth += 2; /* default width of 2 charcells for legal glyphs */\n");
+   printf ("            illegalchar = 1; /* code is not in font */\n");
    printf ("         }\n");
    printf ("\n");
    printf ("      }\n");

@@ -1,4 +1,17 @@
-2015-08-27: Release 9.0.02
+2016-10-21: Release 9.0.03
+
+   Added CSUR glyphs:
+     - Aiha: added doubling combining glyph, omitted from the ConScript
+       Unicode Registry (CSUR) code chart.
+     - Tonal System: base 16 counting system devised by John William Nystrom
+       in the mid-19th century.
+     - Pikto: added the Pikto glyphs to Plane 15 Private Use Area, in the
+       range specified in the CSUR.
+
+   The giant picture of all of Plane 0 now includes the Plane 0 CSUR glyphs,
+   although those are an optional part of Unifont in separate font files.
+
+2016-08-27: Release 9.0.02
 
    Added 3 more CSUR scripts.  Modifications to some existing glyphs.
 

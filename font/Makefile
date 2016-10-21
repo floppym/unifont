@@ -19,7 +19,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 UNICODE_VERSION = 9.0
-PKG_REV = 02
+PKG_REV = 03
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2016 Roman Czyborra, Paul Hardy, Qianqian Fang, \
@@ -380,14 +380,17 @@ bmp: hex $(BINDIR)/unihex2bmp
 	echo "Done creating $(BMPDIR)"
 
 #
-# Build one bitmap of the entire Unifont as a 4096 x 16 grid.
+# Build one bitmap of the entire Unifont Plane 0 set of glyphs.
 # Use all the .hex files in $(HEXDIR) so we add the contents of
 # omit.hex (FFFE & FFFF).  Those two glyphs aren't included in the
 # unifont_sample font because they cause problems with MS Windows,
-# but we can put them in the picture.
+# but we can put them in the picture.  Also add the Plane 0
+# ConScript Unicode Registry (CSUR) glyphs in the Private Use Area.
+# The CSUR glyphs are optional, appearing in the unifont_csur font
+# files rather than the main unifont font files.
 #
 bigpic: $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
-	sort -u $(HEXDIR)/*.hex | \
+	cat $(HEXDIR)/*.hex plane00csur/*.hex | \
 	   $(BINDIR)/unifontpic -d120 > $(COMPILED_DIR)/unifont-$(VERSION).bmp
 
 #

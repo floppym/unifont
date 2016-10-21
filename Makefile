@@ -12,7 +12,7 @@ GZFLAGS = -f -9 -n
 
 PACKAGE = "unifont"
 UNICODE_VERSION = 9.0
-PKG_REV = 02
+PKG_REV = 03
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 #
@@ -30,7 +30,23 @@ VPATH = lib font/plane00 font/ttfsrc
 HEXFILES = hangul-syllables.hex nonprinting.hex pua.hex spaces.hex \
 	   unassigned.hex unifont-base.hex wqy.hex
 
-COMBINING = font/plane00/bmp-combining.txt
+#
+# HEXWIDTH and ZEROWIDTH are for forming wcwidth values.
+#
+HEXWIDTH = font/plane00/hangul-syllables.hex \
+	   font/plane00/spaces.hex \
+	   font/plane00/unifont-base.hex \
+	   font/plane00/wqy.hex \
+	   font/plane00csur/plane00csur.hex \
+	   font/plane00csur/plane00csur-spaces.hex \
+	   font/plane01/plane01.hex \
+	   font/plane0Fcsur/plane0Fcsur.hex
+
+ZEROWIDTH = font/plane00/bmp-combining.txt \
+	    font/plane00/nonprinting.hex \
+	    font/plane00csur/plane00csur-combining.txt \
+	    font/plane01/plane01-combining.txt \
+	    font/plane01/plane01-nonprinting.hex
 
 TEXTFILES = ChangeLog INSTALL NEWS README
 
@@ -91,11 +107,12 @@ precompiled:
 # Create lib/wchardata.c.  If you want to also build the object file
 # wchardata.o, uncomment the last line
 #
-lib/wchardata.c: $(HEXFILES) $(COMBINING)
+lib/wchardata.c: $(HEXWIDTH) $(ZEROWIDTH)
 	$(INSTALL) -m0755 -d lib
-	(cd font/plane00 && sort $(HEXFILES) > ../../unifonttemp.hex)
-	bin/unigenwidth unifonttemp.hex $(COMBINING) > lib/wchardata.c
-	\rm -f unifonttemp.hex
+	cat $(HEXWIDTH) > unifonttemp.hex
+	sort $(ZEROWIDTH) > combiningtemp.txt
+	bin/unigenwidth unifonttemp.hex combiningtemp.txt > lib/wchardata.c
+	\rm -f unifonttemp.hex combiningtemp.txt
 #	(cd lib && $(CC) $(CFLAGS) -c wchardata.c && chmod 644 wchardata.o )
 
 install: bindir libdir docdir
