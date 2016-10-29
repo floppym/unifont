@@ -1,3 +1,8 @@
+2016-10-29: Release 9.0.04
+
+   Extended "{" and "}" by one pixel so they now come to a point in the center.
+   Swapped U+2A05 and U+2A06 so they are now in the correct order.
+
 2016-10-21: Release 9.0.03
 
    Added CSUR glyphs:

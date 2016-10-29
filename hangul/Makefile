@@ -8,7 +8,7 @@ GZFLAGS = -f -9 -n
 # assembly date of this version
 #
 UNICODE_VERSION = 9.0
-PKG_REV = 03
+PKG_REV = 04
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2013 Paul Hardy.  \

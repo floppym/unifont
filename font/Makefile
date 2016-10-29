@@ -19,7 +19,7 @@ FONTFORGE = fontforge
 # assembly date of this version
 #
 UNICODE_VERSION = 9.0
-PKG_REV = 03
+PKG_REV = 04
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2016 Roman Czyborra, Paul Hardy, Qianqian Fang, \

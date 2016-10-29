@@ -1,3 +1,12 @@
+2016-10-29 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 9.0.04.
+	* font/plane00/unifont-base.hex:
+	  - Extended "{" and "}" by one pixel to add a point in the center.
+	  - Swapped U+2A05 and U+2A06; they were in reverse order.
+	* Added omitted ChangeLog entry for Unifont 9.0.03 for the addition
+	  of Pikto glyphs to font/plane0Fcsur/plane0Fcsur.hex.
+
 2016-10-21 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 9.0.03.
@@ -26,6 +35,8 @@
 	  - Added combining code points for newly added Kinya combining glyphs.
 	* font/plane00csur/plane00csur-spaces.hex:
 	  - Created file to contain Kinya Alternate Space, U+E16E.
+	* font/plane0Fcsur/plane0Fcsur.hex: added Pikto CSUR glyphs after
+	  Kinya syllables.
 	* src/hexkinya:
 	  - Added copyright and license header.
 	  - Added comments with Unicode CSUR code points of each syllable
