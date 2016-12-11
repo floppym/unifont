@@ -1,3 +1,17 @@
+2016-12-10 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 9.0.05.
+	* font/plane00/unifont-base.hex:
+	  - Modified upper-case Cherokee (U+13A0..U+13FF) to better reflect
+	    changes in latest Unicode Consortium Cherokee font.  Removed
+	    most serifs to make glyphs easier to read.
+	  - Modified lower-case Cherokee (U+AB70..U+ABBF) to better reflect
+	    changes in latest Unicode Consortium Cherokee font.  Removed
+	    most serifs to make glyphs easier to read.
+	* font/plane01/plane01.hex: modified U+011449, Newa OM glyph.
+	* font/plane0Fcsur/plane0Fcsur.hex: modified glyphs after comparison
+	  with scans from two copies of the Basic Pikto book.
+
 2016-10-29 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 9.0.04.

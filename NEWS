@@ -1,3 +1,12 @@
+2016-12-10: Release 9.0.05
+
+   Modified Cherokee glyphs to reflect changes in recent Cherokee font
+   that the Unicode Consortium adopted for its code charts.  Removed
+   serifs to make Cherokee glyphs easier to read.
+
+   Modified Pikto CSUR glyphs after comparison with high-resolution scans
+   of Basic Pikto book.
+
 2016-10-29: Release 9.0.04
 
    Extended "{" and "}" by one pixel so they now come to a point in the center.
