@@ -29,7 +29,7 @@ Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
 UNICODE_VERSION = 9.0
-PKG_REV = 05
+PKG_REV = 06
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 #

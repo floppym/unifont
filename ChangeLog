@@ -1,3 +1,17 @@
+2016-12-22 Paul Hardy <unifoundry@unifoundry.com>
+
+	* Version: 9.0.06.
+	* Makefiles, src/unifontpic.c - changed version number to 9.0.06.
+	* font/plane00/unifont-base.hex:
+	  - U+22F5: Added missing dot; thanks to Johnnie Weaver for noticing
+	    this error.
+	* font/plane01/plane01.hex:
+	  - Osage: Glyphs U+0104D9 and U+0104DA were swapped; Johnnie Weaver
+	    corrected them.  Shifted glyphs that were 7 pixels wide left one
+	    pixel to line up on the leftmost column.
+	* font/plane0Fcsur/plane0Fcsur.hex:
+	  - Pikto: Paul Hardy modified about 50 glyphs to improve shapes.
+
 2016-12-10 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 9.0.05.
