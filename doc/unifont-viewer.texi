@@ -109,6 +109,8 @@ or by typing Control-X.
 @b{unidup(1),}
 @comment TROFF INPUT: .BR unifont(5),
 @b{unifont(5),}
+@comment TROFF INPUT: .BR unifont1per(1),
+@b{unifont1per(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

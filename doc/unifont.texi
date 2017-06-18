@@ -7,10 +7,10 @@
 @paragraphindent none
 
 @copying
-This tutorial describes Unifont, a bitmap-based font covering the
-Unicode Basic Multilingual Plane and beyond, and its utility programs.
+This manual describes Unifont, a bitmap-based font covering the Unicode
+Basic Multilingual Plane and beyond, along with Unifont's utility programs.
 
-Copyright @copyright{} 2008--2014 Paul Hardy
+Copyright @copyright{} 2008--2017 Paul Hardy
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -64,10 +64,6 @@ to make a new font while adding those glyphs in the beginning.
 I streamlined the font build process after I was done drawing the
 Unicode 5.1 glyphs.
 
-I know that plain ASCII text is *so* last millennium, especially for
-a package related to Unicode.  Yet ASCII can be read with anything;
-hence this format.
-
 If you have questions, please email
 @code{unifoundry@@unifoundry.com}.
 You can check for the latest Unifont news at
@@ -101,6 +97,7 @@ utility programs to modify a font in the GNU Unifont format.
 * Using Hexdraw:: The Unifont ASCII utility for text editors.
 * Checking Coverage:: Checking Unicode Basic Multilingual Plane coverage.
 * Custom Builds:: Customizing the composition of a Unifont derivative.
+* One Glyph per File:: Using @code{unifont1per}
 * Viewing a Unifont File Interactively:: Using @code{unifont-viewer}
 * Seeing the Big Picture (Literally!):: Creating a Unifont poster.
 * Combining Circles:: Glyphs with zero width.
@@ -155,6 +152,18 @@ unique .hex file format invented by Roman Czyborra as a convenient
 way of giving each character exactly a one line specification.
 Conversion between this .hex format and BDF font format is trivial.
 
+Glyphs can actually be 8, 16, 24, or 32 pixels wide, but this
+extended capability should be considered experimental.  Prior to
+the release of Unicode 10.0.0, hooks were put in place in some of
+the Unifont utilities to allow for the possibility of future fonts
+to represent complex glyphs such as Cuneiform.  Unicode 10.0.0
+created a need for quadruple-width glyphs (31 pixels wide, encoded
+as 32 pixels wide) for some historic Chinese ideographs assigned to
+the BMP; that currently is the only place glyphs other than single-
+or double-width are used.  As a result, those Unifont utilities that
+support quadruple-width glyphs have updated descriptions in the
+reference section of this document.
+
 
 @node Hex File Format, Using Graphical Tools, Unifont Structure, Tutorial
 @section Hex File Format
@@ -206,22 +215,17 @@ file can only encode a pixel being on or off (i.e., black or white
 only with no intermediate shades of gray).
 
 Andrew Miller later converted @code{unihex2bmp} and @code{unibmp2hex}
-to Perl, then transformed them into
+to Perl, transforming them into
 @code{unihex2png} and @code{unipng2hex}, respectively.  These programs
 convert Unifont .hex files to and from Portable Network Graphics files.
 
-These programs will probably handle glyphs beyond the BMP properly, but
-that capability is considered experimental, as the focus was to cover
-the BMP.  The @code{unihex2png} and @code{unipng2hex} programs handle
+The @code{unihex2png},@code{unipng2hex}, and @code{hexdraw} programs handle
 the full Unicode code point range of 0x000000 through 0x10FFFF.  The
 @code{unihex2bmp} and @code{unibmp2hex} programs support the full
 32-bit unsigned integer range of 0x00000000 through 0xFFFFFFFF, but
-have not been tested extensively beyond the Unicode BMP.  The range of
-the C programs might be truncated in the future to only cover to
-0x10FFFF, the limit of the Unicode code point space.
-
-The latest release of the @code{hexdraw} program works correctly with .hex
-files having code points in the full Unicode range of U+0000 through U+10FFFF.
+have not been tested extensively beyond the Unicode upper limit of
+0x10FFFF.  The range of the C programs might be truncated in the future
+to only cover to 0x10FFFF, the limit of the Unicode code point space.
 
 
 @node Using Graphical Tools, Using Hexdraw, Hex File Format, Tutorial
@@ -415,7 +419,7 @@ BDF fonts can be created just with the tools in this package.
 PCF fonts are created by running @code{bdftopcf} on the BDF font.
 TrueType fonts require FontForge.
 
-The Unifont package also includes two new programs
+The Unifont package also includes two programs
 for working with Portable Network Graphics (PNG) files instead
 of BMP files.  These utilities are @code{unihex2png} and
 @code{unipng2hex}.  They work in a similar manner to the corresponding
@@ -632,7 +636,7 @@ sort font/plane00/*.hex >unifont-whole.hex
 and run @code{unicoverage} using the resulting @code{unifont-whole.hex} file.
 
 
-@node Custom Builds, Viewing a Unifont File Interactively, Checking Coverage, Tutorial
+@node Custom Builds, One Glyph per File, Checking Coverage, Tutorial
 @section Custom Builds
 
 
@@ -666,27 +670,32 @@ All of the .hex file names can be replaced selectively on the
 Their locations are relative to the @code{font/} directory.
 The list of component hex file variables is:
 
-@table @code
+@quotation
+@multitable @columnfractions 0.16 0.84
 
-@item UNIFONTBASE
-The bulk of Unifont scripts
+@item @code{UNIFONTBASE}
+@tab The bulk of Unifont scripts
 
-@item CJK
-Most of the CJK Ideographs
+@item @code{CJK}
+@tab Most of the CJK Ideographs
 
-@item HANGUL
-Hangul Syllables block
+@item @code{CUSTOM00}
+@tab Hand-drawn quadruple-length Plane 0 glyphs
 
-@item SPACES
-Space glyphs, single- and double-width
+@item @code{HANGUL}
+@tab Hangul Syllables block
 
-@item UNASSIGNED
-Glyphs for unassigned code points
+@item @code{SPACES}
+@tab Space glyphs, single- and double-width
 
-@item PUA
-Glyphs for the Private Use Area
+@item @code{UNASSIGNED}
+@tab Glyphs for unassigned code points
 
-@end table
+@item @code{PUA}
+@tab Glyphs for the Private Use Area
+
+@end multitable
+@end quotation
 
 So, for example, to build a font that includes four-digit hexadecimal
 code point glyphs (as white digits on a black background) for the
@@ -739,7 +748,22 @@ em space, or quad space; all spaces are either 8 pixels wide or 16 pixels
 wide.)
 
 
-@node Viewing a Unifont File Interactively, Seeing the Big Picture (Literally!), Custom Builds, Tutorial
+@node One Glyph per File, Viewing a Unifont File Interactively, Custom Builds, Tutorial
+@section One Glyph per File
+
+The @code{unifont1per} program will read a Unifont ".hex" file from
+standard input and create bitmap output files, one file per Unicode
+code point in the ".hex" file.  This can be useful if you want to
+include single glyphs as graphic objects for illustration in a document
+or web page.  Output files have names of the form "U+<codepoint>.bmp",
+where "<codepoint>" is the Unicode code point of the glyph.
+
+Note that if you feed @code{unifont1per} a huge file of glyph hexadecimal
+strings, you will get a directory loaded with individual ".bmp" files,
+so use your judgment!
+
+
+@node Viewing a Unifont File Interactively, Seeing the Big Picture (Literally!), One Glyph per File, Tutorial
 @section Viewing a Unifont File Interactively
 
 The @code{unifont-viewer} Perl script uses the @code{wxWidgets} Perl library
@@ -793,6 +817,11 @@ conversion program to convert the BMP file to a PNG file.
 
 This utility is especially useful if you're customizing the font,
 for example if adding your own Private Use Area glyphs.
+
+Single-width and double-width glyphs are reproduced in this bitmap
+file at the correct aspect ratio.  Triple-width and quadruple-width
+glyphs will be compressed 50% in the horizontal dimension to fit within
+a 16-by-16 pixel glyph cell.
 
 The default 256-by-256 code point chart will render satisfactorily
 on a sheet of paper approximately 3 feet by 3 feet (1 meter by 1 meter)
@@ -910,8 +939,9 @@ The original tools will only produce glyphs that are 16 pixels tall, and
 either 8 or 16 pixels wide.  The utilities @code{unihex2png},
 @code{unipng2hex}, @code{hexdraw}, and @code{hex2bdf} now also support
 glyph heights of 24 and 32 pixels, and glyph widths of 8, 16, 24, and 32
-pixels, but this is not fully tested.  These new dimensions are currently
-available for experimental use.  See the respective sections for each
+pixels, but this is not fully tested.  PNG glyphs that are 32 pixels wide
+are only supported if the glyphs are also 32 pixels tall.  These dimensions
+are available for experimental use.  See the respective sections for each
 of these programs in the Reference chapter of this document, or their
 respective man pages.
 
@@ -1034,6 +1064,7 @@ Enjoy!
 * unicoverage::
 * unidup::
 * unifont-viewer::
+* unifont1per::
 * unifontchojung::
 * unifontksx::
 * unifontpic::
@@ -1060,6 +1091,7 @@ Enjoy!
 @include unicoverage.texi
 @include unidup.texi
 @include unifont-viewer.texi
+@include unifont1per.texi
 @include unifontchojung.texi
 @include unifontksx.texi
 @include unifontpic.texi

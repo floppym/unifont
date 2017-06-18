@@ -1,7 +1,10 @@
 /*
    unigenwidth - IEEE 1003.1-2008 setup to calculate wchar_t string widths.
+                 All glyphs are treated as 16 pixels high, and can be
+                 8, 16, 24, or 32 pixels wide (resulting in widths of
+                 1, 2, 3, or 4, respectively).
 
-   Author: Paul Hardy, 2013
+   Author: Paul Hardy, 2013, 2017
 
    LICENSE:
 
@@ -69,7 +72,11 @@ main (int argc, char **argv)
       sscanf (teststring, "%X", &loc);
       if (loc < 0x20000) {
          gstart = index (teststring,':') + 1;
-         glyph_width[loc] = strlen (gstart) <= 34 ? 1 : 2;
+         /*
+            16 rows per glyph, 2 ASCII hexadecimal digits per byte,
+            so divide number of digits by 32 (shift right 5 bits).
+         */
+         glyph_width[loc] = (strlen (gstart) - 1) >> 5;
       }
       else if ((loc >= PIKTO_START) && (loc <= PIKTO_END)) {
          gstart = index (teststring,':') + 1;

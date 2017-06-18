@@ -1,3 +1,21 @@
+2017-06-20: Release 10.0.01
+
+   Updated for Unicode 10.0 release.
+
+   New scripts added (introduced in Unicode 10.0):
+     - U+0860..U+086F     Syriac Supplement
+     - U+011A00..U+011A4F Zanabazar Square
+     - U+011A50..U+011AAF Soyombo
+     - U+011D00..U+011D5F Masaram Gondi
+
+   Added quadruple-width glyphs U+9FD8..U+9FE9, updating some utility
+   programs and documentation to allow this change.  The Perl scripts
+   unihex2png, unipng2hex, and unifont-viewer do not support this new
+   16-by-32 glyph size.
+
+   Corrected several glyphs and made numerous changes in others,
+   described in detail in the ChangeLog file.
+
 2016-12-22: Release 9.0.06
 
    Refined about 50 Pikto CSUR glyphs.

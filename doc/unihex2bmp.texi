@@ -48,9 +48,9 @@ reads a GNU Unifont .hex file Unicode page of 256 code points
 and converts the page into a Microsoft Windows Bitmap (.bmp) or
 Wireless Bitmap (.wbmp) file.  The bitmap file displays the glyphs
 of a Unicode block of 256 code points in a 32 by 32 pixel grid.
-The glyphs themselves must be 16 rows high, and either 8 columns or
-16 columns wide. The default page is 0; that is, the range
-U+0000 through U+00FF.
+The glyphs themselves must be 16 rows high, and 8, 16, 24, or 31 
+(encoded as 32) columns wide. The default page is 0; that is, the
+range U+0000 through U+00FF.
 @comment TROFF INPUT: .PP
 
 The bitmap can be printed.  It can also be edited with a bitmap editor.
@@ -154,6 +154,8 @@ unihex2bmp -imy@t{_}input@t{_}file.hex -omy@t{_}output@t{_}file.bmp
 @b{unifont(5),}
 @comment TROFF INPUT: .BR unifont-viewer(1),
 @b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont1per(1),
+@b{unifont1per(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

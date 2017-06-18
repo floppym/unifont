@@ -50,8 +50,8 @@ reads a bitmap produced by
 before or after editing, and converts it back into a Unifont .hex format
 file.  The graphics file contains a block of 256 Unicode code points
 arranged in a 16 by 16 grid.  Each code point appears in a 32 by 32
-pixel grid.  Characters are either 16 rows high by 8 columns, or 16 rows by
-16 columns.
+pixel grid.  Characters are 16 rows high, and 8, 16, or 31 (treated as 32)
+columns wide.
 @comment TROFF INPUT: .PP
 
 @comment TROFF INPUT: .SH OPTIONS
@@ -153,6 +153,8 @@ unibmp2hex -imy@t{_}input@t{_}file.bmp -omy@t{_}output@t{_}file.hex
 @b{unifont(5),}
 @comment TROFF INPUT: .BR unifont-viewer(1),
 @b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont1per(1),
+@b{unifont1per(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

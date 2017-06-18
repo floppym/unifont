@@ -3,7 +3,7 @@
 
    Author: Paul Hardy, 2013
 
-   Copyright (C) 2013 Paul Hardy
+   Copyright (C) 2013, 2017 Paul Hardy
 
    LICENSE:
 
@@ -21,13 +21,19 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+     11 June 2017 [Paul Hardy]: modified to take glyphs that are
+     24 or 32 pixels wide and compress them horizontally by 50%.
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define MAXSTRING 256
 
-#define HEADER_STRING "GNU Unifont 9.0.06" /* to be printed as chart title */
+#define HEADER_STRING "GNU Unifont 10.0.01" /* to be printed as chart title */
 
 /*
    Stylistic Note:
@@ -110,6 +116,9 @@ output2 (int thisword)
 
 /*
    gethex reads a Unifont .hex-format input file from stdin.
+
+   Each glyph can be 2, 4, 6, or 8 ASCII hexadecimal digits wide.
+   Glyph height is fixed at 16 pixels.
 */
 void
 gethex (int bitarray[0x10000][16])
@@ -118,35 +127,60 @@ gethex (int bitarray[0x10000][16])
    char instring[MAXSTRING]; /* input buffer for a code point */
    char *bitstring;          /* pointer into instring for glyph bitmap */
 
-   int i;
-   int codept; /* the Unicode code point of the current glyph */
+   int i;       /* loop variable                               */
+   int codept;  /* the Unicode code point of the current glyph */
+   int ndigits; /* number of ASCII hexadecimal digits in glyph */
+   int bytespl; /* bytes per line of pixels in a glyph         */
+   int temprow; /* 1 row of a quadruple-width glyph            */
+   int newrow;  /* 1 row of double-width output pixels         */
+   unsigned bitmask; /* to mask off 2 bits of long width glyph */
 
    /*
       Read each input line and place its glyph into the bit array.
    */
    while (fgets (instring, MAXSTRING, stdin) != NULL) {
       sscanf (instring, "%X", &codept);
-      for (i = 0; (i < 9) && (instring[i] != ':'); i++); /* find the colon separator */
+      /* find the colon separator */
+      for (i = 0; (i < 9) && (instring[i] != ':'); i++);
       i++; /* position past it */
       bitstring = &instring[i];
-      /*
-         If this glyph is only 8 pixels wide, expand so right half of glyph is 0s.
-      */
-      if (strlen (bitstring) <= 33) { /* count terminating newline */
-         for (i = 60; i >= 0; i -= 4) {
-            bitstring[i + 3] = '0';
-            bitstring[i + 2] = '0';
-            bitstring[i + 1] = bitstring[(i >> 1) + 1];
-            bitstring[i    ] = bitstring[ i >> 1     ];
-         }
-      }
-      bitstring[64] = '\0'; /* truncate string, overwriting newline */
+      ndigits = strlen (bitstring) - 1; /* don't count '\n' at end of line */
+      bytespl = ndigits >> 5;  /* 16 rows per line, 2 digits per byte */
 
-      for (i = 0; i < 16; i++) {
-         sscanf (bitstring, "%4X", &bitarray[codept][i]);
-         bitstring += 4;
-      }
-   }
+      if (bytespl >= 1 && bytespl <= 4) {
+         for (i = 0; i < 16; i++) { /* 16 rows per glyph */
+            /* Read correct number of hexadecimal digits given glyph width */
+            switch (bytespl) {
+               case 1: sscanf (bitstring, "%2X", &temprow);
+                       bitstring += 2;
+                       temprow <<= 8; /* left-justify single-width glyph */
+                       break;
+               case 2: sscanf (bitstring, "%4X", &temprow);
+                       bitstring += 4;
+                       break;
+               /* cases 3 and 4 widths will be compressed by 50% (see below) */
+               case 3: sscanf (bitstring, "%6X", &temprow);
+                       bitstring += 6;
+                       temprow <<= 8; /* left-justify */
+                       break;
+               case 4: sscanf (bitstring, "%8X", &temprow);
+                       bitstring += 8;
+                       break;
+            }  /* switch on number of bytes per row */
+            /* compress glyph width by 50% if greater than double-width */
+            if (bytespl > 2) {
+               newrow = 0x0000;
+               /* mask off 2 bits at a time to convert each pair to 1 bit out */
+               for (bitmask = 0xC0000000; bitmask != 0; bitmask >>= 2) {
+                  newrow <<= 1;
+                  if ((temprow & bitmask) != 0) newrow |= 1;
+               }
+               temprow = newrow;
+            }  /* done conditioning glyphs beyond double-width */
+            bitarray[codept][i] = temprow;  /* store glyph bitmap for output */
+         }  /* for each row */
+      }  /* if 1 to 4 bytes per row */
+   }  /* while not EOF */
 
    return;
 }

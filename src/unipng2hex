@@ -180,7 +180,7 @@ for ($d = 0; $d < 3; $d++) {
 	}
 }
 
-# Calculate the first codepoint and it's display width
+# Calculate the first codepoint and its display width
 $codepoint = ($codepoint << 4);
 $display_width = $codepoint > 0xFFFF ? 6 : 4;
 
@@ -213,7 +213,7 @@ for ($col = 0; $col < 16; $col++) {
 		if ($charwidth != 0) {
 			$char = sprintf ("%0*X:", $display_width, $codepoint);
 
-			# Loop through the glyph and build up it's hex representation
+			# Loop through the glyph and build up its hex representation
 			for ($j = 0; $j < $charheight; $j++) {
 				$line = 0;
 

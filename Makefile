@@ -11,8 +11,8 @@ INSTALL = install
 GZFLAGS = -f -9 -n
 
 PACKAGE = "unifont"
-UNICODE_VERSION = 9.0
-PKG_REV = 06
+UNICODE_VERSION = 10.0
+PKG_REV = 01
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 #
@@ -37,6 +37,7 @@ HEXWIDTH = font/plane00/hangul-syllables.hex \
 	   font/plane00/spaces.hex \
 	   font/plane00/unifont-base.hex \
 	   font/plane00/wqy.hex \
+	   font/plane00/custom00.hex \
 	   font/plane00csur/plane00csur.hex \
 	   font/plane00csur/plane00csur-spaces.hex \
 	   font/plane01/plane01.hex \

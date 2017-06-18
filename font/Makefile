@@ -18,8 +18,8 @@ FONTFORGE = fontforge
 #
 # assembly date of this version
 #
-UNICODE_VERSION = 9.0
-PKG_REV = 06
+UNICODE_VERSION = 10.0
+PKG_REV = 01
 VERSION = $(UNICODE_VERSION).$(PKG_REV)
 
 COPYRIGHT = "Copyright (C) 2016 Roman Czyborra, Paul Hardy, Qianqian Fang, \
@@ -53,8 +53,8 @@ BMPDIR = $(COMPILED_DIR)/bmp
 PNGDIR = $(COMPILED_DIR)/png
 
 # Choose one graphics format or neither.
-GRAPHICS=png
-# GRAPHICS=bmp
+# GRAPHICS=png
+GRAPHICS=bmp
 #
 # Directory with original unifont-$(VERSION).hex files
 #
@@ -94,9 +94,10 @@ UNIFONTBASE = $(HEXDIR)/unifont-base.hex
 CJK         = $(HEXDIR)/wqy.hex
 HANGUL      = $(HEXDIR)/hangul-syllables.hex
 SPACES      = $(HEXDIR)/spaces.hex
+CUSTOM00    = $(HEXDIR)/custom00.hex
 
 UNIFILES = $(UNIFONTBASE) $(CJK) $(HANGUL) $(SPACES) $(UNASSIGNED) \
-	   $(NONPRINTING) $(PUA)
+	   $(NONPRINTING) $(PUA) $(CUSTOM00)
 
 #
 # Planes 1 through 14 (0x0E) are ordinary;

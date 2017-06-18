@@ -16,8 +16,9 @@ INSTALLDIR = $(PREFIX)/bin
 #
 # Programs written in C.
 #
-CPROGS = unibmp2hex unicoverage unidup unibdf2hex unifontpic \
-	 unigencircles unigenwidth unihex2bmp unihexgen unipagecount
+CPROGS = unibmp2hex unicoverage unidup unibdf2hex \
+	 unifont1per unifontpic unigencircles unigenwidth \
+	 unihex2bmp unihexgen unipagecount
 
 #
 # Programs written in Perl.

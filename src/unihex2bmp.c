@@ -196,11 +196,24 @@ main (int argc, char *argv[])
             and 4 column bytes for completeness in the beginning.
          */
          for (i=8; i<24; i++) {
+            bitmap[toppixelrow + i][(thiscol << 2) | 0] =
+               ~charbits[i][0] & 0xff;
             bitmap[toppixelrow + i][(thiscol << 2) | 1] =
                ~charbits[i][1] & 0xff;
             bitmap[toppixelrow + i][(thiscol << 2) | 2] =
                ~charbits[i][2] & 0xff;
+            /* Only use first 31 bits; leave vertical rule in 32nd column */
+            bitmap[toppixelrow + i][(thiscol << 2) | 3] =
+               ~charbits[i][3] & 0xfe;
          }
+         /*
+            Leave white space in 32nd column of rows 8, 14, 15, and 23
+            to leave 16 pixel height upper, middle, and lower guides.
+         */
+         bitmap[toppixelrow +  8][(thiscol << 2) | 3] |= 1;
+         bitmap[toppixelrow + 14][(thiscol << 2) | 3] |= 1;
+         bitmap[toppixelrow + 15][(thiscol << 2) | 3] |= 1;
+         bitmap[toppixelrow + 23][(thiscol << 2) | 3] |= 1;
       }
    }
    /*
@@ -322,7 +335,7 @@ hex2bit (char *instring, unsigned char character[32][4])
    int i;  /* current row in bitmap character */
    int j;  /* current character in input string */
    int k;  /* current byte in bitmap character */
-   int width;  /* number of output bytes to fill: 1, 2, or 4 */
+   int width;  /* number of output bytes to fill - 1: 0, 1, 2, or 3 */
 
    for (i=0; i<32; i++)  /* erase previous character */
       character[i][0] = character[i][1] = character[i][2] = character[i][3] = 0; 
@@ -332,10 +345,12 @@ hex2bit (char *instring, unsigned char character[32][4])
       width = 0;
    else if (strlen (instring) <= 66)  /* 64 + possible '\r', '\n' */
       width = 1;
-   else
+   else if (strlen (instring) <= 98)  /* 96 + possible '\r', '\n' */
+      width = 3;
+   else  /* the maximum allowed is quadruple-width */
       width = 4;
 
-   k = (width > 1) ? 0 : 1;  /* if width < 3, start at index 1 else at 0 */
+   k = (width > 1) ? 0 : 1; /* if width > double, start at index 1 else at 0 */
 
    for (i=8; i<24; i++) {  /* 16 rows per input character, rows 8..23 */
       sscanf (&instring[j], "%2hhx", &character[i][k]);
@@ -343,12 +358,14 @@ hex2bit (char *instring, unsigned char character[32][4])
       if (width > 0) { /* add next pair of hex digits to this row */
          sscanf (&instring[j], "%2hhx", &character[i][k+1]);
          j += 2;
-      }
-      if (width > 1) { /* add 2 next pairs of hex digits to this row */
-         sscanf (&instring[j], "%2hhx", &character[i][k+2]);
-         j += 2;
-         sscanf (&instring[j], "%2hhx", &character[i][k+3]);
-         j += 2;
+         if (width > 1) { /* add next pair of hex digits to this row */
+            sscanf (&instring[j], "%2hhx", &character[i][k+2]);
+            j += 2;
+            if (width > 2) {  /* quadruple-width is maximum width */
+               sscanf (&instring[j], "%2hhx", &character[i][k+3]);
+               j += 2;
+            }
+         }
       }
    }
 
@@ -458,7 +475,7 @@ init (unsigned char bitmap[17*32][18*4])
          bitmap[i][(j << 2) | 3] &= 0xfe;
       }
    }
-   /* draw horizontal lines 2 pixels tall */
+   /* draw horizontal lines 1 pixel tall */
    for (i=1*32-1; i<18*32-1; i+=32) {
       for (j=2; j<18; j++) {
          bitmap[i][(j << 2)    ] = 0x00;

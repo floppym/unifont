@@ -86,6 +86,8 @@ braille.hex output font files
 @b{unifont(5),}
 @comment TROFF INPUT: .BR unifont-viewer(1),
 @b{unifont-viewer(1),}
+@comment TROFF INPUT: .BR unifont1per(1),
+@b{unifont1per(1),}
 @comment TROFF INPUT: .BR unifontchojung(1),
 @b{unifontchojung(1),}
 @comment TROFF INPUT: .BR unifontksx(1),

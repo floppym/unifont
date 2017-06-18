@@ -75,12 +75,17 @@
 ; Ahom
 011740 01189F
 ; Warang Citi
-011900 011ABF
+011900 0119FF
+; Zanabazar Square
+; Soyombo
+011AB0 011ABF
 ; Pau Cin Hau
 011B00 011AFF
 ; Bhaiksuki
 ' Marchen
-011CC0 011FFF
+011CC0 011CFF
+; Masaram Gondi
+011D60 011FFF
 ; Cuneiform
 ; Cuneiform Numbers and Punctuation
 ; Early Dynastic Cuneiform
@@ -102,7 +107,10 @@
 ; Tangut Components
 018B00 01AFFF
 ; Kana Supplement
-01B100 01BBFF
+; Kana Extended - A
+01B130 01B16F
+; Nushu
+01B300 01BBFF
 ; Duployan
 ; Shorthand Format Controls
 01BCB0 01CFFF

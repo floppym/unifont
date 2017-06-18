@@ -57,11 +57,17 @@ main (int argc, char *argv[])
    int match; /* =1 if we're still matching a pattern, 0 if no match */
    int empty1, empty2; /* =1 if bytes tested are all zeroes */
    unsigned char thischar1[16], thischar2[16]; /* bytes of hex char */
+   unsigned char thischar0[16], thischar3[16]; /* bytes for quadruple-width */
    int thisrow; /* index to point into thischar1[] and thischar2[] */
    int tmpsum;  /* temporary sum to see if a character is blank */
 
    unsigned char bitmap[17*32][18*32/8]; /* final bitmap */
-   char wide[0x200000]={0x200000 * 0}; /* 1 = force double width code point */
+   /* For wide array:
+         0 = don't force glyph to double-width;
+         1 = force glyph to double-width;
+         4 = force glyph to quadruple-width.
+   */
+   char wide[0x200000]={0x200000 * 0};
 
    char *infile="", *outfile="";  /* names of input and output files */
    FILE *infp, *outfp;      /* file pointers of input and output files */
@@ -148,6 +154,7 @@ main (int argc, char *argv[])
    for (i = 0x1C00; i <= 0x1C4F; i++) wide[i] = 1; /* Lepcha (5.1)           */
    for (i = 0x1CD0; i <= 0x1CFF; i++) wide[i] = 1; /* Vedic Extensions (5.2) */
    for (i = 0x2E80; i <= 0xA4CF; i++) wide[i] = 1; /* CJK                    */
+   for (i = 0x9FD8; i <= 0x9FE9; i++) wide[i] = 4; /* CJK quadruple-width    */
    for (i = 0x1A20; i <= 0x1AAF; i++) wide[i] = 1; /* Tai Tham (5.2)         */
    for (i = 0xA930; i <= 0xA95F; i++) wide[i] = 1; /* Rejang (5.1)           */
    for (i = 0xA980; i <= 0xA9DF; i++) wide[i] = 1; /* Javanese (5.2)         */
@@ -169,6 +176,8 @@ main (int argc, char *argv[])
    for (i = 0x011680; i <= 0x0116CF; i++) wide[i] = 1; /* Takri           */
    for (i = 0x0112B0; i <= 0x0112FF; i++) wide[i] = 1; /* Khudawadi       */
    for (i = 0x011600; i <= 0x01165F; i++) wide[i] = 1; /* Modi            */
+   for (i = 0x011A50; i <= 0x011AAF; i++) wide[i] = 1; /* Soyombo         */
+   for (i = 0x011D00; i <= 0x011D4F; i++) wide[i] = 1; /* Masaram Gondi non-digits */
    for (i = 0x016F00; i <= 0x016F9F; i++) wide[i] = 1; /* Mino            */
    for (i = 0x01D100; i <= 0x01D1FF; i++) wide[i] = 1; /* Musical Symbols */
    for (i = 0x01D200; i <= 0x01D24F; i++) wide[i] = 1; /* Ancient Greek Musical Notation */
@@ -336,12 +345,16 @@ main (int argc, char *argv[])
       for (j = 0x0; j <= 0xf; j++) {
          for (k = 0; k < 16; k++) {
             if (flip) {  /* transpose glyph matrix */
+               thischar0[k] = bitmap[32*(j+1) + k + 7][4 * (i+2)    ];
                thischar1[k] = bitmap[32*(j+1) + k + 7][4 * (i+2) + 1];
                thischar2[k] = bitmap[32*(j+1) + k + 7][4 * (i+2) + 2];
+               thischar3[k] = bitmap[32*(j+1) + k + 7][4 * (i+2) + 3];
             }
             else {
+               thischar0[k] = bitmap[32*(i+1) + k + 7][4 * (j+2)    ];
                thischar1[k] = bitmap[32*(i+1) + k + 7][4 * (j+2) + 1];
                thischar2[k] = bitmap[32*(i+1) + k + 7][4 * (j+2) + 2];
+               thischar3[k] = bitmap[32*(i+1) + k + 7][4 * (j+2) + 3];
             }
          }
          /*
@@ -381,14 +394,23 @@ main (int argc, char *argv[])
                   code point to double width, print as single width
                */
                if (!forcewide &&
-                   empty2 && !wide[(uniplane << 8) | (i << 4) | j])
+                   empty2 && !wide[(uniplane << 8) | (i << 4) | j]) {
                   fprintf (outfp,
                           "%02X",
                           thischar1[thisrow]);
-               else
+               }
+               else if (wide[(uniplane << 8) | (i << 4) | j] == 4) {
+                  /* quadruple-width; force 32nd pixel to zero */
+                  fprintf (outfp,
+                          "%02X%02X%02X%02X",
+                          thischar0[thisrow], thischar1[thisrow],
+                          thischar2[thisrow], thischar3[thisrow] & 0xFE);
+               }
+               else { /* treat as double-width */
                   fprintf (outfp,
                           "%02X%02X",
                           thischar1[thisrow], thischar2[thisrow]);
+               }
             }
             fprintf (outfp, "\n");
          }

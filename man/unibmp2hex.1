@@ -12,8 +12,8 @@ reads a bitmap produced by
 before or after editing, and converts it back into a Unifont .hex format
 file.  The graphics file contains a block of 256 Unicode code points
 arranged in a 16 by 16 grid.  Each code point appears in a 32 by 32
-pixel grid.  Characters are either 16 rows high by 8 columns, or 16 rows by
-16 columns.
+pixel grid.  Characters are 16 rows high, and 8, 16, or 31 (treated as 32)
+columns wide.
 .PP
 .SH OPTIONS
 .TP 12
@@ -64,6 +64,7 @@ unibmp2hex -imy_input_file.bmp -omy_output_file.hex
 .BR unidup(1),
 .BR unifont(5),
 .BR unifont-viewer(1),
+.BR unifont1per(1),
 .BR unifontchojung(1),
 .BR unifontksx(1),
 .BR unifontpic(1),

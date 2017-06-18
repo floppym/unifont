@@ -1,3 +1,95 @@
+2017-06-20 Paul Hardy <unifoundry@unifoundry.com>
+	* Version: 10.0.01.
+	* Makefiles, src/unifontpic.c - changed version number to 10.0.01.
+	* Makefile - added font/plane00/custom00.hex to files for wchar table.
+	* README - updated to mention support for triple-width and
+	  quadruple-width glyphs for experimental use.
+	* doc/unifont.texi:
+	  - Added section on new unifont1per utility.
+	  - Updated tutorial section of manual with information on
+	    triple-width and quadruple-width support and limitations.
+	* doc/unifont1per.texi - added texinfo file for new Unifont utility.
+	* font/Makefile
+	  - Added CUSTOM variable (see font/plane00/custom.hex).
+	  - GRAPHICS variable set to generate ".bmp" graphics font images,
+	    not PNG, because unihex2png does not yet support glyphs that
+	    are 16 pixels high by 32 pixels wide.
+	* font/plane00:
+	  - Updated Basic Multilingual Plane with Unicode 10.0 changes.
+	* font/plane00/custom00.hex - added file for hand-created Unifont
+	  glyphs, to allow for Chinese ideographs U+9FD8..U+9FE9 introduced
+	  in Unicode 10.0.0 to be quadruple-width.  The hexdraw and hex2bdf
+	  utilities already support this, and the TrueType font appears to be
+	  okay, but such wide with use is still experimental.
+	* font/plane00/unifont-base.hex:
+	  - David Corbett contributed improved glyphs for U+06E5, u+06E6, and
+	    U+FE73 Arabic glyphs.
+	  - Corrected these BMP glyphs: U+0166, U+0167, U+04AA, U+04AB, U+061A,
+	    U+06E5, U+06E6, U+0DD8, U+0DDD, U+A81F, U+A825, U+FB1E, U+FE73.
+	  - Modified U+2626 as per Unicode 10.0.0 chart; modified U+2628 to
+	    resemble modified U+2626.
+	  - Adjusted Full Width Latin script glyphs to improve centering,
+	    and to reflect recent changes to the Unifont ASCII glyphs.
+	  - Applied Unicode 9.0 Errata Notice change for Combining Diacritical
+	    Marks: U+033B.
+	  - Made other changes as per Unicode 10.0.0.
+	* font/plane00/wqy.hex: Added U+9FD6, U+9FD7, and U+9FEA; glyphs
+	  in the range U+0FD8..U+9FE9 were made quadruple-width and moved
+	  to new file font/plane00/custom00.hex.
+	* font/plane01/plane01.hex:
+	  - Johnny Weaver added SMP scripts new in Unicode 10.0:
+	    o U+011A00..U+011A4F Zanabazar Square
+	    o U+011A50..U+011AAF Soyombo
+	    o U+011D00..U+011D5F Masaram Gondi
+	  - Paul Hardy added and/or modified glyphs new (or modified) in
+	    Unicode 10.0 for existing SMP scripts:
+	    o Corrected U+01130B, U+011317, U+01131D, U+011332, and
+	      U+01F694..U+01F698.
+	    o Not all Unicode 10.0 modifications were made to existing glyphs,
+	      because of the constraints of the Unifont glyph size.  Some new
+	      modifications for symbols in Unicode 10.0.0 are not without
+	      controversy.  The original glyphs (pre-Unicode 10.0) still
+	      convey the proper meaning.
+	    o Old Italic (3 glyphs)
+	    o U+011A50..U+011AAF Soyombo
+	    o U+01F200..U+01F2FF Enclosed Ideographic Supplement (6 glyphs)
+	    o U+01F300..U+01F5FF Miscellaneous Symbols and Pictographs
+	      (15 glyphs modified in Unicode 10.0; no new glyphs);
+	      corrected U+01F47F.
+	    o U+01F600..U+01F64F Emoticons (9 glyphs)
+	    o U+01F680..U+01F6FF Transport and Map Symbols (4 glyphs)
+	    o U+01F900..U+01F9FF Supplemental Symbols and Pictographs
+	      (68 glyphs)
+	    o Made other changes as per Unicode 10.0.0.
+	    o Applied Unicode 9.0 Errata Notice changes:
+	      + Sundanese: U+1B8F (this was already applied in an earlier
+	        Unifont release)
+	      + Linear B Ideograms: U+0100A7
+	      + Brahmi: U+011008, U+01103E, and U+01103F
+	      + Did *NOT* apply Unicode 9.0 Errata Notice changes for
+	        Tangut, because Tangut is not at present part of Unifont.
+	        This affects code points U+017013, U+017712, and U+017D9F.
+	* src/unihex2bmp.c: added capability to output triple-width and
+	  quadruple-width (31 pixels wide, not 32) glyphs.  The 32nd column
+	  in a glyph cell is occupied by the vertical cell border, so a
+	  quadruple-width glyph can only occupy the first 31 columns;
+	  the 32nd column is ignored.
+	* src/png2hex: fixed a couple of typos.
+	* src/unibmp2hex.c:
+	  - Modify to allow hard-coding of quadruple-width hex glyphs.
+	    The 32nd column (rightmost column) is cleared to zero, because
+	    that column contains the vertical cell border.
+	  - Set U+9FD8..U+9FE9 (complex CJK) to be quadruple-width.
+	  - Set U+011A00..U+011A4F (Masaram Gondi, non-digits) to be wide.
+	  - Set U+011A50..U+011AAF (Soyombo) to be wide.
+	* src/unifont1per.c: added new program for .bmp graphics rendering
+	  of glyphs with 8, 16, 24, or 32 pixels per row, one glyph per file.
+	* src/unifontpic.c: now handles glyphs that are 24 or 32 pixels wide,
+	  by compressing them horizontally by 50% to fit in 16-by-16 pixel
+	  grid.
+	* src/unigenwidth.c: now handles glyphs that are 24 or 32 pixels wide.
+	* src/unihex2bmp.c: modified to print quadruple-width glyphs.
+
 2016-12-22 Paul Hardy <unifoundry@unifoundry.com>
 
 	* Version: 9.0.06.
