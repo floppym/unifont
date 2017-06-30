@@ -33,7 +33,7 @@
 
 #define MAXSTRING 256
 
-#define HEADER_STRING "GNU Unifont 10.0.01" /* to be printed as chart title */
+#define HEADER_STRING "GNU Unifont 10.0.02" /* to be printed as chart title */
 
 /*
    Stylistic Note:

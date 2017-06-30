@@ -1,3 +1,17 @@
+2017-06-30 Paul Hardy <unifoundry@unifoundry.com>
+	* Version: 10.0.02.
+	* Makefiles: updated to version 10.0.02.
+	* Fixed typo in ChangeLog of previous entry:
+	  "wide with" --> "wide width".
+	* font/Makefile: updated Copyright string for FontForge.
+	* font/plane00/unifont-base.hex:
+	  - Touched up U+03xx block.
+	  - Made tonos over Greek vowels slant like U+0301 (acute accent).
+	  - Moved Greek rough and smooth breathing marks to the left.
+	  - Other minor changes.
+	* font/plane00csur/plane00csur.hex: fixed Aiha glyph U+F8AB.
+	* src/unifontpic.c: update version string to 10.0.02.
+
 2017-06-20 Paul Hardy <unifoundry@unifoundry.com>
 	* Version: 10.0.01.
 	* Makefiles, src/unifontpic.c - changed version number to 10.0.01.
@@ -20,7 +34,7 @@
 	  glyphs, to allow for Chinese ideographs U+9FD8..U+9FE9 introduced
 	  in Unicode 10.0.0 to be quadruple-width.  The hexdraw and hex2bdf
 	  utilities already support this, and the TrueType font appears to be
-	  okay, but such wide with use is still experimental.
+	  okay, but such wide width use is still experimental.
 	* font/plane00/unifont-base.hex:
 	  - David Corbett contributed improved glyphs for U+06E5, u+06E6, and
 	    U+FE73 Arabic glyphs.

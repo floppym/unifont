@@ -1,3 +1,8 @@
+2017-06-30: Release 10.0.02
+
+   Touched up glyphs in the block U+03xx, which includes modern Greek.
+   Fixed an Aiha glyph in the Private Use Area in the Unifont CSUR font.
+
 2017-06-20: Release 10.0.01
 
    Updated for Unicode 10.0 release.
