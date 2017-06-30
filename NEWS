@@ -1,3 +1,9 @@
+2017-06-30: Release 10.0.03
+
+   Modified font/hex2sfd to reposition combining characters.  If
+   you experience problems with the TrueType font in this release,
+   revert to 10.0.02.
+
 2017-06-30: Release 10.0.02
 
    Touched up glyphs in the block U+03xx, which includes modern Greek.

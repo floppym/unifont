@@ -1,4 +1,10 @@
 2017-06-30 Paul Hardy <unifoundry@unifoundry.com>
+	* Version: 10.0.03
+	* Makefile: updated to version 10.0.03
+	* src/hex2sfd: modified combining character positioning.
+	* src/unifontpic.c: update version string to 10.0.03.
+
+2017-06-30 Paul Hardy <unifoundry@unifoundry.com>
 	* Version: 10.0.02.
 	* Makefiles: updated to version 10.0.02.
 	* Fixed typo in ChangeLog of previous entry:
