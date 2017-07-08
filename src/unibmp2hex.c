@@ -8,7 +8,7 @@
    Author: Paul Hardy, unifoundry <at> unifoundry.com, December 2007
    
    
-   Copyright (C) 2007, 2008, 2013 Paul Hardy
+   Copyright (C) 2007, 2008, 2013, 2017 Paul Hardy
 
    LICENSE:
 
@@ -24,6 +24,22 @@
 
       You should have received a copy of the GNU General Public License
       along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+   20 June 2017 [Paul Hardy]:
+      - Modify to allow hard-coding of quadruple-width hex glyphs.
+        The 32nd column (rightmost column) is cleared to zero, because
+        that column contains the vertical cell border.
+      - Set U+9FD8..U+9FE9 (complex CJK) to be quadruple-width.
+      - Set U+011A00..U+011A4F (Masaram Gondi, non-digits) to be wide.
+      - Set U+011A50..U+011AAF (Soyombo) to be wide.
+
+   8 July 2017 [Paul Hardy]:
+      - All CJK glyphs in the range U+4E00..u+9FFF are double width
+        again; commented out the line that sets U+9FD8..U+9FE9 to be
+        quadruple width.
+
 */
 
 #include <stdio.h>
@@ -42,7 +58,6 @@ unsigned forcewide=0;       /* =1 to set each glyph to 16 pixels wide    */
 
 /* The six Unicode plane digits, from left-most (0) to right-most (5)    */
 unsigned unidigit[6][4];
-
 
 
 int
@@ -154,7 +169,7 @@ main (int argc, char *argv[])
    for (i = 0x1C00; i <= 0x1C4F; i++) wide[i] = 1; /* Lepcha (5.1)           */
    for (i = 0x1CD0; i <= 0x1CFF; i++) wide[i] = 1; /* Vedic Extensions (5.2) */
    for (i = 0x2E80; i <= 0xA4CF; i++) wide[i] = 1; /* CJK                    */
-   for (i = 0x9FD8; i <= 0x9FE9; i++) wide[i] = 4; /* CJK quadruple-width    */
+// for (i = 0x9FD8; i <= 0x9FE9; i++) wide[i] = 4; /* CJK quadruple-width    */
    for (i = 0x1A20; i <= 0x1AAF; i++) wide[i] = 1; /* Tai Tham (5.2)         */
    for (i = 0xA930; i <= 0xA95F; i++) wide[i] = 1; /* Rejang (5.1)           */
    for (i = 0xA980; i <= 0xA9DF; i++) wide[i] = 1; /* Javanese (5.2)         */

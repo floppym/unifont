@@ -11,9 +11,7 @@ INSTALL = install
 GZFLAGS = -f -9 -n
 
 PACKAGE = "unifont"
-UNICODE_VERSION = 10.0
-PKG_REV = 03
-VERSION = $(UNICODE_VERSION).$(PKG_REV)
+VERSION = 10.0.04
 
 #
 # The settings below will install software, man pages, and documentation
@@ -27,8 +25,8 @@ PKGDEST = $(PREFIX)/share/unifont
 
 VPATH = lib font/plane00 font/ttfsrc
 
-HEXFILES = hangul-syllables.hex nonprinting.hex pua.hex spaces.hex \
-	   unassigned.hex unifont-base.hex wqy.hex
+HEXFILES = hangul-syllables.hex plane00-nonprinting.hex pua.hex spaces.hex \
+	   plane00-unassigned.hex unifont-base.hex wqy.hex
 
 #
 # HEXWIDTH and ZEROWIDTH are for forming wcwidth values.
@@ -38,16 +36,18 @@ HEXWIDTH = font/plane00/hangul-syllables.hex \
 	   font/plane00/unifont-base.hex \
 	   font/plane00/wqy.hex \
 	   font/plane00/custom00.hex \
+	   font/plane00/plane00-nonprinting.hex \
 	   font/plane00csur/plane00csur.hex \
 	   font/plane00csur/plane00csur-spaces.hex \
 	   font/plane01/plane01.hex \
+	   font/plane01/plane01-nonprinting.hex \
 	   font/plane0Fcsur/plane0Fcsur.hex
 
-ZEROWIDTH = font/plane00/bmp-combining.txt \
-	    font/plane00/nonprinting.hex \
+ZEROWIDTH = font/plane00/plane00-combining.txt \
 	    font/plane00csur/plane00csur-combining.txt \
 	    font/plane01/plane01-combining.txt \
-	    font/plane01/plane01-nonprinting.hex
+	    font/plane0E/plane0E-combining.txt \
+	    font/plane0Fcsur/plane0Fcsur-combining.txt
 
 TEXTFILES = ChangeLog INSTALL NEWS README
 
@@ -64,7 +64,7 @@ BUILDFONT=
 COMPRESS = 1
 
 all: bindir libdir docdir buildfont
-	echo "Make is done."
+	@echo "Make is done."
 
 #
 # Build a distribution tarball.
@@ -110,7 +110,7 @@ precompiled:
 #
 lib/wchardata.c: $(HEXWIDTH) $(ZEROWIDTH)
 	$(INSTALL) -m0755 -d lib
-	cat $(HEXWIDTH) > unifonttemp.hex
+	sort $(HEXWIDTH) > unifonttemp.hex
 	sort $(ZEROWIDTH) > combiningtemp.txt
 	bin/unigenwidth unifonttemp.hex combiningtemp.txt > lib/wchardata.c
 	\rm -f unifonttemp.hex combiningtemp.txt
@@ -126,7 +126,7 @@ install: bindir libdir docdir
 	   gzip $(GZFLAGS) $(PKGDEST)/$$i ; \
 	done
 	$(INSTALL) -m0644 -p lib/wchardata.c $(PKGDEST)
-	$(INSTALL) -m0644 -p font/plane00/bmp-combining.txt $(PKGDEST)
+	$(INSTALL) -m0644 -p font/plane00/plane00-combining.txt $(PKGDEST)
 	# If "make" wasn't run before, font/compiled won't exist.
 	if [ ! -d font/compiled ] ; then \
 	   $(INSTALL) -m0644 -p font/precompiled/unifont-$(VERSION).hex   $(PKGDEST)/unifont.hex && \

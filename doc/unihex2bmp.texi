@@ -35,7 +35,7 @@ unihex2bmp @minus{} GNU Unifont .hex file to bitmap graphics file converter
 @comment .br
 @comment TROFF INPUT: .B unihex2bmp
 @b{unihex2bmp}
-[-phexpage] [-iinput@t{_}file.hex] [-ooutput@t{_}file.bmp] [-f] [-w]
+[@minus{}phexpage] [@minus{}iinput@t{_}file.hex] [@minus{}ooutput@t{_}file.bmp] [@minus{}f] [@minus{}w]
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unihex2bmp DESCRIPTION
@@ -48,7 +48,7 @@ reads a GNU Unifont .hex file Unicode page of 256 code points
 and converts the page into a Microsoft Windows Bitmap (.bmp) or
 Wireless Bitmap (.wbmp) file.  The bitmap file displays the glyphs
 of a Unicode block of 256 code points in a 32 by 32 pixel grid.
-The glyphs themselves must be 16 rows high, and 8, 16, 24, or 31 
+The glyphs themselves must be 16 rows high, and 8, 16, 24, or 31
 (encoded as 32) columns wide. The default page is 0; that is, the
 range U+0000 through U+00FF.
 @comment TROFF INPUT: .PP
@@ -69,7 +69,7 @@ command.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item -ppagenum
+@item @minus{}ppagenum
 Extract page
 @comment TROFF INPUT: .I pagenum
 @i{pagenum}
@@ -79,19 +79,19 @@ Unicode term.  It refers to an output bitmap graphics page of
 16 by 16 code points.
 @comment TROFF INPUT: .TP
 
-@item -i
+@item @minus{}i
 Specify the input file. The default is STDIN.
 @comment TROFF INPUT: .TP
 
-@item -o
+@item @minus{}o
 Specify the output file. The default is STDOUT.
 @comment TROFF INPUT: .TP
 
-@item -f
+@item @minus{}f
 "Flip" (transpose) the grid so it matches the Unicode standard order.
 @comment TROFF INPUT: .TP
 
-@item -w
+@item @minus{}w
 Produce a Wireless Bitmap format file instead of a Microsoft Windows
 Bitmap file.
 @comment TROFF INPUT: .PP
@@ -103,7 +103,7 @@ Sample usage:
 
 @c ---------------------------------------------------------------------
 @quotation
-unihex2bmp -imy@t{_}input@t{_}file.hex -omy@t{_}output@t{_}file.bmp
+unihex2bmp @minus{}imy@t{_}input@t{_}file.hex @minus{}omy@t{_}output@t{_}file.bmp
 @comment TROFF INPUT: .RE
 
 @end quotation

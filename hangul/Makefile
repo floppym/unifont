@@ -5,11 +5,7 @@ BINDIR = ../bin
 GZFLAGS = -f -9 -n
 
 #
-# assembly date of this version
-#
-UNICODE_VERSION = 10.0
-PKG_REV = 03
-VERSION = $(UNICODE_VERSION).$(PKG_REV)
+VERSION = 10.0.04
 
 COPYRIGHT = "Copyright (C) 2013 Paul Hardy.  \
 Licensed under the GNU General Public License; either version 2, or \

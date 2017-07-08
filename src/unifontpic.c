@@ -22,18 +22,36 @@
 */
 
 /*
-     11 June 2017 [Paul Hardy]: modified to take glyphs that are
-     24 or 32 pixels wide and compress them horizontally by 50%.
+     11 June 2017 [Paul Hardy]:
+        -  Modified to take glyphs that are 24 or 32 pixels wide and
+           compress them horizontally by 50%.
+
+     8 July 2017 [Paul Hardy]:
+        - Modified to print Unifont charts above Unicode Plane 0.
+        - Adds "-P" option to specify Unicode plane in decimal,
+          as "-P0" through "-P17".  Omitting this argument uses
+          plane 0 as the default.
+        - Appends Unicode plane number to chart title.
+        - Reads in "unifontpic.h", which was added mainly to
+          store ASCII chart title glyphs in an embedded array
+          rather than requiring these ASCII glyphs to be in
+          the ".hex" file that is read in for the chart body
+          (which was the case previously, when all that was
+          able to print was Unicode place 0).
+        - Fixes truncated header in long bitmap format, making
+          the long chart title glyphs single-spaced.  This leaves
+          room for the Unicode plane to appear even in the narrow
+          chart title of the "long" format chart.  The wide chart
+          title still has double-spaced ASCII glyphs.
+        - Adjusts centering of title on long and wide charts.
 */
 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "unifontpic.h"
 
-#define MAXSTRING 256
-
-#define HEADER_STRING "GNU Unifont 10.0.03" /* to be printed as chart title */
 
 /*
    Stylistic Note:
@@ -47,23 +65,23 @@
 int
 main (int argc, char **argv)
 {
+   /* Input line buffer */
+   char instring[MAXSTRING];
 
    /* long and dpi are set from command-line options */
    int wide=1; /* =1 for a 256x256 grid, =0 for a 16x4096 grid */
    int dpi=96; /* change for 256x256 grid to fit paper if desired */
    int tinynum=0; /* whether to use tiny labels for 256x256 grid */
 
-   int i; /* loop variable */
+   int i, j; /* loop variables */
 
-   int bitarray[0x10000][16]; /* 16 pixel rows for each of 65,536 glyphs */
+   int plane=0;      /* Unicode plane, 0..17; Plane 0 is default */
+   /* 16 pixel rows for each of 65,536 glyphs in a Unicode plane */
+   int plane_array[0x10000][16];
 
    void gethex();
    void genlongbmp();
    void genwidebmp();
-
-   memset ((void *)bitarray, 0, 0x10000 * 16 * sizeof (int));
-
-   gethex (bitarray); /* read .hex input file and fill bitarray with glyph data */
 
    if (argc > 1) {
       for (i = 1; i < argc; i++) {
@@ -76,14 +94,52 @@ main (int argc, char **argv)
          else if (strncmp (argv[i],"-t",2) == 0) {
             tinynum = 1;
          }
+         else if (strncmp (argv[i],"-P",2) == 0) {
+            /* Get Unicode plane */
+            for (j = 2; argv[i][j] != '\0'; j++) {
+               if (argv[i][j] < '0' || argv[i][j] > '9') {
+                  fprintf (stderr,
+                           "ERROR: Specify Unicode plane as decimal number.\n\n");
+                  exit (EXIT_FAILURE);
+               }
+            }
+            plane = atoi (&argv[i][2]); /* Unicode plane, 0..17 */
+            if (plane < 0 || plane > 17) {
+               fprintf (stderr,
+                        "ERROR: Plane out of Unicode range [0,17].\n\n");
+               exit (EXIT_FAILURE);
+            }
+         }
       }
    }
 
+
+   /*
+      Initialize the ASCII bitmap array for chart titles
+   */
+   for (i = 0; i < 128; i++) {
+      gethex (ascii_hex[i], plane_array, 0); /* convert Unifont hexadecimal string to bitmap */
+      for (j = 0; j < 16; j++) ascii_bits[i][j] = plane_array[i][j];
+   }
+
+
+   /*
+      Read in the Unifont hex file to render from standard input
+   */
+   memset ((void *)plane_array, 0, 0x10000 * 16 * sizeof (int));
+   while (fgets (instring, MAXSTRING, stdin) != NULL) {
+      gethex (instring, plane_array, plane); /* read .hex input file and fill plane_array with glyph data */
+   }  /* while not EOF */
+
+
+   /*
+      Write plane_array glyph data to BMP file as wide or long bitmap.
+   */
    if (wide) {
-      genwidebmp (bitarray, dpi, tinynum); /* write bitarray glyph data to BMP file */
+      genwidebmp (plane_array, dpi, tinynum, plane);
    }
    else {
-      genlongbmp (bitarray, dpi, tinynum);
+      genlongbmp (plane_array, dpi, tinynum, plane);
    }
 
    exit (EXIT_SUCCESS);
@@ -119,16 +175,16 @@ output2 (int thisword)
 
    Each glyph can be 2, 4, 6, or 8 ASCII hexadecimal digits wide.
    Glyph height is fixed at 16 pixels.
+
+   plane is the Unicode plane, 0..17.
 */
 void
-gethex (int bitarray[0x10000][16])
+gethex (char *instring, int plane_array[0x10000][16], int plane)
 {
-
-   char instring[MAXSTRING]; /* input buffer for a code point */
-   char *bitstring;          /* pointer into instring for glyph bitmap */
-
+   char *bitstring;  /* pointer into instring for glyph bitmap */
    int i;       /* loop variable                               */
    int codept;  /* the Unicode code point of the current glyph */
+   int glyph_plane; /* Unicode plane of current glyph          */
    int ndigits; /* number of ASCII hexadecimal digits in glyph */
    int bytespl; /* bytes per line of pixels in a glyph         */
    int temprow; /* 1 row of a quadruple-width glyph            */
@@ -138,13 +194,17 @@ gethex (int bitarray[0x10000][16])
    /*
       Read each input line and place its glyph into the bit array.
    */
-   while (fgets (instring, MAXSTRING, stdin) != NULL) {
-      sscanf (instring, "%X", &codept);
+   sscanf (instring, "%X", &codept);
+   glyph_plane = codept >> 16;
+   if (glyph_plane == plane) {
+      codept &= 0xFFFF;  /* array index will only have 16 bit address */
       /* find the colon separator */
       for (i = 0; (i < 9) && (instring[i] != ':'); i++);
       i++; /* position past it */
       bitstring = &instring[i];
-      ndigits = strlen (bitstring) - 1; /* don't count '\n' at end of line */
+      ndigits = strlen (bitstring);
+      /* don't count '\n' at end of line if present */
+      if (bitstring[ndigits - 1] == '\n') ndigits--;
       bytespl = ndigits >> 5;  /* 16 rows per line, 2 digits per byte */
 
       if (bytespl >= 1 && bytespl <= 4) {
@@ -177,10 +237,10 @@ gethex (int bitarray[0x10000][16])
                }
                temprow = newrow;
             }  /* done conditioning glyphs beyond double-width */
-            bitarray[codept][i] = temprow;  /* store glyph bitmap for output */
+            plane_array[codept][i] = temprow;  /* store glyph bitmap for output */
          }  /* for each row */
-      }  /* if 1 to 4 bytes per row */
-   }  /* while not EOF */
+      }  /* if 1 to 4 bytes per row/line */
+   }  /* if this is the plane we are seeking */
 
    return;
 }
@@ -191,43 +251,21 @@ gethex (int bitarray[0x10000][16])
    This is a long bitmap, 16 glyphs wide by 4,096 glyphs tall.
 */
 void
-genlongbmp (int bitarray[0x10000][16], int dpi, int tinynum)
+genlongbmp (int plane_array[0x10000][16], int dpi, int tinynum, int plane)
 {
 
-   char header_string[17];
-   int header[16][16]; /* header row, for chart title */
-   int hdrlen;         /* length of HEADER_STRING */
-   int startcol;       /* column to start printing header, for centering */
+   char header_string[33]; /* centered header             */
+   char raw_header[33];    /* left-aligned header         */
+   int header[16][16];     /* header row, for chart title */
+   int hdrlen;             /* length of HEADER_STRING     */
+   int startcol;           /* column to start printing header, for centering */
 
    unsigned leftcol[0x1000][16]; /* code point legend on left side of chart */
    int d1, d2, d3, d4;           /* digits for filling leftcol[][] legend   */
    int codept;                   /* current starting code point for legend  */
    int thisrow;                  /* glyph row currently being rendered      */
    unsigned toprow[16][16];      /* code point legend on top of chart       */
-
-   /*
-      hexdigit contains 4x5 pixel arrays of tiny digits for legend.
-      See unihexgen.c for more detailed description in comments.
-   */
-   char hexdigit[16][5] = {
-      {0x6,0x9,0x9,0x9,0x6},  /* 0x0 */
-      {0x2,0x6,0x2,0x2,0x7},  /* 0x1 */
-      {0xF,0x1,0xF,0x8,0xF},  /* 0x2 */
-      {0xE,0x1,0x7,0x1,0xE},  /* 0x3 */
-      {0x9,0x9,0xF,0x1,0x1},  /* 0x4 */
-      {0xF,0x8,0xF,0x1,0xF},  /* 0x5 */
-      {0x6,0x8,0xE,0x9,0x6},  /* 0x6 */
-      {0xF,0x1,0x2,0x4,0x4},  /* 0x7 */
-      {0x6,0x9,0x6,0x9,0x6},  /* 0x8 */
-      {0x6,0x9,0x7,0x1,0x6},  /* 0x9 */
-      {0xF,0x9,0xF,0x9,0x9},  /* 0xA */
-      {0xE,0x9,0xE,0x9,0xE},  /* 0xB */
-      {0x7,0x8,0x8,0x8,0x7},  /* 0xC */
-      {0xE,0x9,0x9,0x9,0xE},  /* 0xD */
-      {0xF,0x8,0xE,0x8,0xF},  /* 0xE */
-      {0xF,0x8,0xE,0x8,0x8}   /* 0xF */
-   };
-   int digitrow;  /* row we're in (0..4) for the above hexdigit digits */
+   int digitrow;       /* row we're in (0..4) for the above hexdigit digits */
 
    /*
       DataOffset = BMP Header bytes + InfoHeader bytes + ColorTable bytes.
@@ -297,19 +335,24 @@ genlongbmp (int bitarray[0x10000][16], int dpi, int tinynum)
    /*
       Create header row bits.
    */
+   sprintf (raw_header, "%s Plane %d", HEADER_STRING, plane);
    memset ((void *)header, 0, 16 * 16 * sizeof (int)); /* fill with white */
-   memset ((void *)header_string, ' ', 16 * sizeof (char)); /* 16 spaces */
-   header_string[16] = '\0';  /* null-terminated */
+   memset ((void *)header_string, ' ', 32 * sizeof (char)); /* 32 spaces */
+   header_string[32] = '\0';  /* null-terminated */
 
-   hdrlen = strlen (HEADER_STRING);
-   if (hdrlen > 16) hdrlen = 16;        /* only 16 columns to print header */
-   startcol = 8 - ((hdrlen + 1) >> 1);                 /* to center header */
-   strncpy (&header_string[startcol], HEADER_STRING, hdrlen); /* center up to 16 chars */
+   hdrlen = strlen (raw_header);
+   if (hdrlen > 32) hdrlen = 32;        /* only 32 columns to print header */
+   startcol = 16 - ((hdrlen + 1) >> 1); /* to center header                */
+   /* center up to 32 chars */
+   strncpy (&header_string[startcol], raw_header, hdrlen);
 
-   /* Copy each letter's bitmap from the bitarray[][] we constructed. */
+   /* Copy each letter's bitmap from the plane_array[][] we constructed. */
+   /* Each glyph must be single-width, to fit two glyphs in 16 pixels */
    for (j = 0; j < 16; j++) {
       for (i = 0; i < 16; i++) {
-         header[i][j] = bitarray[(unsigned)header_string[j]][i];
+         header[i][j] =
+            (ascii_bits[header_string[j+j  ] & 0x7F][i] & 0xFF00) |
+            (ascii_bits[header_string[j+j+1] & 0x7F][i] >> 8);
       }
    }
 
@@ -404,7 +447,7 @@ genlongbmp (int bitarray[0x10000][16], int dpi, int tinynum)
          putchar ( ~leftcol[thisrow][j]        & 0xFF);
          /* Unifont glyph */
          for (k = 0; k < 16; k++) {
-            bytesout = ~bitarray[i+k][j] & 0xFFFF;
+            bytesout = ~plane_array[i+k][j] & 0xFFFF;
             putchar ((bytesout >> 8) & 0xFF);
             putchar ( bytesout       & 0xFF);
          }
@@ -489,10 +532,11 @@ genlongbmp (int bitarray[0x10000][16], int dpi, int tinynum)
    This is a wide bitmap, 256 glyphs wide by 256 glyphs tall.
 */
 void
-genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
+genwidebmp (int plane_array[0x10000][16], int dpi, int tinynum, int plane)
 {
 
    char header_string[257];
+   char raw_header[33];
    int header[16][256]; /* header row, for chart title */
    int hdrlen;         /* length of HEADER_STRING */
    int startcol;       /* column to start printing header, for centering */
@@ -502,31 +546,8 @@ genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
    int codept;                  /* current starting code point for legend  */
    int thisrow;                 /* glyph row currently being rendered      */
    unsigned toprow[32][256];    /* code point legend on top of chart       */
-
-   /*
-      hexdigit contains 4x5 pixel arrays of tiny digits for legend.
-      See unihexgen.c for more detailed description in comments.
-   */
-   char hexdigit[16][5] = {
-      {0x6,0x9,0x9,0x9,0x6},  /* 0x0 */
-      {0x2,0x6,0x2,0x2,0x7},  /* 0x1 */
-      {0xF,0x1,0xF,0x8,0xF},  /* 0x2 */
-      {0xE,0x1,0x7,0x1,0xE},  /* 0x3 */
-      {0x9,0x9,0xF,0x1,0x1},  /* 0x4 */
-      {0xF,0x8,0xF,0x1,0xF},  /* 0x5 */
-      {0x8,0x8,0xF,0x9,0xF},  /* 0x6 */
-      {0xF,0x1,0x2,0x4,0x4},  /* 0x7 */
-      {0x6,0x9,0x6,0x9,0x6},  /* 0x8 */
-      {0xF,0x9,0xF,0x1,0x1},  /* 0x9 */
-      {0xF,0x9,0xF,0x9,0x9},  /* 0xA */
-      {0xE,0x9,0xE,0x9,0xE},  /* 0xB */
-      {0x7,0x8,0x8,0x8,0x7},  /* 0xC */
-      {0xE,0x9,0x9,0x9,0xE},  /* 0xD */
-      {0xF,0x8,0xE,0x8,0xF},  /* 0xE */
-      {0xF,0x8,0xE,0x8,0x8}   /* 0xF */
-   };
-   int digitrow;  /* row we're in (0..4) for the above hexdigit digits */
-   int hexalpha1, hexalpha2; /* to convert hex digits to ASCII */
+   int digitrow;      /* row we're in (0..4) for the above hexdigit digits */
+   int hexalpha1, hexalpha2;    /* to convert hex digits to ASCII          */
 
    /*
       DataOffset = BMP Header bytes + InfoHeader bytes + ColorTable bytes.
@@ -594,19 +615,22 @@ genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
    /*
       Create header row bits.
    */
+   sprintf (raw_header, "%s Plane %d", HEADER_STRING, plane);
    memset ((void *)header, 0, 256 * 16 * sizeof (int)); /* fill with white */
    memset ((void *)header_string, ' ', 256 * sizeof (char)); /* 256 spaces */
    header_string[256] = '\0';  /* null-terminated */
 
-   hdrlen = strlen (HEADER_STRING);
-   if (hdrlen > 256) hdrlen = 256;        /* only 256 columns to print header */
-   startcol = 128 - ((hdrlen + 1) >> 1);                 /* to center header */
-   strncpy (&header_string[startcol], HEADER_STRING, hdrlen); /* center up to 16 chars */
+   hdrlen = strlen (raw_header);
+   /* Wide bitmap can print 256 columns, but limit to 32 columns for long bitmap. */
+   if (hdrlen > 32) hdrlen = 32;
+   startcol = 125 - (hdrlen >> 1);  /* to center header */
+   /* center up to 32 chars */
+   strncpy (&header_string[startcol], raw_header, hdrlen);
 
-   /* Copy each letter's bitmap from the bitarray[][] we constructed. */
+   /* Copy each letter's bitmap from the plane_array[][] we constructed. */
    for (j = 0; j < 256; j++) {
       for (i = 0; i < 16; i++) {
-         header[i][j] = bitarray[(unsigned)header_string[j]][i];
+         header[i][j] = ascii_bits[header_string[j] & 0x7F][i];
       }
    }
 
@@ -637,8 +661,8 @@ genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
 
          for (i = 0 ; i < 16; i++) {
             leftcol[thisrow][i] =
-               (bitarray[hexalpha1][i] << 2) |
-               (bitarray[hexalpha2][i] >> 6);
+               (ascii_bits[hexalpha1][i] << 2) |
+               (ascii_bits[hexalpha2][i] >> 6);
          }
       }
 
@@ -679,8 +703,8 @@ genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
          hexalpha2 = d4 < 0xA ? '0' + d4 : 'A' + d4 - 0xA;
          for (i = 0 ; i < 16; i++) {
             toprow[14 + i][codept] =
-               (bitarray[hexalpha1][i]     ) |
-               (bitarray[hexalpha2][i] >> 7);
+               (ascii_bits[hexalpha1][i]     ) |
+               (ascii_bits[hexalpha2][i] >> 7);
          }
       }
    }
@@ -726,7 +750,7 @@ genwidebmp (int bitarray[0x10000][16], int dpi, int tinynum)
          putchar ( ~leftcol[thisrow][j]        & 0xFF);
          /* Unifont glyph */
          for (k = 0x00; k < 0x100; k++) {
-            bytesout = ~bitarray[i+k][j] & 0xFFFF;
+            bytesout = ~plane_array[i+k][j] & 0xFFFF;
             putchar ((bytesout >> 8) & 0xFF);
             putchar ( bytesout       & 0xFF);
          }

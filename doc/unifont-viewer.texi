@@ -23,7 +23,7 @@
 @subsection unifont-viewer NAME
 @c DEBUG: print_menu("unifont-viewer NAME")
 
-unifont-viewer @minus{} View a .hex font file with a graphical user interface
+unifont@minus{}viewer @minus{} View a .hex font file with a graphical user interface
 @comment TROFF INPUT: .SH SYNOPSIS
 
 @node unifont-viewer SYNOPSIS
@@ -32,16 +32,16 @@ unifont-viewer @minus{} View a .hex font file with a graphical user interface
 
 @comment TROFF INPUT: .br
 @comment .br
-@comment TROFF INPUT: .B unifont-viewer &
-@b{unifont-viewer &}
+@comment TROFF INPUT: .B unifont\-viewer &
+@b{unifont@minus{}viewer &}
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unifont-viewer DESCRIPTION
 @subsection unifont-viewer DESCRIPTION
 @c DEBUG: print_menu("unifont-viewer DESCRIPTION")
 
-@comment TROFF INPUT: .B unifont-viewer
-@b{unifont-viewer}
+@comment TROFF INPUT: .B unifont\-viewer
+@b{unifont@minus{}viewer}
 reads a GNU Unifont .hex file and displays glyphs in blocks of 16 by 16,
 256 glyphs per screen with a graphical user interface.  The .hex file
 is selected by opening it with the
@@ -52,8 +52,8 @@ menu item or by typing Control-O.  After loading a file, a list of "pages" of
 such page of glyphs in the file will appear in the main window.
 @comment TROFF INPUT: .PP
 
-@comment TROFF INPUT: .B unifont-viewer
-@b{unifont-viewer}
+@comment TROFF INPUT: .B unifont\-viewer
+@b{unifont@minus{}viewer}
 supports glyph heights of 16, 24, and 32 pixels.  The height of a .hex font
 file is selected under the
 @comment TROFF INPUT: .B File
@@ -64,8 +64,8 @@ menu.  The default selection is
 @comment TROFF INPUT: .PP
 
 Exit
-@comment TROFF INPUT: .B unifont-viewer
-@b{unifont-viewer}
+@comment TROFF INPUT: .B unifont\-viewer
+@b{unifont@minus{}viewer}
 by selecting
 @comment TROFF INPUT: .B File > Exit
 @b{File > Exit}
@@ -139,8 +139,8 @@ or by typing Control-X.
 @subsection unifont-viewer AUTHOR
 @c DEBUG: print_menu("unifont-viewer AUTHOR")
 
-@comment TROFF INPUT: .B unifont-viewer
-@b{unifont-viewer}
+@comment TROFF INPUT: .B unifont\-viewer
+@b{unifont@minus{}viewer}
 was written by Andrew Miller.
 @comment TROFF INPUT: .SH LICENSE
 
@@ -148,8 +148,8 @@ was written by Andrew Miller.
 @subsection unifont-viewer LICENSE
 @c DEBUG: print_menu("unifont-viewer LICENSE")
 
-@comment TROFF INPUT: .B unifont-viewer
-@b{unifont-viewer}
+@comment TROFF INPUT: .B unifont\-viewer
+@b{unifont@minus{}viewer}
 is Copyright @copyright{} 2014 Andrew Miller.
 @comment TROFF INPUT: .PP
 

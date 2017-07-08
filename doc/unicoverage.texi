@@ -35,7 +35,7 @@ unicoverage @minus{} Print coverage of each Unicode BMP Script
 @comment .br
 @comment TROFF INPUT: .B unicoverage
 @b{unicoverage}
-[-iinput-file] [-ooutput-file]
+[@minus{}iinput-file] [@minus{}ooutput-file]
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unicoverage DESCRIPTION
@@ -59,11 +59,11 @@ the percent coverage of each script in the Unicode Basic Multilingual Plane.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item -i
+@item @minus{}i
 Specify the input file. The default is STDIN.
 @comment TROFF INPUT: .TP
 
-@item -o
+@item @minus{}o
 Specify the output file. The default is STDOUT.
 Sample usage:
 @comment TROFF INPUT: .PP

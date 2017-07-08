@@ -102,7 +102,7 @@ assigned scripts with this single-line command:
 @quotation
 @comment TROFF INPUT: .B ../../bin/unihexfill
 @b{../../bin/unihexfill}
-< unassigned-ranges.txt > unassigned.hex
+< unassigned@minus{}ranges.txt > unassigned.hex
 @comment TROFF INPUT: .RE
 
 @end quotation

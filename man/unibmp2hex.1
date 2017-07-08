@@ -4,7 +4,7 @@ unibmp2hex \- Bitmap graphics file to GNU Unifont .hex file converter
 .SH SYNOPSIS
 .br
 .B unibmp2hex
-[-phexpage] [-iinput_file.bmp] [-ooutput_file.hex] [-w]
+[\-phexpage] [\-iinput_file.bmp] [\-ooutput_file.hex] [\-w]
 .SH DESCRIPTION
 .B unibmp2hex
 reads a bitmap produced by
@@ -17,7 +17,7 @@ columns wide.
 .PP
 .SH OPTIONS
 .TP 12
--ppagenum
+\-ppagenum
 Specify that the code points will be assigned to the 256 block space
 .I pagenum
 in the .hex file.  If not specified,
@@ -33,20 +33,20 @@ Multilingual Plane. In that event, the .hex file will contain
 eight digit hexadecimal code points rather than the Unifont
 standard of four hexadecimal code points.
 .TP
--i
+\-i
 Specify the input file. The default is STDIN.
 .TP
--o
+\-o
 Specify the output file. The default is STDOUT.
 .TP
--w
+\-w
 Force all output .hex glyphs to be 16 pixels wide rather than dual
 width (8 or 16 pixels).
 .PP
 Sample usage:
 .PP
 .RS
-unibmp2hex -imy_input_file.bmp -omy_output_file.hex
+unibmp2hex \-imy_input_file.bmp \-omy_output_file.hex
 .RE
 .SH FILES
 *.bmp or *.wbmp graphics files

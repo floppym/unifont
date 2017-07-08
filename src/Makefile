@@ -50,8 +50,8 @@ bin-stamp: $(CPROGS) $(PPROGS) $(PNGPROGS)
 install:
 	if [ x$(PREFIX) = x ] ; \
 	then \
-	   echo "Fatal error: PREFIX directory is not defined." && \
-	   echo "Run 'make install' from top-level directory" && \
+	   @echo "Fatal error: PREFIX directory is not defined." && \
+	   @echo "Run 'make install' from top-level directory" && \
 	   exit 1 ; \
 	fi
 	install -m0755 -d $(INSTALLDIR)

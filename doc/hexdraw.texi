@@ -62,7 +62,7 @@ reads a sorted GNU Unifont .hex file from STDIN and writes a two
 dimensional ASCII art rendering for each glyph to STDOUT.  The
 output file can be edited with any text editor, then converted
 back into a .hex file.
-Unifont ASCII hexadecimal glyphs are 16 pixels high and can be 
+Unifont ASCII hexadecimal glyphs are 16 pixels high and can be
 8, 16, 24, or 32 pixels wide.
 @comment TROFF INPUT: .SH FILES
 

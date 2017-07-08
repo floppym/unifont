@@ -16,19 +16,19 @@ utility) from STDIN and writes a BDF version of the font
 to STDOUT.
 .SH OPTIONS
 .TP 12
--f "font-name"
+\-f "font-name"
 Specify the target font name.  If omitted, the default
 font name "Unifont" is assigned.
 .TP
--v "font-version"
+\-v "font-version"
 Specify the target font version.  If omitted, the default
 version "1.0" is assigned.
 .TP
--c "font-copyright"
+\-c "font-copyright"
 Specify the target font copyright information.  The default
 is the null string.
 .TP
--r <pixel-rows> 
+\-r <pixel-rows> 
 Specify how many pixel rows tall a glyph is.  The default
 is the traditional Unifont 16 rows of pixels.  This is an
 addition to support
@@ -41,7 +41,7 @@ pixel rows tall.
 Sample usage:
 .PP
 .RS
-hex2bdf -f "Unifont" -c "(C) 2013..." unifont.hex > unifont.bdf
+hex2bdf \-f "Unifont" \-c "(C) 2013..." unifont.hex > unifont.bdf
 .RE
 .SH FILES
 *.hex GNU Unifont font files

@@ -1,3 +1,51 @@
+2017-07-08: Release 10.0.04
+
+   Added "-P" flag to the unifontpic utility to specify the Unicode
+   plane.  This allows creating code charts for glyphs above Plane 0.
+   The Unicode plane is now added to the chart title.  This works
+   properly for the wide and the long chart versions, with the
+   letters in the long version's chart title now single-spaced.
+
+   Received double-width Chinese ideographs to replace the quadruple-
+   width glyphs for Church Slavonic transliteration that were released
+   in Unifont 10.0.01.  This allows a return to PNG charts of Unifont
+   glyphs.  PNG files are smaller than the BMP version but the PNG
+   Unifont utilities have not been modified to handle quadruple-width
+   glyphs, whereas the BMP utilities have been.  The 18 quadruple-width
+   Chinese glyphs are preserved in font/plane00/alt/quad-width.hex to
+   allow future experimentation.
+
+   The PNG charts of Unicode Plane 1 (Supplemental Multilingual Plane)
+   glyphs now use the Unifont "sample" version of Unifont ".hex" files,
+   so that combining circles appear.  This was already being done for
+   Unicode Plane 0 and will look better in font sample pages.
+
+   Added new x-offset field to all *-combining.txt files to provide
+   proper rendering of Unicode double diacritic marks; they should
+   span across the preceding character and the following character.
+   Added support for this in hex2sfd for FontForge generation of
+   TrueType fonts.  Also added support for this to the unigencircles
+   utility, so the combining circle of a double diacritic is printed
+   correctly in the left half of the glyph as in the Unicode
+   Consortium's code charts, rather than being centered.  Several
+   applications are not rendering these double diacritic marks
+   correctly; releasing this version of Unifont will allow validation
+   of the new Unifont TrueType build, and could serve as a test font
+   for implementing these specialty Unicode characters in other
+   applications.
+
+   Redrew Musical Symbols Ornaments (U+01D194..U+01D1A5) so they
+   join together when used as a consecutive string of characters.
+   Adjusted the Byzantine Musical Symbols "ano", "meso", and "kato"
+   glyph versions for high, middle, and low vertical placement,
+   respectively.
+
+   Made numerous adjustments to many glyphs as noted in the ChangeLog
+   file, including re-coding some "subjoiner" glyphs as combining
+   characters instead of as non-printing.  Those glyphs now render
+   a virama (halant) sign if a script contains such a sign, or a
+   "+" subscript sign otherwise.
+
 2017-06-30: Release 10.0.03
 
    Modified font/hex2sfd to reposition combining characters.  If

@@ -4,7 +4,7 @@ unipagecount \- Count the assigned code points in a GNU Unifont .hex file
 .SH SYNOPSIS
 .br
 .B unipagecount
-[-ppagenum] [-h|-l]
+[\-ppagenum] [\-h|\-l]
 .SH DESCRIPTION
 .B unipagecount
 reads a GNU Unifont .hex file from STDIN and prints a 16 by 16 grid of the
@@ -14,21 +14,21 @@ In all planes, code points U+*FFFE and U+*FFFF are not expected in the input
 hex file; they are reserved and always counted as being present in a plane.
 .SH OPTIONS
 .TP 12
--Pplanenum
+\-Pplanenum
 Select a Unicode plane, from 0 through 16, inclusive.  If not specified,
 .B unipagecount
 defaults to Plane 0 (the Basic Multilingual Plane).
 .TP
--ppagenum
+\-ppagenum
 Just print information on one 256 code point "page" rather than
 the entire Basic Multilingual Plane.  This prints a 16 by 16 table with
 an asterisk in every code point that has an assigned glyph.
 .TP
--h
+\-h
 Print an HTML table with color-coded cell background colors
 instead of a plain text table.
 .TP
--l
+\-l
 [The letter "l"]: Print hyperlinks to font bitmaps in the HTML table.
 To create the bitmaps themselves, use the
 .B unihex2bmp

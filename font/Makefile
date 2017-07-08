@@ -16,11 +16,7 @@ INSTALL = install
 GZFLAGS = -f -9 -n
 FONTFORGE = fontforge
 #
-# assembly date of this version
-#
-UNICODE_VERSION = 10.0
-PKG_REV = 03
-VERSION = $(UNICODE_VERSION).$(PKG_REV)
+VERSION = 10.0.04
 
 COPYRIGHT = "Copyright (C) 1998-2017 Roman Czyborra, Paul Hardy, Qianqian Fang, \
 Andrew Miller, et al.  \
@@ -53,8 +49,8 @@ BMPDIR = $(COMPILED_DIR)/bmp
 PNGDIR = $(COMPILED_DIR)/png
 
 # Choose one graphics format or neither.
-# GRAPHICS=png
-GRAPHICS=bmp
+GRAPHICS=png
+# GRAPHICS=bmp
 #
 # Directory with original unifont-$(VERSION).hex files
 #
@@ -64,13 +60,13 @@ HEXDIR = plane00
 # Wen Quan Yi CJK ideographs.  This version provides complete coverage
 # of the Unicode Basic Multilingual Plane.
 #
-# If you want don't want to inlcude blank glyphs in unassigned code points,
+# If you don't want to include blank glyphs in unassigned code points,
 # uncomment the UNASSIGNED definition or override from the make command line.
 #
-# Likewise, uncomment the PUA definiation if you want to use Private
+# Likewise, uncomment the PUA definition if you want to use Private
 # Use Area glyphs.
 #
-UNASSIGNED = $(HEXDIR)/unassigned.hex
+UNASSIGNED = $(HEXDIR)/plane00-unassigned.hex
 # UNASSIGNED =
 
 #
@@ -78,7 +74,7 @@ UNASSIGNED = $(HEXDIR)/unassigned.hex
 # users do want to print representations of these glyphs, so they are
 # included as an optional assignment.
 #
-NONPRINTING = $(HEXDIR)/nonprinting.hex
+NONPRINTING = $(HEXDIR)/plane00-nonprinting.hex
 # NONPRINTING =
 
 #
@@ -108,9 +104,9 @@ UPPER_FILES = plane0[1-E]/*.hex
 #
 # Location of the file containing a list of Unicode combining characters.
 #
-COMBINING = plane00/bmp-combining.txt
+COMBINING = plane00/plane00-combining.txt
 
-UPPER_COMBINING = plane0[0-E]/*combining*.txt
+UPPER_COMBINING = plane0[1-E]/*combining.txt
 
 VPATH = plane00 ttfsrc
 
@@ -138,14 +134,16 @@ hex:
 	sort $(UNIFILES) > $(COMPILED_DIR)/unifont-$(VERSION).hex
 	(cd $(HEXDIR) && sort *.hex) | \
 	  egrep -v "^FFF[EF]" | \
-	   $(BINDIR)/unigencircles $(COMBINING) plane00/nonprinting.hex \
+	   $(BINDIR)/unigencircles $(COMBINING) plane00/plane00-nonprinting.hex \
 	   > $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
 	sort $(UPPER_FILES) \
 	   > $(COMPILED_DIR)/unifont_upper-$(VERSION).hex
 	sort $(UPPER_COMBINING) > $(COMPILED_DIR)/upper_combining.txt
-	sort plane0[1-F]/plane*-nonprinting.hex \
+	sort plane0[1-E]/plane*-nonprinting.hex \
 	   > $(COMPILED_DIR)/upper_nonprinting.hex
-	sort plane0[1-F]/*.hex | egrep -v "^..FFF[EF]" | \
+	# Generate files in plane01/all directory to create font sample book.
+	(cd plane01 && make)
+	sort plane01/all/plane01-all.hex plane0[2-E]/*.hex | egrep -v "^..FFF[EF]" | \
 	   $(BINDIR)/unigencircles $(COMPILED_DIR)/upper_combining.txt \
 	   $(COMPILED_DIR)/upper_nonprinting.hex \
 	   > $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).hex
@@ -164,7 +162,7 @@ hex:
 	   >> $(COMPILED_DIR)/csur_combining.txt
 	$(BINDIR)/unigencircles \
 	     $(COMPILED_DIR)/csur_combining.txt \
-	     plane00/nonprinting.hex \
+	     plane00/plane00-nonprinting.hex \
 	   < $(COMPILED_DIR)/unifont_csur-$(VERSION).hex \
 	   > $(COMPILED_DIR)/unifont_csur_sample-$(VERSION).hex
 
@@ -272,12 +270,10 @@ png: hex $(BINDIR)/unihex2png
 	if [ ! -d $(PNGDIR)/plane01 ] ; then \
 	   mkdir -p $(PNGDIR)/plane01 ; \
 	fi
-	# Generate files in plane01/all directory to create PNG files.
-	(cd plane01 && make)
 	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	   for j in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	      $(BINDIR)/unihex2png -p 01$$i$$j \
-	         -i plane01/all/plane01-all.hex \
+	         -i $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).hex \
 	         -o $(PNGDIR)/plane01/uni01$$i$$j.png ; \
 	   done ; \
 	done
@@ -313,7 +309,7 @@ png: hex $(BINDIR)/unihex2png
 	# Create HTML table showing color-coded percent coverage in Plane 1.
 	../bin/unipagecount -P1 -h < plane01/all/plane01-all.hex \
 	   > compiled/plane01.html
-	echo "Done creating $(PNGDIR)"
+	@echo "Done creating $(PNGDIR)"
 
 #
 # Create the .bmp (Bitmap Graphics) versions of the glyphs.
@@ -335,12 +331,10 @@ bmp: hex $(BINDIR)/unihex2bmp
 	if [ ! -d $(BMPDIR)/plane01 ] ; then \
 	   mkdir -p $(BMPDIR)/plane01 ; \
 	fi
-	# Generate files in plane01/all directory to create PNG files.
-	(cd plane01 && make)
 	for i in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	   for j in 0 1 2 3 4 5 6 7 8 9 A B C D E F; do \
 	      $(BINDIR)/unihex2bmp -p01$$i$$j \
-	         < plane01/all/plane01-all.hex \
+	         < $(COMPILED_DIR)/unifont_upper_sample-$(VERSION).hex \
 	         > $(BMPDIR)/plane01/uni01$$i$$j.bmp ; \
 	   done ; \
 	done
@@ -407,7 +401,7 @@ ttf:
 		$(COMPILED_DIR)/unifont-$(VERSION).hex \
 		$(TTFSRC)/unifont.hex
 	install -p \
-		$(HEXDIR)/bmp-combining.txt \
+		$(HEXDIR)/plane00-combining.txt \
 		$(TTFSRC)/combining.txt
 	cd $(TTFSRC) && \
 	   $(MAKE) FONTFILE="unifont" COMBINING="combining" \
@@ -519,7 +513,7 @@ precompiled: all
 install:
 	if [ x$(CURDIR) = x ] ; \
 	then \
-	   echo "Fatal Error: CURDIR not defined -- define in Makefile." ; \
+	   @echo "Fatal Error: CURDIR not defined -- define in Makefile." ; \
 	   exit 1 ; \
 	fi
 	$(INSTALL) -m0755 -d $(CONSOLEDEST)

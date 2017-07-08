@@ -79,7 +79,7 @@ are double-width (i.e., their hex glyph strings are 64 characters long).
 
 @c ---------------------------------------------------------------------
 @quotation
-unigencircles combining.txt nonprinting.hex < unifont.hex > unifont-circles.hex
+unigencircles combining.txt nonprinting.hex < unifont.hex > unifont@minus{}circles.hex
 @comment TROFF INPUT: .RE
 
 @end quotation

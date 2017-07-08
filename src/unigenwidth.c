@@ -22,6 +22,15 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+   20 June 2017 [Paul Hardy]:
+      - Now handles glyphs that are 24 or 32 pixels wide.
+
+   8 July 2017 [Paul Hardy]:
+      - Modifies sscanf format strings to ignore second field after
+        the ":" field separator, newly added to "*combining.txt" files
+        and already present in "*.hex" files.
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,7 +78,7 @@ main (int argc, char **argv)
 
    teststring[MAXSTRING-1] = '\0';
    while (fgets (teststring, MAXSTRING-1, infilefp) != NULL) {
-      sscanf (teststring, "%X", &loc);
+      sscanf (teststring, "%X:%*s", &loc);
       if (loc < 0x20000) {
          gstart = index (teststring,':') + 1;
          /*
@@ -95,53 +104,58 @@ main (int argc, char **argv)
    }
 
    while (fgets (teststring, MAXSTRING-1, infilefp) != NULL) {
-      sscanf (teststring, "%X", &loc);
+      sscanf (teststring, "%X:%*s", &loc);
       if (loc < 0x20000) glyph_width[loc] = 0;
    }
 
    fclose (infilefp);
 
    /*
-      Code Points with Unusual Properties (Unicode Standard, Chapter 4)
+      Code Points with Unusual Properties (Unicode Standard, Chapter 4).
+
+      As of Unifont 10.0.04, use the widths in the "*-nonprinting.hex"
+      files.  If an application is smart enough to know how to handle
+      these special cases, it will not render the "nonprinting" glyph
+      and will treat the code point as being zero-width.
    */
-   glyph_width[0]=0; /* NULL character */
-   for (i = 0x0001; i <= 0x001F; i++) glyph_width[i]=-1; /* Control Characters */
-   for (i = 0x007F; i <= 0x009F; i++) glyph_width[i]=-1; /* Control Characters */
+// glyph_width[0]=0; /* NULL character */
+// for (i = 0x0001; i <= 0x001F; i++) glyph_width[i]=-1; /* Control Characters */
+// for (i = 0x007F; i <= 0x009F; i++) glyph_width[i]=-1; /* Control Characters */
 
-   glyph_width[0x034F]=0; /* combining grapheme joiner               */
-   glyph_width[0x180B]=0; /* Mongolian free variation selector one   */
-   glyph_width[0x180C]=0; /* Mongolian free variation selector two   */
-   glyph_width[0x180D]=0; /* Mongolian free variation selector three */
-   glyph_width[0x180E]=0; /* Mongolian vowel separator               */
-   glyph_width[0x200B]=0; /* zero width space                        */
-   glyph_width[0x200C]=0; /* zero width non-joiner                   */
-   glyph_width[0x200D]=0; /* zero width joiner                       */
-   glyph_width[0x200E]=0; /* left-to-right mark                      */
-   glyph_width[0x200F]=0; /* right-to-left mark                      */
-   glyph_width[0x202A]=0; /* left-to-right embedding                 */
-   glyph_width[0x202B]=0; /* right-to-left embedding                 */
-   glyph_width[0x202C]=0; /* pop directional formatting              */
-   glyph_width[0x202D]=0; /* left-to-right override                  */
-   glyph_width[0x202E]=0; /* right-to-left override                  */
-   glyph_width[0x2060]=0; /* word joiner                             */
-   glyph_width[0x2061]=0; /* function application                    */
-   glyph_width[0x2062]=0; /* invisible times                         */
-   glyph_width[0x2063]=0; /* invisible separator                     */
-   glyph_width[0x2064]=0; /* invisible plus                          */
-   glyph_width[0x206A]=0; /* inhibit symmetric swapping              */
-   glyph_width[0x206B]=0; /* activate symmetric swapping             */
-   glyph_width[0x206C]=0; /* inhibit arabic form shaping             */
-   glyph_width[0x206D]=0; /* activate arabic form shaping            */
-   glyph_width[0x206E]=0; /* national digit shapes                   */
-   glyph_width[0x206F]=0; /* nominal digit shapes                    */
+// glyph_width[0x034F]=0; /* combining grapheme joiner               */
+// glyph_width[0x180B]=0; /* Mongolian free variation selector one   */
+// glyph_width[0x180C]=0; /* Mongolian free variation selector two   */
+// glyph_width[0x180D]=0; /* Mongolian free variation selector three */
+// glyph_width[0x180E]=0; /* Mongolian vowel separator               */
+// glyph_width[0x200B]=0; /* zero width space                        */
+// glyph_width[0x200C]=0; /* zero width non-joiner                   */
+// glyph_width[0x200D]=0; /* zero width joiner                       */
+// glyph_width[0x200E]=0; /* left-to-right mark                      */
+// glyph_width[0x200F]=0; /* right-to-left mark                      */
+// glyph_width[0x202A]=0; /* left-to-right embedding                 */
+// glyph_width[0x202B]=0; /* right-to-left embedding                 */
+// glyph_width[0x202C]=0; /* pop directional formatting              */
+// glyph_width[0x202D]=0; /* left-to-right override                  */
+// glyph_width[0x202E]=0; /* right-to-left override                  */
+// glyph_width[0x2060]=0; /* word joiner                             */
+// glyph_width[0x2061]=0; /* function application                    */
+// glyph_width[0x2062]=0; /* invisible times                         */
+// glyph_width[0x2063]=0; /* invisible separator                     */
+// glyph_width[0x2064]=0; /* invisible plus                          */
+// glyph_width[0x206A]=0; /* inhibit symmetric swapping              */
+// glyph_width[0x206B]=0; /* activate symmetric swapping             */
+// glyph_width[0x206C]=0; /* inhibit arabic form shaping             */
+// glyph_width[0x206D]=0; /* activate arabic form shaping            */
+// glyph_width[0x206E]=0; /* national digit shapes                   */
+// glyph_width[0x206F]=0; /* nominal digit shapes                    */
 
-   /* Variation Selector-1 to Variation Selector-16 */
-   for (i = 0xFE00; i <= 0xFE0F; i++) glyph_width[i] = 0;
+// /* Variation Selector-1 to Variation Selector-16 */
+// for (i = 0xFE00; i <= 0xFE0F; i++) glyph_width[i] = 0;
 
-   glyph_width[0xFEFF]=0; /* zero width no-break space         */
-   glyph_width[0xFFF9]=0; /* interlinear annotation anchor     */
-   glyph_width[0xFFFA]=0; /* interlinear annotation separator  */
-   glyph_width[0xFFFB]=0; /* interlinear annotation terminator */
+// glyph_width[0xFEFF]=0; /* zero width no-break space         */
+// glyph_width[0xFFF9]=0; /* interlinear annotation anchor     */
+// glyph_width[0xFFFA]=0; /* interlinear annotation separator  */
+// glyph_width[0xFFFB]=0; /* interlinear annotation terminator */
    /*
       Let glyph widths represent 0xFFFC (object replacement character)
       and 0xFFFD (replacement character).

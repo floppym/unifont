@@ -8,7 +8,7 @@
 
    Author: Paul Hardy, unifoundry <at> unifoundry.com, December 2007
    
-   Copyright (C) 2007, 2008, 2013 Paul Hardy
+   Copyright (C) 2007, 2008, 2013, 2017 Paul Hardy
 
    LICENSE:
 
@@ -24,6 +24,14 @@
 
       You should have received a copy of the GNU General Public License
       along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+   20 June 2017 [Paul Hardy]:
+   - Adds capability to output triple-width and quadruple-width (31 pixels
+     wide, not 32) glyphs.  The 32nd column in a glyph cell is occupied by
+     the vertical cell border, so a quadruple-width glyph can only occupy
+     the first 31 columns; the 32nd column is ignored.
 */
 
 #include <stdio.h>

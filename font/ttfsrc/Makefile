@@ -28,9 +28,7 @@ Qianqian Fang, Andrew Miller, et al.  \
 Licensed under the GNU General Public License; either version 2, or \
 (at your option) a later version, with the GNU Font Embedding Exception."
 
-UNICODE_VERSION = 10.0
-PKG_REV = 03
-VERSION = $(UNICODE_VERSION).$(PKG_REV)
+VERSION = 10.0.04
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex
@@ -67,7 +65,7 @@ all: outline
 # an outline TrueType font.
 #
 outline: $(FONTFILE).hex $(BINDIR)/hex2sfd
-	echo "Converting font as a single file."
+	@echo "Converting font as a single file."
 	$(BINDIR)/hex2sfd $(COMBINING).txt < $(FONTFILE).hex > $(FONTFILE).sfd
 	$(FONTFORGE) -lang=ff -c \
 	   'Open($$1); \
@@ -79,7 +77,7 @@ outline: $(FONTFILE).hex $(BINDIR)/hex2sfd
 	    Simplify(64,1); \
 	    Save($$1);' \
 	   $(FONTFILE).sfd
-	echo "Converting .sfd font into .ttf font"
+	@echo "Converting .sfd font into .ttf font"
 	$(FONTFORGE) -lang=ff -c \
 	   'Open($$1); \
 	    Generate($$2)' $(FONTFILE).sfd $(FONTFILE).ttf

@@ -36,13 +36,13 @@ unipng2hex @minus{} Portable Network Graphics to GNU Unifont .hex file converter
 @comment .br
 @comment TROFF INPUT: .B unipng2hex
 @b{unipng2hex}
--i
+@minus{}i
 @comment TROFF INPUT: .I input_file.png
 @i{input@t{_}file.png}
-[-o
+[@minus{}o
 @comment TROFF INPUT: .I output_file.hex
 @i{output@t{_}file.hex}
-] [-w
+] [@minus{}w
 @comment TROFF INPUT: .I width
 @i{width}
 ]
@@ -61,7 +61,7 @@ before or after editing, and converts it back into a Unifont .hex format
 file.  The PNG file contains a block of 256 Unicode code points
 arranged in a 16 by 16 grid.  Each code point appears in a 32 by 32 or a 40
 by 40 pixel grid.  Characters are either 16, 24 or 32 pixel rows high,
-depending on the "-r" parameter specified by
+depending on the "@minus{}r" parameter specified by
 @comment TROFF INPUT: .B unihex2png.
 @b{unihex2png.}
 They can be 8, 16, 24, or 32 pixel columns wide (widths of 32 are only
@@ -76,21 +76,21 @@ supported for 32 pixel row tall characters).
 
 @c ---------------------------------------------------------------------
 @table @code
-@item -i
+@item @minus{}i
 Specify the input file.
 @comment TROFF INPUT: .TP
 
-@item -o
+@item @minus{}o
 Specify the output file.  If omitted, a file in the Unifont .hex format
 is written to STDOUT.
 @comment TROFF INPUT: .TP
 
-@item -w width
+@item @minus{}w width
 Specify the minimum width of the output glyphs.  Valid values are 16, 24,
  and 32.  The default is no minimum width.
 @comment TROFF INPUT: .TP
 
-@item -h
+@item @minus{}h
 Print a help message of options and exit.
 @comment TROFF INPUT: .SH EXAMPLE
 
@@ -109,7 +109,7 @@ Sample usage:
 
 @c ---------------------------------------------------------------------
 @quotation
-unipng2hex -i my@t{_}input@t{_}file.png -o my@t{_}output@t{_}file.hex
+unipng2hex @minus{}i my@t{_}input@t{_}file.png @minus{}o my@t{_}output@t{_}file.hex
 @comment TROFF INPUT: .RE
 
 @end quotation

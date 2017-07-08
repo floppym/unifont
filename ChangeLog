@@ -1,3 +1,141 @@
+2017-07-08 Paul Hardy <unifoundry@unifoundry.com>
+	* Thanks to David Corbett for bringing the issues concerning
+	  double diacritics, Western and Byzantine musical symbols,
+	  subjoiner glyphs, and other issues to my attention.  Those
+	  issues have been addressed in this release.
+	* All Makefiles:
+	  - Simplified to contain just a VERSION variable without
+	    separate UNICODE_VERSION and PKG_REV variables.
+	  - Changed "echo" to "@echo" where it wasn't already done,
+	    except in hangul/Makefile.
+	  - Changed "font/plane00/bmp-combining.txt" in files where
+	    it occurred to "font/plane00/plane00-combining.txt".
+	* *-comining.txt: now have "<code-point> ':' <x-offset>".
+	  This two-field format now allows the unidup utility to
+	  check the *-combining.txt files for duplicate code points
+	  in addition to checking *.hex files for duplicates.
+	* ChangeLog: ascribed work to "Anonymous1" by request.
+	* doc: rebuilt texinfo files from modified man pages.
+	* Makefile:
+	  - Moved "*nonpringing.hex" files from ZEROWIDTH variable
+	    definition to HEXWIDTH variable definition, so the
+	    unigenwidth utility will no longer treat them as
+	    zero-width glyphs.  They will be invisible in a
+	    Unicode-savvy application, but most applications
+	    do not seem to provide special handling of these
+	    code points, so their Unifont glyphs will appear
+	    in-line with regular text.
+	  - Added all font/plane*/*combining.txt files to
+	    ZEROWIDTH definition.
+	  - Sort both the unifonttemp.hex and combiningtemp.txt
+	    files to make debugging easier.
+	* font/Makefile:
+	  - Removed inclusion of plane0F from "upper" glyph files,
+	    as Plane 15 is a Private Use Area plane.
+	  - Read "upper_sample" font to create PNG or BMP bitmaps,
+	    so combining circles will be rendered.  Add hexadecimal
+	    code point glyphs to upper_sample font so bitmaps will
+	    display these unassigned code points.
+	  - Fixed typos in comments.
+	* font/plane00/alt/quad-width.hex:
+	  - Preserves quadruple-width Chinese glyphs added in the
+	    file font/plane00/custom00.hex in the original Unifont
+	    10.0.01 release.  Those glyphs are moved to a new
+	    alternate directory, "alt", to remain available for
+	    experimentation with quadruple-width glyphs.  These
+	    glyphs are no longer used in Unifont.
+	* font/plane00/bmp-combining.txt:
+	  - Renamed to plane00-combining.txt for similarity with
+	    file names in other plane__ directories.
+	  - U+2D7F (Tifinagh): make a "+" subscript combining character.
+	  - Added second field containing x-axis offset.
+	* font/plane00/custom00.hex: now a zero-length file, because
+	  the formerly quadruple-width Chinese glyphs custom-created
+	  by hand have been replaced by double-width glyphs.
+	* font/plane00/nonprinting.hex:
+	  - Renamed to plane00-nonprinting.hex for similarity with
+	    file names in other plane__ directories.
+	  - Redrew U+2062, "INVISIBLE TIMES", to resemble U+00D7,
+	    MULTIPLICATION SIGN.
+	* font/plane00/unassigned.hex:
+	  - Renamed to plane00-unassigned.hex for similarity with
+	    file names in other plane__ directories.
+	* font/plane00/unifont-base.hex:
+	  - Fixed missing pixels in U+0962, U+0963.
+	  - Widened combining character U+1DFC to better span across
+	    two single-width glyphs.
+	  - Redrew a large part of U+1D00..U+1D7F, Phonetic Extensions.
+	* font/plane00/wqy.hex: Anonymous1 contributed glyphs for
+	  U+9FD6..U+9FEA that fits the formerly quadruple-width
+	  glyphs into a double-width space (16 pixels wide).
+	  This allows switching back to the PNG<-->Unifont utilities.
+	* font/plane01/plane01.hex:
+	  - U+010300..U+010323, Old Italic: Anonymous1 redrew glyphs.
+	  - U+01107F: Brahmi number joiner; created as 8-pixel horizontal
+	    stroke to join Brahmi numeric digits.
+	  - U+011A3A (Zanabazar): make a single-width combining character.
+	  - U+011A47 (Zanabazar): make a printing virama (U+011A34)
+	    combining character.
+	  - U+011A86..U+011A89 (Soyombo): these are cluster initial forms,
+	    so raised to top of glyph and made combining characters.
+	  - U+011A99 (Soyombo): make a "+" subscript combining character,
+	    as Soyombo has no virama/halant.
+	  - U+011D45 (Masaram Gondi): made the same as combining character
+	    U+011D44.  U+011D46: cluster initial form of U+011D26, so
+	    raised to top of glyph and made it a combining character.
+	  - U+01D000..U+01D0FF, Byzantine Musical Symbols: adjusted
+	    glyphs intended to be at two or three heights ("ano",
+	    "meso", and "kato" versions), U+01D04E, U+01D0F0, U+01D0F2;
+	    U+01D04F, U+01D0F1, U+01D0F3; U+01D07F, U+01D0F4;
+	    U+01D08F, U+01D0F5.
+	  - U+01D18C..U+01D191 and U+01D196, Musical Symbols: redrew
+	    in bold italics.
+	* font/plane01/plane01-combining.txt:
+	  - Removed U+01BC9D, as it is non-printing.
+	  - Add U+011A3A, U+011A47, U+011A86..U+011A89, U+011A99, and
+	    U+011D45.
+	  - Added U+01D1A0, which is not a Unicode combining character,
+	    but it must be combined with other musical glyphs.
+	  - Added second field containing x-axis offset.
+	* font/plane01/plane01-nonprinting.hex:
+	  - Remove glyphs that have been made combining characters added
+	    to font/plane01/plane01.hex: U+011A47, U+011A99, and U+011D45.
+	* man/unifontpic.1: updated with new "-P" option.
+	* man/*.[15]: Changed "-" to "\-" for option flags.
+	* src - added comments to source programs to reflect changes
+	  made from Unifont 10.0.01 release onwards.
+	* src/unibmp2hex.c: all CJK glyphs in the range U+4E00..u+9FFF
+	  are double width again; commented out the line that sets
+          U+9FD8..U+9FE9 to be quadruple width.
+	* src/hex2sfd:
+	  - Modified to use new second field in combining characters txt
+	    files as the x-axis offset of combining characters.
+	* src/unifontpic.h:
+	  - Created new file, read by unifontpic.c.
+	  - Constants moved to this file from unifontpic.c.
+	  - Added Unifont hexadecimal strings for ASCII range to use in
+	    chart title, allowing Unifont charts above Unicode Plane 0.
+	* src/unifontpic.c:
+	  - Fixed header in "long" bitmap output so it isn't truncated.
+	  - Added "-P" argument, to specify Unicode plane 0..17.
+	  - Add Unicode plane to chart title.
+	  - Adjusted centering of title on long and wide charts.
+	* src/unigencircles.c:
+	  - Modified to read new second field in combining characters
+	    txt files that contains x-axis offset.
+	  - Uses the above x-axis offset value for a combining character
+	    to print combining circle in the left half of a double
+	    diacritic combining character grid, or in the center for
+	    other combining characters.
+	  - Added exceptions for U+01107F (Brahmi number joiner) and
+	    U+01D1A0 (vertical stroke musical ornament); they are in
+	    a combining.txt file for positioning, but are not actually
+	    Unicode combining characters.
+	* src/unigenwidth.c:
+	  - Modified a sscanf format strings to ignore second field
+	    added to "*combining.txt" files and already present in
+	    "*.hex" files.
+
 2017-06-30 Paul Hardy <unifoundry@unifoundry.com>
 	* Version: 10.0.03
 	* Makefile: updated to version 10.0.03
@@ -63,8 +201,8 @@
 	    o U+011D00..U+011D5F Masaram Gondi
 	  - Paul Hardy added and/or modified glyphs new (or modified) in
 	    Unicode 10.0 for existing SMP scripts:
-	    o Corrected U+01130B, U+011317, U+01131D, U+011332, and
-	      U+01F694..U+01F698.
+	    o Corrected U+0110BD, U+01130B, U+011317, U+01131D, U+011332,
+	      and U+01F694..U+01F698.
 	    o Not all Unicode 10.0 modifications were made to existing glyphs,
 	      because of the constraints of the Unifont glyph size.  Some new
 	      modifications for symbols in Unicode 10.0.0 are not without
@@ -358,7 +496,7 @@
 	    Latin Extended-E, Cherokee Supplement (new in Unicode 8.0.0),
 	    and Combining Half Marks.
 	* font/plane00/wqy.hex:
-	  - Umbreon126 drew U+9FCD..U+9FD5, new in Unicode 8.0.
+	  - Anonymous1 drew U+9FCD..U+9FD5, new in Unicode 8.0.
 	  - Moved U+2FF* to unifont-base.hex following modification; see above.
 	* font/plane01/noscript-ranges.txt: updated to remove scripts that are
 	  new in Uniocde 8.0.0.  "noscript-hex.txt" is generated from this.
@@ -369,7 +507,7 @@
 	  - Paul Hardy added the new Unicode 8.0 glyphs in Siddham,
 	    Musical Symbols, Miscellaneous Symbols and Pictographs, Emoticons,
 	    and Transport and Map Symbols.
-	  - Umbreon126 drew most of the Blackletter (Fraktur) in the
+	  - Anonymous1 drew most of the Blackletter (Fraktur) in the
 	    Mathematical Alphanumeric Symbols block.  Currently the regular and
 	    bold versions of those glyphs are identical, from limitations of
 	    Unifont's bitmap format.
@@ -429,7 +567,7 @@
 	* font/Makefile:
 	  - Put plane01.html in font/compiled/ instead of font/.
 	* font/plane00.hex:
-	  Following Umbreon126's discovery that the ASCII letter 'k' was
+	  Following Anonymous1's discovery that the ASCII letter 'k' was
 	  one pixel too short, Paul Hardy examined the rest of the ASCII
 	  alphabet and made these changes:
 	  - The letter 'l' was raised by one pixel to make it the same
@@ -468,7 +606,7 @@
 	* Makefiles: bumped version to 7.0.04.
 	* ChangeLog: added "Version" line at the start of all past entries,
 	  since the version number now no longer includes a date as of
-	  Version 7.0.01.  Fixed spelling of "Umbreon126" in 7.0.02 entry.
+	  Version 7.0.01.  Fixed spelling of "Anonymous1" in 7.0.02 entry.
 	* doc/: updates to include man/unipagecount.1 changes.
 	* font/Makefile:
 	  - Incorporates all font/plane01 glyphs in generated
@@ -480,17 +618,17 @@
 	  - Modified distclean target to do a "make clean" in font/plane01.
 	* font/plane00/unifont-base.hex:
 	  - Copied U+0070 (lower-case Latin "p") to U+0440 (Cyrillic
-	    small letter "er").  Thanks to Umbreon126 for spotting that.
+	    small letter "er").  Thanks to Anonymous1 for spotting that.
 	  - Made the angle in symbol U+26BC (SESQUIQUADRATE) a 45 degree
 	    angle, since the symbol is supposed to represent 135 degrees
 	    (so 90 + 45 = 135).  Thanks to Artur Quaglio for noticing that.
 	    The depiction in the Unicode Standard code chart is inaccurate.
-	  - Umbreon126 improved the following glyphs:
+	  - Anonymous1 improved the following glyphs:
 	    U+0026, U+006B, U+0111, U+0127, U+040F, U+041A, U+0444, U+0452,
 	    U+045B, U+045F, U+066F, U+0950, U+1E00, U+1E01, U+20AB, U+2103,
 	    U+2109, U+2118, U+211C, U+213C, U+213D, U+2169, U+26F6, U+2721,
 	    U+A4D2, U+3005, U+3006.
-	* font/plane00/wqy.hex: Umbreon126 improved the following glyphs:
+	* font/plane00/wqy.hex: Anonymous1 improved the following glyphs:
 	  U+3116, U+3464, U+35CA, U+4EAE, U+533F, U+53D7, U+5404, U+569F,
 	  U+56B9, U+56DE, U+5909, U+5967, U+5E38, U+6238, U+796D, U+7981,
 	  U+7A3F, U+7C21, U+7F60, U+840C, U+8276, U+9055, U+907A, U+9089,
@@ -515,14 +653,14 @@
 	  - Paul Hardy added Sora Sompeng, Chakma, Sharada, Takri, Miao,
 	    Arabic Mathematical Alphabetic Supplement, and Transport and
 	    Map Symbols.
-	  - Umbreon126 added Siddham and the script letters in the Mathematical
+	  - Anonymous1 added Siddham and the script letters in the Mathematical
 	    Alphanumeric Symbols block.
-	  - Paul Hardy, Nils Dagsson Moskopp, and Umbreon126 added more
+	  - Paul Hardy, Nils Dagsson Moskopp, and Anonymous1 added more
 	    to the Miscellaneous Symbols and Pictographs, and Nils improved
 	    existing glyphs.
 	  - Nils Dagsson Moskopp made improvements to some Transport and
 	    Map Symbols.
-	  - Umbreon126 improved U+01F200.
+	  - Anonymous1 improved U+01F200.
 	* font/plane01/plane01-nonprinting.hex: new file contains the
 	  non-printing Unicode Plane 01 glyphs.
 	* font/plane01/unassigned-ranges.txt: fixed a typo; under the
@@ -577,9 +715,9 @@
 	  - Joshua Krämer redrew U+0079 ('y') and U+00B5 (mu).
 	  - Paul Hardy redrew U+00DF (German double s), and Gujarati
 	    characters U+0ACB and U+0ACC.
-	  - Umbreon126 redrew symbols U+2672, U+267B, U+267C, U+267D, U+269B,
+	  - Anonymous1 redrew symbols U+2672, U+267B, U+267C, U+267D, U+269B,
 	    and U+269C.
-	  - Umbreon126 and Paul Hardy redrew U+262F (yin-yang).
+	  - Anonymous1 and Paul Hardy redrew U+262F (yin-yang).
 	* font/plane01/plane01.hex:
 	  - Paul Hardy added [in order of appearance in Uniocde Plane 1 /
             the SMP]: Meroitic Hieroglyphs, Meroitic Cursive, Avestan,
@@ -589,7 +727,7 @@
 	    He also redrew U+01F195 ("NEW").
 	  - Nils Dagsson Moskopp drew more glyphs in the Miscellaneous
 	    Symbols and Pictographs block.
-	  - Umbreon126 contributed the Pahawh Hmong glyphs.  He contributed
+	  - Anonymous1 contributed the Pahawh Hmong glyphs.  He contributed
 	    new Mah Jong glyphs: U+01F010, U+01F022 through U+01F02A.  He
 	    also redrew U+01F16A ("MC") and U+01F198 ("SOS").
 

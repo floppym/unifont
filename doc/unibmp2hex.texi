@@ -35,7 +35,7 @@ unibmp2hex @minus{} Bitmap graphics file to GNU Unifont .hex file converter
 @comment .br
 @comment TROFF INPUT: .B unibmp2hex
 @b{unibmp2hex}
-[-phexpage] [-iinput@t{_}file.bmp] [-ooutput@t{_}file.hex] [-w]
+[@minus{}phexpage] [@minus{}iinput@t{_}file.bmp] [@minus{}ooutput@t{_}file.hex] [@minus{}w]
 @comment TROFF INPUT: .SH DESCRIPTION
 
 @node unibmp2hex DESCRIPTION
@@ -64,7 +64,7 @@ columns wide.
 
 @c ---------------------------------------------------------------------
 @table @code
-@item -ppagenum
+@item @minus{}ppagenum
 Specify that the code points will be assigned to the 256 block space
 @comment TROFF INPUT: .I pagenum
 @i{pagenum}
@@ -84,15 +84,15 @@ eight digit hexadecimal code points rather than the Unifont
 standard of four hexadecimal code points.
 @comment TROFF INPUT: .TP
 
-@item -i
+@item @minus{}i
 Specify the input file. The default is STDIN.
 @comment TROFF INPUT: .TP
 
-@item -o
+@item @minus{}o
 Specify the output file. The default is STDOUT.
 @comment TROFF INPUT: .TP
 
-@item -w
+@item @minus{}w
 Force all output .hex glyphs to be 16 pixels wide rather than dual
 width (8 or 16 pixels).
 @comment TROFF INPUT: .PP
@@ -104,7 +104,7 @@ Sample usage:
 
 @c ---------------------------------------------------------------------
 @quotation
-unibmp2hex -imy@t{_}input@t{_}file.bmp -omy@t{_}output@t{_}file.hex
+unibmp2hex @minus{}imy@t{_}input@t{_}file.bmp @minus{}omy@t{_}output@t{_}file.hex
 @comment TROFF INPUT: .RE
 
 @end quotation
