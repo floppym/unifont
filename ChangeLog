@@ -1,3 +1,39 @@
+2017-07-12 Paul Hardy <unifoundry@unifoundry.com>
+	* font/plane00/plane00.hex:
+	  - U+0252 modified to resemble U+1D9B
+	  - U+028B ('v' with hook): redrawn; matches new U+1DB9 shape.
+	  - U+03C7 (Greek chi): redrawn; matches new U+1D61 shape.
+	  - U+0D44 (Malayalam): removed extraneous combining circle.
+	  - U+1D00..U+1DBF (Phonetic Extensions): numerous adjustments
+	    requested by David Corbett; a few changes (for example,
+	    Greek chi) were copied to the base glyph code points.
+	* font/plane00/plane00-combining.txt:
+	  - Removed non-printing characters U+034F, U+17B4, U+17B5,
+	    U+180B..U+180D, U+FE00..U+FE0F.
+	* font/plane00csur/plane00csur.hex:
+	  - U+E031: redrew to resemble U+E051.
+	  - U+E04F: moved from bottom to top.
+	  - U+E06C: redrew as single-width.
+	  - U+E0BC: fixed horizontally mirrored glyph.
+	  - U+E7E2: made same height as U+E7E1; it was shorter.
+	* font/plane00csur/plane00csur-combining.hex:
+	  - Added U+E050..U+E055, U+E059, U+E07D.
+	  - Removed U+E058, U+E06C.
+	* font/plane00csur/plane00csur-spaces.hex:
+	  - Added single-width space for Kinya digit zero, U+E1A0.
+	* font/plane01/plane01.hex:
+	  - Reverted U+01D084 to its form from Unifont 10.0.03;
+	    it was inadvertently changed in 10.0.04.
+	* src/hex2sfd:
+	  - Assign hex() converted value to $max_code_point.
+	  - Multiply $xoffset by $pixel.
+	* src/unifontpic.c: adjusted centering of chart title
+	  for the wide version of charts.
+	* src/unigencircles.c: replace deprecated "index" function
+	  with "strchr".
+	* src/unigenwidth.c: replace deprecated "index" function
+	  with "strchr".
+
 2017-07-08 Paul Hardy <unifoundry@unifoundry.com>
 	* Thanks to David Corbett for bringing the issues concerning
 	  double diacritics, Western and Byzantine musical symbols,

@@ -16,7 +16,7 @@ INSTALL = install
 GZFLAGS = -f -9 -n
 FONTFORGE = fontforge
 #
-VERSION = 10.0.04
+VERSION = 10.0.05
 
 COPYRIGHT = "Copyright (C) 1998-2017 Roman Czyborra, Paul Hardy, Qianqian Fang, \
 Andrew Miller, et al.  \

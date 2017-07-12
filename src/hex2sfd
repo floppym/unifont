@@ -51,6 +51,11 @@
 #      files.  This allows handling of special situations such as double
 #      diacritics, which combine with the letter on either side of them.
 #
+# 11 July 2017 [Paul Hardy]:
+#    - Convert number assigned to $max_code_point with hex(), based on
+#      request of Leroy Vargas-Ortiz.
+#    - Scale $xoffset by $pixel for combining characters.
+#
 
 #
 # Read the list of combining characters and the x-axis (horizontal)
@@ -108,7 +113,7 @@ while(<STDIN>) {
 	push (@bitmaps,    $d);
 	$nglyphs++;
 }
-$max_code_point=$codepoints[ $nglyphs - 1 ];
+$max_code_point = hex ($codepoints[ $nglyphs - 1 ]);
 
 # Encoding tag: Is highest glyph above Plane 0?
 if ($max_code_point > 0xFFFF) {
@@ -226,7 +231,7 @@ sub outline {
 		$charname = "uni$c";
 		$codepoint = hex ($c);
 		if ($combining[ $codepoint ]) {
-			$xoffset = $x_origin[ $codepoint ];
+			$xoffset = $x_origin[ $codepoint ] * $pixel;
 			$ptwidth = 0;
 		}
 		$cn = hex ($c);

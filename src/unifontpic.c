@@ -623,7 +623,7 @@ genwidebmp (int plane_array[0x10000][16], int dpi, int tinynum, int plane)
    hdrlen = strlen (raw_header);
    /* Wide bitmap can print 256 columns, but limit to 32 columns for long bitmap. */
    if (hdrlen > 32) hdrlen = 32;
-   startcol = 125 - (hdrlen >> 1);  /* to center header */
+   startcol = 127 - ((hdrlen - 1) >> 1);  /* to center header */
    /* center up to 32 chars */
    strncpy (&header_string[startcol], raw_header, hdrlen);
 

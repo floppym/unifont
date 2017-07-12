@@ -1,3 +1,16 @@
+2017-07-12: Release 10.0.05
+
+   This release positions Unicode double diacritic marks correctly
+   in the TrueType fonts.  The previous release did not multiply
+   their offsets by the correct scale factor in FontForge.
+
+   The unifontpic chart title is also centered along the top row
+   legend, which looks better visually.
+
+   The Phonetic Extensions block has gone through major revision,
+   with minor adjustments in other Unicode scripts as described
+   in the ChangeLog file.
+
 2017-07-08: Release 10.0.04
 
    Added "-P" flag to the unifontpic utility to specify the Unicode

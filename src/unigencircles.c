@@ -117,7 +117,7 @@ main (int argc, char **argv)
    teststring[MAXSTRING - 1] = '\0';   /* so there's no chance we leave array  */
    while (fgets (teststring, MAXSTRING-1, stdin) != NULL) {
       sscanf (teststring, "%X", &loc);     /* loc == the Uniocde code point    */
-      gstart = index (teststring,':') + 1; /* start of glyph bitmap            */
+      gstart = strchr (teststring,':') + 1; /* start of glyph bitmap            */
       if (combining[loc]) {                /* if a combining character         */
          if (strlen (gstart) < 35)
             add_single_circle (gstart);                 /* single-width */
