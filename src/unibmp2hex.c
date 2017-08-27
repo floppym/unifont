@@ -40,6 +40,14 @@
         again; commented out the line that sets U+9FD8..U+9FE9 to be
         quadruple width.
 
+   6 August 2017 [Paul Hardy]:
+      - Remove hard-coding of U+01D200..U+01D24F Ancient Greek Musical
+        Notation to double-width; allow range to be dual-width.
+
+   12 August 2017 [Paul Hardy]:
+      - Remove Miao script from list of wide scripts, so it can contain
+        single-width glyphs.
+
 */
 
 #include <stdio.h>
@@ -193,9 +201,7 @@ main (int argc, char *argv[])
    for (i = 0x011600; i <= 0x01165F; i++) wide[i] = 1; /* Modi            */
    for (i = 0x011A50; i <= 0x011AAF; i++) wide[i] = 1; /* Soyombo         */
    for (i = 0x011D00; i <= 0x011D4F; i++) wide[i] = 1; /* Masaram Gondi non-digits */
-   for (i = 0x016F00; i <= 0x016F9F; i++) wide[i] = 1; /* Mino            */
    for (i = 0x01D100; i <= 0x01D1FF; i++) wide[i] = 1; /* Musical Symbols */
-   for (i = 0x01D200; i <= 0x01D24F; i++) wide[i] = 1; /* Ancient Greek Musical Notation */
    for (i = 0x01E800; i <= 0x01E8Df; i++) wide[i] = 1; /* Mende Kikakui   */
    /*
       Determine whether or not the file is a Microsoft Windows Bitmap file.

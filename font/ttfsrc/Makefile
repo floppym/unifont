@@ -24,11 +24,11 @@ COMBINING="combining"
 #
 
 COPYRIGHT = "Copyright (C) 1998-2017 Roman Czyborra, Paul Hardy, \
-Qianqian Fang, Andrew Miller, et al.  \
-Licensed under the GNU General Public License; either version 2, or \
-(at your option) a later version, with the GNU Font Embedding Exception."
+Qianqian Fang, Andrew Miller, Johnnie Weaver, David Corbett, et al. \
+License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html> \
+with the GNU Font Embedding Exception."
 
-VERSION = 10.0.05
+VERSION = 10.0.06
 
 #
 # How to build unifont.ttf from GNU Unifont's unifont.hex

@@ -11,7 +11,7 @@ INSTALL = install
 GZFLAGS = -f -9 -n
 
 PACKAGE = "unifont"
-VERSION = 10.0.05
+VERSION = 10.0.06
 
 #
 # The settings below will install software, man pages, and documentation
@@ -80,7 +80,7 @@ bindir:
 # Conditionally build the font, depending on the value of BUILDFONT.
 # To build the font unconditionally, use the "fontdir" target below.
 #
-buildfont:
+buildfont: bindir
 	if [ x$(BUILDFONT) != x ] ; \
         then \
            set -e && $(MAKE) -C font ; \
@@ -108,7 +108,7 @@ precompiled:
 # Create lib/wchardata.c.  If you want to also build the object file
 # wchardata.o, uncomment the last line
 #
-lib/wchardata.c: $(HEXWIDTH) $(ZEROWIDTH)
+lib/wchardata.c: $(HEXWIDTH) $(ZEROWIDTH) bindir
 	$(INSTALL) -m0755 -d lib
 	sort $(HEXWIDTH) > unifonttemp.hex
 	sort $(ZEROWIDTH) > combiningtemp.txt

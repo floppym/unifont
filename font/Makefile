@@ -16,12 +16,12 @@ INSTALL = install
 GZFLAGS = -f -9 -n
 FONTFORGE = fontforge
 #
-VERSION = 10.0.05
+VERSION = 10.0.06
 
-COPYRIGHT = "Copyright (C) 1998-2017 Roman Czyborra, Paul Hardy, Qianqian Fang, \
-Andrew Miller, et al.  \
-Licensed under the GNU General Public License; either version 2, or \
-(at your option) a later version, with the GNU Font Embedding Exception."
+COPYRIGHT = "Copyright (C) 1998-2017 Roman Czyborra, Paul Hardy, \
+Qianqian Fang, Andrew Miller, Johnnie Weaver, David Corbett, et al. \
+License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html> \
+with the GNU Font Embedding Exception."
 
 #
 # Path to local unifont-bin utilities.  If your system doesn't
@@ -384,7 +384,7 @@ bmp: hex $(BINDIR)/unihex2bmp
 # The CSUR glyphs are optional, appearing in the unifont_csur font
 # files rather than the main unifont font files.
 #
-bigpic: $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
+bigpic: hex
 	cat $(HEXDIR)/*.hex plane00csur/*.hex | \
 	   $(BINDIR)/unifontpic -d120 > $(COMPILED_DIR)/unifont-$(VERSION).bmp
 
@@ -395,7 +395,7 @@ bigpic: $(COMPILED_DIR)/unifont_sample-$(VERSION).hex
 # and it is created from merging "[0-F].sfd", which take up another 100 MB.
 #
 
-ttf:
+ttf: hex
 	# First, copy the ordinary version, to make a TrueType font.
 	install -p \
 		$(COMPILED_DIR)/unifont-$(VERSION).hex \
@@ -422,7 +422,7 @@ ttf:
 #
 # Now build the ConScript Unicode Registry PUA font.
 #
-csurttf:
+csurttf: hex
 	install -p \
 		$(COMPILED_DIR)/unifont_csur-$(VERSION).hex \
 		$(TTFSRC)/unifont_csur.hex
@@ -442,7 +442,7 @@ csurttf:
 #
 # Now build the ConScript Unicode Registry PUA font.
 #
-upperttf:
+upperttf: hex
 	# First, copy the ordinary version, to make a TrueType font.
 	install -p \
 		$(COMPILED_DIR)/unifont_upper-$(VERSION).hex \

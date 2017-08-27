@@ -1,3 +1,138 @@
+2017-08-27 Paul Hardy <unifoundry@unifoundry.com>
+	* Makefile: modifications from Mike Gilbert to support
+	  parallel make.
+	* font/Makefile:
+	  - Modifications from Mike Gilbert to support parallel make.
+	  - Added Johnnie Weaver and David Corbett to COPYRIGHT string.
+	* font/plane00/plane00-combining.txt: Numerous changes discussed with
+	  David Corbett:
+	  - These code point widths have been changed from -16 to -12 now that
+	    fractional positioning of combining marks is possible:
+	    U+0488, U+0489, U+20DD..U+20E0, U+20E2..U+20E4, U+A670, U+A672.
+	  - These combining characters in right-to-left scripts have had
+	    their offsets set to 0:
+	       U+0590..U+05FF Hebrew;      U+0600..U+06FF Arabic
+	       U+0700..U+074F Syriac;      U+0750..U+077F Arabic Supplement
+	       U+0780..U+07BF Thaana;      U+07C0..U+07FF N'Ko
+	       U+0800..U+083F Samaritan;   U+0840..U+085F Mandaic
+	       U+0860..U+086F Syriac Supplement;
+	       U+08A0..U+08FF Arabic Extended - A;
+	       U+FB1E HEBREW POINT JUDEO-SPANISH VARIKA.
+	  - U+ABED given offset of -8 to span across two double-width glyphs.
+	* font/plane00/unifont-base.hex: Numerous changes suggested by and
+	  contributed by David Corbett:
+	  - U+0080..U+00FE C1 Controls and Latin-1 Supplement
+	  - U+0250..U+02AF IPA Extensions
+	  - U+02B0..U+02FF Spacing Modifier Letters (also by Paul Hardy,
+	    correcting issues noted by Johnnie Weaver)
+	  - U+0300..U+036F Combining Diacritical Marks, with U+0358 adjusted
+	    to improve Osage rendering.
+	  - U+0370..U+03FF Greek and Coptic: standardized serifs on normal
+	    lower-case iotas, no serifs on iota subscripts; other changes
+	    suggested by David Corbett.
+	  - U+0400..U+04FF Cyrillic
+	  - U+0500..U+052F Cyrillic Supplement
+          - U+0590..U+05FF Hebrew
+	  - U+0600..U+06FF Arabic
+	  - U+0750..U+077F Arabic Supplement
+	  - U+0780..U+07BF Thaana
+	  - U+07C0..U+07FF N'Ko
+	  - U+08A0..U+08FF Arabic Extended-A
+	  - U+0D00..U+0D7F Malayalam
+	  - U+13A0..U+13FF, U+AB70..U+ABBF Cherokee modified by Paul Hardy
+	  - U+1400..U+167F Unified Canadian Aboriginal Syllabics
+	  - U+1780..U+17FF Khmer
+	  - U+18B0..U+1BFF Unified Canadian Aboriginal Syllabics Extended
+	  - U+1C80..U+1C8F Cyrillic Extended-C
+	  - U+1D00..U+1D7F Phonetic Extensions
+	  - U+1DC0..U+1DFF Combining Diacritical Marks Supplement
+	  - U+2070..U+209F Superscripts and Subscripts (also by Paul Hardy,
+	    correcting issues noted by Johnnie Weaver)
+	  - U+2100..U+214F Letterlike Symbols
+	  - U+2150..U+218F Number Forms
+	  - U+2300..U+23FF Miscellaneous Technical
+	  - U+2600..U+26FF Miscellaneous Symbols
+	  - U+2980..U+29FF Miscellaneous Mathematical Symbols-B
+	  - U+2B00..U+2BFF Miscellaneous Symbols and Arrows
+	  - U+2C60..U+2C7F Latin Extended-C
+	  - U+2C80..U+2CFF Coptic
+	  - U+2DE0..U+2DFF Cyrillic Extended-A
+	  - U+2E00..U+2E7F Supplemental Punctuation
+	  - U+A640..U+A69F Cyrillic Extended-B
+	  - U+A720..U+A7FF Latin Extended-D
+	  - U+AB30..U+AB6F Latin Extended-E
+	  - U+ABC0..U+ABFF Meetei Mayek
+	  - U+FB50..U+FDFF Arabic Presentation Forms-A
+	  - U+FE20..U+FE2F Combining Half Marks
+	  - U+FE70..U+FEFF Arabic Presentation Forms-B
+	* font/plane01/plane01-combining.txt:
+	  - Changed combining characters in the following right-to-left
+	    scripts to 0 width at the suggestion of David Corbett:
+	     o U+010A00..U+010A5F Kharoshthi
+	     o U+010AC0..U+010AFF Manichaean
+	     o U+016F51..U+016F7E Miao: removed; treat as non-combining
+	       so multiple vowels can follow a consonant.
+	     o U+011D46 Masaram Gondi Repha: offset changed to zero
+	     o U+01D400..U+01D7FF Mathematical Alphanumeric Symbols
+	     o U+01E800..U+01E8DF Mende Kikakui
+	     o U+01E900..U+01E95F Adlam
+	     o U+01F300..U+01F5FF Miscellaneous Symbols and Pictograms
+	     o U+01F700..U+01F77F Alchemical Symbols
+	     o U+01F800..U+01F8FF Supplemental Arrows-C
+	     o U+01F900..U+01F9FF Supplemental Symbols and Pictographs
+	   - U+01D242..U+01D244 Ancient Greek Musical Notation changed
+	     from an offset of -16 to an offset of -8 for compatibility
+	     with dual-width Greek musical notation.
+	* font/plane01/plane01.hex:
+	  - Numerous changes suggested by and contributed by David Corbett:
+	     o U+010123, U+010132 Aegean Numbers
+	     o U+01015B, U+010160, U+010170, U+010182, U+01018E Ancient Greek
+	       Numbers
+	     o U+0101D2, U+0101D7, U+0101D8, U+0101D9, U+0101DA, U+0101DC,
+	       U+0101DE, U+0101E8, U+0101EA, U+0101ED, U+0101EE, U+0101F1,
+	       U+0101F6, U+0101FD Phaistos Disc
+	     o U+010284, U+010289, U+01028F Lycian
+	     o U+0102E0 Coptic Epact Thousands Mark
+	     o U+010330..U+01034F Gothic, with U+010330, U+010331, U+01033A,
+	       U+01033B, and U+010342 modified to match the uncial style of
+	       the Codex Argenteus.
+	     o U+010400..U+01044F Deseret
+	     o U+010450..U+01047F Shavian
+	     o U+0104B4, U+0104C1, U+0104C4, U+0104C5, U+0104E4, U+0104E5,
+	       U+0104E6, U+0104E9 Osage
+	     o U+011180..U+0111DF Sharada
+	     o U+011C70..U+011CBF Marchen: some glyphs modified
+	     o U+011D00..U+011D5F Masaram Gondi
+             o U+016F00..U+016F9F Miao
+	     o U+01D400..U+01D7FF Mathematical Alphanumeric Symbols: added
+	       serifs to iotas.
+	     o U+01EE00..U+01EEFF Arabic Mathematical Alphabetic Symbols
+	     o U+01F300..U+01F5FF 
+	     o U+01F30E, U+01F32A, U+01F33A, U+01F3CF, U+01F3FA, U+01F411,
+	       U+01F434, U+01F481 Miscellaneous Symbols and Pictographs
+	     o U+01F720, U+01F76D Alchemical Symbols
+	     o U+01F89C, U+01F89D, U+01F89E, U+01F89F, U+01F8AC, U+01F8AD
+	       Supplemental Arrows-C
+	     o U+01F908, U+01F909, U+01F90A, U+01F90B, U+01F933, U+01F986,
+	       U+01F98F, U+01F993, U+01F995
+	       Supplemental Symbols and Pictographs
+	  - U+01D200..U+01D24F Ancient Greek Musical Notation changed
+	    from double-width to dual-width.  Combining characters
+	    U+01D242..U+01D244 changed to single-width for compatibility
+	    with dual-width glyphs.
+	* font/ttfsrc/Makefile:
+	  - Added Johnnie Weaver and David Corbett to COPYRIGHT string.
+	* src/unibmp2hex.c:
+	  - U+01D200..U+01D24F Ancient Greek Musical Notation no longer
+	    hard-coded to be double-width, so that glyphs now can be
+	    dual-width.
+	  - U+016F00..U+016F9F Miao no longer hard-coded as double-width.
+	* src/unifontpic.h: fixed corrupted ASCII hexadecimal strings.
+	* src/unigencircles.c: hard-code Miao vowels as combining, because
+	  they were removed from font/plane01/plane01-combining.hex to allow
+	  stacking of multiple vowels together.
+	* Corrected spelling of "Johnny Weaver" to "Johnnie Weaver".
+
 2017-07-12 Paul Hardy <unifoundry@unifoundry.com>
 	* font/plane00/plane00.hex:
 	  - U+0252 modified to resemble U+1D9B
@@ -231,7 +366,7 @@
 	  in the range U+0FD8..U+9FE9 were made quadruple-width and moved
 	  to new file font/plane00/custom00.hex.
 	* font/plane01/plane01.hex:
-	  - Johnny Weaver added SMP scripts new in Unicode 10.0:
+	  - Johnnie Weaver added SMP scripts new in Unicode 10.0:
 	    o U+011A00..U+011A4F Zanabazar Square
 	    o U+011A50..U+011AAF Soyombo
 	    o U+011D00..U+011D5F Masaram Gondi
@@ -440,7 +575,7 @@
 	  - Modified U+1B8F as per Unicode errata.
 	  - U+2FF9 no longer identical to U+2FF7.
 	  - U+202F (NARROW NO-BREAK SPACE) now is a space glyph.
-	  - U+20BA (Turkish Lira) moved down 2 rows--thanks to Johnny Weaver
+	  - U+20BA (Turkish Lira) moved down 2 rows--thanks to Johnnie Weaver
 	    for noticing that.
 	  - Rotated Mongolian script (U+1800..U+18AF) as per Unicode change
 	    from traditional vertical writing to horizontal writing.
@@ -473,7 +608,7 @@
 	* font/plane01/README: added file to describe how to add new Plane 1
 	  glyphs to the distribution.
 	* font/plane01/plane01.hex:
-	  - Johnny Weaver made these additions:
+	  - Johnnie Weaver made these additions:
 	    - Osage       (U+0104B0..U+0104FF)
 	    - Multani     (U+011280..U+0112AF)
 	    - Khudawadi   (U+0112B0..U+0112FF)
